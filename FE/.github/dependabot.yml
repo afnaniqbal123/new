@@ -1,0 +1,35 @@
+# Dependabot config — see AGENTS.md § Package Manager & Supply Chain for the policy this
+# implements. Docs: https://docs.github.com/code-security/dependabot/dependabot-version-updates
+
+version: 2
+
+updates:
+  # pnpm is not its own ecosystem — Dependabot parses pnpm-lock.yaml under "npm"
+  # (https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file).
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    groups:
+      # Routine minor/patch bumps land as one grouped PR to cut noise. Majors are
+      # deliberately excluded (no "major" in update-types) so each still opens its own
+      # PR — a breaking change gets reviewed on its own, never buried in a group.
+      minor-and-patch:
+        applies-to: version-updates
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    groups:
+      # Same grouping policy as the npm ecosystem above — routine bumps grouped,
+      # majors stay individual and deliberate (a workflow action's major bump can
+      # change its permissions/inputs, worth a standalone review).
+      minor-and-patch:
+        applies-to: version-updates
+        patterns: ['*']
+        update-types: ['minor', 'patch']

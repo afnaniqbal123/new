@@ -1,0 +1,12 @@
+---
+description: Styling rules (Tailwind design tokens only, class ordering)
+globs: ["src/**/*.tsx", "src/**/*.css"]
+alwaysApply: false
+---
+
+Full rule: see `AGENTS.md` § Styling Tokens.
+
+- Use design tokens from the `@theme` block in `src/index.css` — no arbitrary values.
+- No inline `style={{}}`. Class order: layout → display → text → effects → state
+  (Prettier's Tailwind plugin auto-orders on format).
+- Re-skin a project by editing tokens in `src/index.css`, never by hardcoding in components.

@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+coverage
+storybook-static
+playwright-report
+*.min.js
+.next
+out
+package-lock.json
+docs/quality-gate
+public/mockServiceWorker.js

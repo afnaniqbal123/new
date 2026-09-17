@@ -1,0 +1,73 @@
+name: Quality Gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: quality-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: Verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      # Reads the pinned version from package.json's "packageManager" field —
+      # keep that field as the single source of truth, don't also pin a version here.
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Chromium only (check:e2e/playwright.config.ts is a deliberately
+      # single-browser smoke-gate, not a cross-browser matrix) — --with-deps
+      # installs the system libraries a fresh Ubuntu runner doesn't have yet.
+      - name: Install Playwright's Chromium browser
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Static-analysis contract
+        run: pnpm static-analysis:contract
+
+      - name: Type check
+        run: pnpm check:types
+
+      - name: Lint
+        run: pnpm check:lint
+
+      - name: Accessibility lint (strict jsx-a11y)
+        run: pnpm check:a11y
+
+      - name: Format check
+        run: pnpm check:format
+
+      - name: Style check (Impeccable — opt-in)
+        run: pnpm check:style
+
+      # Single canonical check — guard rails, types, tests, lint, a11y, format,
+      # style, react-doctor, build, e2e. Same command developers run locally;
+      # the pre-commit hook runs a staged-files-scoped subset for commit speed.
+      - name: Verify
+        run: pnpm verify
+
+      # Only produced (and only meaningful) if check:e2e actually ran and
+      # failed — if-no-files-found: ignore keeps this a no-op when verify
+      # failed on an earlier check, before Playwright ever ran.
+      - name: Upload Playwright failure artifacts (traces/screenshots/videos)
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7

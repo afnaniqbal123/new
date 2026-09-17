@@ -1,0 +1,12 @@
+---
+description: Custom hook conventions (naming, exhaustive deps)
+globs: src/hooks/**/*.ts
+alwaysApply: false
+---
+
+Full rule: see `AGENTS.md` § Naming Conventions and § Data & State.
+
+- camelCase with a `use` prefix (`useDebouncedValue.ts`).
+- Exhaustive `useEffect`/`useCallback` dependency arrays (ESLint-enforced).
+- Generic hooks only live here; feature-specific hooks live inside the feature folder.
+- Server-state fetching belongs in a TanStack Query hook, never a raw `useEffect` fetch.

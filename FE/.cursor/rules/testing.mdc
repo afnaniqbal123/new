@@ -1,0 +1,20 @@
+---
+description: Test conventions (workflow tests vs. service/hook tests, RTL query priority, no snapshots, MSW-backed)
+globs: "src/**/*.test.{ts,tsx}"
+alwaysApply: false
+---
+
+Full rule: see `AGENTS.md` § Testing.
+
+- Workflow-over-unit-testing: no standalone test for a `src/components/common/` primitive —
+  it gets coverage transitively through the feature workflows that use it.
+- A feature component → `<Name>.workflow.test.tsx`, co-located in the feature folder (see
+  `ExampleWidget.workflow.test.tsx`). A `src/services/`/`src/hooks/` file (reusable logic) →
+  standalone `*.test.ts`, co-located next to it.
+- Use `renderWithProviders` from `src/test/renderWithProviders.tsx` for anything touching
+  TanStack Query or react-router context.
+- Query like a user: `getByRole`, `getByLabelText`, not `getByTestId`. **No snapshots.**
+- Drive the real MSW-backed network layer (`src/mocks/handlers.ts`, `server.use(...)` for a
+  one-off override) — never an inline mock of `apiClient`/`fetch`.
+- Prefer `findBy*` for async (MSW-backed) data. A hook with a timer uses
+  `vi.useFakeTimers()` + `vi.advanceTimersByTime(...)`, never a real `setTimeout` wait.

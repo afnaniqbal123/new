@@ -1,0 +1,9 @@
+{
+  "$schema": "https://impeccable.style/config.schema.json",
+  "detector": {
+    "designSystem": {
+      "enabled": true
+    },
+    "ignoreFiles": ["src/mocks/**", "dist/**", "coverage/**"]
+  }
+}

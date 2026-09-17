@@ -1,0 +1,43 @@
+# Supply-chain hardening — see AGENTS.md § Package Manager & Supply Chain for the decisions
+# behind these values. `pnpm settings` docs: https://pnpm.io/settings
+
+# Require a package version to have been published at least this many minutes ago before
+# pnpm will resolve/install it — delays adoption of a brand-new (possibly compromised or
+# not-yet-caught-malicious) release. pnpm 11 defaults to 1440 (1 day) even if this key is
+# absent; set explicitly so the actual value is visible here, not an implicit version-tied
+# default, and raised to 3 days for more margin. Applies on every install, including CI's
+# `--frozen-lockfile` runs — pnpm re-verifies each locked entry's registry publish time
+# unless `trustLockfile: true` is set, which this repo deliberately never sets.
+minimumReleaseAge: 4320
+
+# Pinned because the versions jsdom→vitest would otherwise resolve
+# (@csstools/css-color-parser@4.2.1, @csstools/css-syntax-patches-for-csstree@1.1.9 — both
+# transitive, test-toolchain-only, never shipped to the browser) were published within the
+# minimumReleaseAge window above when this was added (2026-08-27). Pinned to the
+# already-old, policy-compliant patch version one below each, not excluded from the check —
+# the protection stays on for both, this just resolves today's violation without a
+# whole-lockfile re-resolution. Revisit/remove once jsdom bumps past these naturally.
+overrides:
+  '@csstools/css-color-parser': '4.2.0'
+  '@csstools/css-syntax-patches-for-csstree': '1.1.8'
+
+# Which dependencies with install/postinstall/build scripts pnpm is allowed to actually run
+# (pnpm 11's `allowBuilds`, replacing the deprecated `onlyBuiltDependencies`/
+# `ignoredBuiltDependencies`). Everything else's build scripts stay blocked by default
+# (`strictDepBuilds`, default true) — a new dependency that starts shipping a script fails
+# the install until reviewed and added here, never runs silently.
+allowBuilds:
+  # msw's postinstall reads this repo's own `package.json#msw.workerDirectory` and runs
+  # `msw init` to regenerate `public/mockServiceWorker.js` — a local file copy, no network
+  # access, keeps the worker script version-matched to the installed msw package (a mismatch
+  # logs a console warning in the browser, which would fail e2e/fixtures.ts's
+  # console.error-fails-the-test rule). Verified via a fresh install; genuinely needed.
+  msw: true
+  # puppeteer is an *optional* transitive dependency of impeccable (postinstall downloads a
+  # full Chromium build). Verified this repo never needs it: `check:style` runs
+  # `impeccable detect src/` — a bare directory path — which impeccable's own CLI (`cli/
+  # engine/cli/main.mjs`) routes to its static-HTML engine; the Puppeteer-backed
+  # browser/visual engines only activate for an `http(s)://`/`file://` URL target, which this
+  # repo never passes. Denied explicitly (not omitted) so the decision is recorded and pnpm
+  # doesn't prompt on it again.
+  puppeteer: false

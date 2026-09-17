@@ -1,0 +1,16 @@
+---
+description: React component conventions (props typing, structure, a11y reminders)
+globs: src/components/**/*.tsx
+alwaysApply: false
+---
+
+Full rule: see `AGENTS.md` § Component Conventions and § Accessibility.
+
+When editing a component in this scope:
+
+- Props are an explicit `interface`; destructure in the signature; never `props: any`.
+- One **named** export per file — no barrel `index.ts` for components.
+- Buttons need an explicit `type`; images need `alt` (or `alt="" aria-hidden`).
+- User-facing text is a key in `src/i18n/locales/<lng>/common.json`, read via
+  `useTranslation()`'s `t('KEY')` — never hardcoded in JSX.
+- Tailwind design tokens only — no arbitrary values like `w-[127px]`.

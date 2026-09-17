@@ -1,0 +1,343 @@
+@import 'tailwindcss';
+
+/*
+ * BusinessOS design tokens — the single source of visual truth.
+ * Components reference ONLY these tokens (enforced by
+ * impeccable/no-arbitrary-tailwind-values). Re-skin by editing this block;
+ * never hardcode a value in a component.
+ *
+ * ## The reasoning behind this palette
+ *
+ * This is software a shopkeeper stares at for nine hours in a room with bad
+ * lighting, often on a cheap screen, sometimes in daylight through a shop
+ * front. That drove three choices:
+ *
+ * - **Teal, not blue.** Every POS and accounting product is blue; teal reads
+ *   as adjacent-but-not-another-invoice-app, and holds its hue on the washed
+ *   -out LCDs these are actually used on.
+ * - **High-contrast neutrals.** Foreground sits near-black on near-white
+ *   rather than the fashionable grey-on-grey, because a 4.5:1 minimum is a
+ *   floor, not a target, when someone is reading a total across a counter.
+ *   Every value here was checked with axe against a real rendered page, not
+ *   chosen by eye — the first pass of this palette looked right and failed
+ *   WCAG AA on the brand colour and the subtle foreground.
+ * - **Amber for money-at-risk, not red.** Red is reserved for destructive
+ *   actions. Overdue receivables are a state, not an error, and colouring
+ *   them red trains people to ignore red.
+ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ---- Brand: deep violet --------------------------------------------
+     Hue 300 — a true purple rather than the blue-violet most dashboards
+     reach for, which is what keeps it from reading as "generic SaaS blue".
+     The ramp is tuned for *contrast*, not for even lightness steps: 500 is
+     the lightest shade that still passes AA as large text on white, and 600
+     is the darkest usable as a button fill with white on top. Those two
+     constraints are why the gap between 500 and 600 is wider than the rest —
+     changing either without re-checking `pnpm check:e2e`'s axe scan will
+     fail the gate. */
+  --color-brand-50: oklch(0.98 0.012 300);
+  --color-brand-100: oklch(0.95 0.03 300);
+  --color-brand-200: oklch(0.9 0.06 300);
+  --color-brand-300: oklch(0.82 0.1 300);
+  --color-brand-400: oklch(0.72 0.15 300);
+  --color-brand-500: oklch(0.63 0.19 300);
+  --color-brand-600: oklch(0.5 0.2 300);
+  --color-brand-700: oklch(0.42 0.17 300);
+  --color-brand-800: oklch(0.34 0.13 301);
+  --color-brand-900: oklch(0.27 0.1 302);
+  --color-brand-950: oklch(0.19 0.07 303);
+
+  /* ---- Accent: warm amber, for value and attention -------------------
+     Kept warm against the violet: it is the opposing hue, so an overdue
+     figure or a highlighted plan separates from the brand without needing a
+     second saturated colour. */
+  --color-accent-50: oklch(0.98 0.02 85);
+  --color-accent-100: oklch(0.95 0.05 85);
+  --color-accent-200: oklch(0.91 0.09 84);
+  --color-accent-300: oklch(0.86 0.13 83);
+  --color-accent-400: oklch(0.81 0.16 80);
+  --color-accent-500: oklch(0.76 0.17 72);
+  --color-accent-600: oklch(0.67 0.16 62);
+  --color-accent-700: oklch(0.56 0.14 55);
+  --color-accent-800: oklch(0.46 0.11 52);
+  --color-accent-900: oklch(0.38 0.085 52);
+
+  /* ---- Semantic surfaces --------------------------------------------- */
+  --color-surface: oklch(1 0 0);
+  /* A hint of the brand hue rather than pure grey — stops large filled areas
+     reading as dirty white beside the violet. */
+  --color-surface-muted: oklch(0.975 0.006 300);
+  --color-surface-raised: oklch(1 0 0);
+  --color-surface-sunken: oklch(0.955 0.008 300);
+  --color-surface-inverted: oklch(0.19 0.02 302);
+
+  --color-foreground: oklch(0.21 0.02 300);
+  --color-foreground-muted: oklch(0.48 0.015 300);
+  --color-foreground-subtle: oklch(0.5 0.015 300);
+  --color-foreground-inverted: oklch(0.99 0 0);
+
+  --color-border: oklch(0.9 0.008 300);
+  --color-border-strong: oklch(0.82 0.012 300);
+  --color-ring: var(--color-brand-500);
+
+  /* ---- Status --------------------------------------------------------- */
+  --color-danger: oklch(0.58 0.21 26);
+  --color-danger-soft: oklch(0.95 0.04 26);
+  --color-success: oklch(0.6 0.15 155);
+  --color-success-soft: oklch(0.95 0.04 155);
+  --color-warning: oklch(0.75 0.15 75);
+  --color-warning-soft: oklch(0.96 0.05 80);
+  --color-info: oklch(0.62 0.13 240);
+  --color-info-soft: oklch(0.95 0.035 240);
+
+  /* ---- Radius --------------------------------------------------------- */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  --spacing: 0.25rem;
+
+  /* ---- Layout ---------------------------------------------------------
+     The three two-column splits this product uses, named rather than written
+     as arbitrary values at each call site. A named layout can be changed in
+     one place; `lg:grid-cols-[1fr_22rem]` scattered across four files cannot. */
+  --grid-template-columns-pos: 1fr 22rem;
+  --grid-template-columns-detail: 1fr 20rem;
+  --grid-template-columns-inbox: 18rem 1fr;
+  /* The landing page's "message becomes an order" pair: two equal cards with
+     the transformation arrow sized to its own content between them. */
+  --grid-template-columns-flow: 1fr auto 1fr;
+
+  /* The share of the hero the 3D scene occupies on a wide screen. Named
+     because it is a composition decision — the copy column's breathing room —
+     rather than an incidental number. */
+  --width-hero-scene: 58%;
+
+  /* Where an in-field affordance (the password eye) sits, measured from the
+     top of the label+input pair: label line-height plus the gap, plus half the
+     control. Named because it must track `Input`'s own metrics — if that
+     component's padding changes, this is the one place to follow it. */
+  --spacing-field-toggle: 2.15rem;
+
+  /* The assistant panel's ceiling. Tall enough for a real exchange, short
+     enough to clear the launcher above a 640px viewport. */
+  --size-assistant-panel: 32rem;
+  /* The ambient glow behind the hero. Larger than any viewport dimension it
+     sits in, on purpose: the falloff should be off-screen, not visible. */
+  --size-glow: 38rem;
+
+  /* ---- Type ----------------------------------------------------------- */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+  --text-7xl: 4.5rem;
+
+  --font-sans:
+    'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /*
+   * Every figure in this product is money. Tabular numerals keep columns of
+   * totals aligned digit-for-digit, which is the difference between a
+   * scannable ledger and a ransom note.
+   */
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ---- Elevation ------------------------------------------------------ */
+  --shadow-card: 0 1px 2px oklch(0.2 0.015 195 / 0.04), 0 4px 12px oklch(0.2 0.015 195 / 0.05);
+  --shadow-raised: 0 2px 4px oklch(0.2 0.015 195 / 0.05), 0 12px 28px oklch(0.2 0.015 195 / 0.08);
+  --shadow-overlay: 0 12px 40px oklch(0.2 0.015 195 / 0.16);
+
+  /* ---- Motion ---------------------------------------------------------
+     One duration scale, so nothing in the product animates at a speed
+     nothing else does. */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-fade-up: fade-up 0.5s var(--ease-out-soft) both;
+  /* The assistant's thinking indicator: three dots breathing out of phase. */
+  --animate-typing: typing 1.1s ease-in-out infinite;
+  --animate-fade-in: fade-in 0.4s var(--ease-out-soft) both;
+  /* The drawer's entrance. Fast enough not to delay a form, slow enough to
+     show which edge it came from — which is the whole point of a drawer. */
+  --animate-slide-in-right: slide-in-right 0.28s var(--ease-out-soft) both;
+  --animate-scale-in: scale-in 0.25s var(--ease-out-soft) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+}
+
+/*
+ * Dark theme.
+ *
+ * Surfaces are lifted off pure black and carry a distinctly violet cast —
+ * this is the "dark purple" the product is recognised by, not a neutral
+ * charcoal with purple buttons dropped on it. Text is slightly dimmed from
+ * pure white, because full-white body text on a dark surface haloes on the
+ * cheap panels this runs on.
+ *
+ * Brand 400/500 are the interactive shades in dark mode; 600 is too dark
+ * against these surfaces to carry white text at AA, which is why buttons
+ * swap rather than simply inheriting.
+ */
+.dark {
+  --color-surface: oklch(0.17 0.025 303);
+  --color-surface-muted: oklch(0.21 0.03 303);
+  --color-surface-raised: oklch(0.235 0.032 303);
+  --color-surface-sunken: oklch(0.14 0.022 303);
+  --color-surface-inverted: oklch(0.97 0 0);
+
+  --color-foreground: oklch(0.96 0.008 300);
+  --color-foreground-muted: oklch(0.74 0.018 300);
+  --color-foreground-subtle: oklch(0.68 0.018 300);
+  --color-foreground-inverted: oklch(0.17 0.025 303);
+
+  --color-border: oklch(0.3 0.032 303);
+  --color-border-strong: oklch(0.4 0.04 303);
+
+  --color-danger-soft: oklch(0.3 0.07 26);
+  --color-success-soft: oklch(0.29 0.06 155);
+  --color-warning-soft: oklch(0.32 0.07 80);
+  --color-info-soft: oklch(0.29 0.06 240);
+
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3), 0 4px 12px oklch(0 0 0 / 0.25);
+  --shadow-raised: 0 2px 4px oklch(0 0 0 / 0.3), 0 12px 28px oklch(0 0 0 / 0.35);
+  --shadow-overlay: 0 12px 40px oklch(0 0 0 / 0.5);
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-foreground font-sans antialiased;
+  }
+
+  /* Keyboard focus is always visible (WCAG 2.1 AA: focus-visible). */
+  :focus-visible {
+    @apply outline-ring outline-2 outline-offset-2;
+  }
+
+  /*
+   * Every number in this product is money or a quantity, and both are read in
+   * columns. Tabular figures stop a total from jumping sideways as its digits
+   * change — which is what makes a live POS subtotal readable rather than
+   * twitchy.
+   */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  /*
+   * A faint engineering grid, for dark brand panels.
+   *
+   * Two repeating linear-gradients rather than an SVG or a PNG: it costs
+   * nothing over the wire, scales to any panel size, and the line colour is
+   * mixed from `currentColor`'s canvas rather than baked in, so it never
+   * fights the surface it sits on.
+   */
+  /* Staggers the typing dots without three separate animations. */
+  .animation-delay-150 {
+    animation-delay: 150ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .bg-grid-faint {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, white 7%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, white 7%, transparent) 1px, transparent 1px);
+    background-size: 3.5rem 3.5rem;
+  }
+}
+
+@layer utilities {
+  /*
+   * Respect a user's reduced-motion preference everywhere, once.
+   *
+   * The landing page in particular is heavily animated; someone who has asked
+   * their OS for less motion should get a still page, not a slightly calmer
+   * one. Applied as a blanket override rather than per-component because the
+   * one component that forgets is the one that causes harm.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
