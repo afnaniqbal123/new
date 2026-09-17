@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>BE Boilerplate Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #F4F6F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F6;
+    --ink: #0E1520;
+    --ink-2: #4C5A6B;
+    --ink-3: #7E8B9C;
+    --line: #DCE3EB;
+    --line-2: #C6D0DB;
+    --accent: #2440BE;
+    --accent-soft: #E9ECFC;
+    --ok: #0E7A52;
+    --ok-soft: #E2F3EC;
+    --debt: #8F5B05;
+    --debt-soft: #FAEEDA;
+    --hole: #AB2743;
+    --hole-soft: #FBE7EB;
+    --shadow: 0 1px 2px rgba(14, 21, 32, .05);
+
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --disp: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0B0F15;
+      --surface: #131A23;
+      --surface-2: #1A222D;
+      --ink: #E4EBF3;
+      --ink-2: #9FADBE;
+      --ink-3: #6B7889;
+      --line: #212B37;
+      --line-2: #2E3A48;
+      --accent: #8098FF;
+      --accent-soft: #1A2242;
+      --ok: #40C08C;
+      --ok-soft: #10281F;
+      --debt: #DBA33F;
+      --debt-soft: #2A2113;
+      --hole: #F4708B;
+      --hole-soft: #2C141A;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0B0F15;
+    --surface: #131A23;
+    --surface-2: #1A222D;
+    --ink: #E4EBF3;
+    --ink-2: #9FADBE;
+    --ink-3: #6B7889;
+    --line: #212B37;
+    --line-2: #2E3A48;
+    --accent: #8098FF;
+    --accent-soft: #1A2242;
+    --ok: #40C08C;
+    --ok-soft: #10281F;
+    --debt: #DBA33F;
+    --debt-soft: #2A2113;
+    --hole: #F4708B;
+    --hole-soft: #2C141A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .rail {
+    border-right: 1px solid var(--line);
+    padding: 34px 22px 60px;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  .rail-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    color: var(--ink-3);
+    margin-bottom: 26px;
+    line-height: 1.5;
+  }
+  .rail-brand b { color: var(--ink); font-weight: 600; }
+  .rail-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .13em;
+    color: var(--ink-3);
+    margin: 0 0 10px;
+  }
+  .rail nav { display: flex; flex-direction: column; gap: 1px; }
+  .rail nav a {
+    display: block;
+    padding: 5px 10px;
+    border-left: 2px solid transparent;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 13.5px;
+    border-radius: 0 4px 4px 0;
+  }
+  .rail nav a:hover { color: var(--ink); background: var(--surface-2); }
+  .rail nav a.on {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+  .rail nav a:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .rail-foot { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+  .xlink {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--surface);
+  }
+  .xlink:hover { border-color: var(--accent); color: var(--accent); }
+  .xlink span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 2px;
+  }
+
+  main { padding: 34px 44px 120px; min-width: 0; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+
+  h1 {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: clamp(34px, 4.6vw, 50px);
+    line-height: 1.04;
+    letter-spacing: -.015em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+
+  .lede { font-size: 17px; color: var(--ink-2); max-width: 68ch; margin: 0 0 28px; }
+
+  h2 {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -.01em;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  h3 { font-weight: 600; font-size: 16px; margin: 26px 0 8px; letter-spacing: -.005em; }
+  h4 {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 22px 0 8px;
+  }
+
+  section { scroll-margin-top: 20px; padding-top: 42px; }
+  section > .kicker {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin: 0 0 14px;
+  }
+  p { max-width: 72ch; margin: 0 0 14px; }
+  .muted { color: var(--ink-2); }
+  strong { font-weight: 600; }
+  a { color: var(--accent); }
+
+  code {
+    font-family: var(--mono);
+    font-size: .875em;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: .08em .34em;
+    white-space: nowrap;
+  }
+
+  pre {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.62;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 15px 17px;
+    overflow-x: auto;
+    margin: 0 0 16px;
+    box-shadow: var(--shadow);
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: inherit; white-space: pre; }
+  .cm { color: var(--ink-3); }
+  .kw { color: var(--accent); }
+  .st { color: var(--ok); }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 0 8px;
+  }
+  .stat { background: var(--surface); padding: 13px 15px; }
+  .stat b {
+    display: block;
+    font-family: var(--disp);
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 6px;
+  }
+  .stats-note { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin: 0 0 4px; }
+
+  .tw { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.m, th.m { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  .num { font-variant-numeric: tabular-nums; text-align: right; }
+  td.w { white-space: normal; }
+
+  .chip {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .05em;
+    padding: 1px 7px;
+    border-radius: 3px;
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+  .chip.ok { color: var(--ok); background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+  .chip.debt { color: var(--debt); background: var(--debt-soft); border-color: color-mix(in srgb, var(--debt) 35%, transparent); }
+  .chip.hole { color: var(--hole); background: var(--hole-soft); border-color: color-mix(in srgb, var(--hole) 35%, transparent); }
+  .chip.acc { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+
+  .call {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 7px 7px 0;
+    padding: 13px 17px;
+    margin: 0 0 18px;
+    max-width: 76ch;
+  }
+  .call p:last-child { margin-bottom: 0; }
+  .call.warn { border-left-color: var(--debt); }
+  .call.danger { border-left-color: var(--hole); }
+  .call-t {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+  .call.warn .call-t { color: var(--debt); }
+  .call.danger .call-t { color: var(--hole); }
+
+  figure { margin: 0 0 20px; }
+  .fw { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 16px; }
+  figure svg { display: block; width: 100%; min-width: 660px; height: auto; color: var(--ink-2); }
+  figcaption { font-size: 12.5px; color: var(--ink-3); margin-top: 9px; max-width: 74ch; }
+
+  .b-fill { fill: var(--surface); }
+  .b-alt { fill: var(--surface-2); }
+  .b-line { stroke: var(--line-2); }
+  .t-ink { fill: var(--ink); }
+  .t-mut { fill: var(--ink-3); }
+  .t-sub { fill: var(--ink-2); }
+  .s-ink { stroke: var(--ink-2); }
+  .s-mut { stroke: var(--line-2); }
+  .s-acc { stroke: var(--accent); }
+  .t-acc { fill: var(--accent); }
+  .s-hole { stroke: var(--hole); }
+  .t-hole { fill: var(--hole); }
+  .t-debt { fill: var(--debt); }
+  .b-hole { fill: var(--hole-soft); stroke: color-mix(in srgb, var(--hole) 40%, transparent); }
+  .b-acc { fill: var(--accent-soft); stroke: color-mix(in srgb, var(--accent) 35%, transparent); }
+  .b-ok { fill: var(--ok-soft); stroke: color-mix(in srgb, var(--ok) 40%, transparent); }
+  .t-ok { fill: var(--ok); }
+  .mk-ink { fill: var(--ink-2); }
+  .mk-acc { fill: var(--accent); }
+  .mk-hole { fill: var(--hole); }
+  .ttl { font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .ttl-s { font-family: var(--sans); font-size: 12px; font-weight: 600; }
+  .lbl { font-family: var(--sans); font-size: 12px; }
+  .mn { font-family: var(--mono); font-size: 11px; }
+  .mn-s { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; }
+
+  .mod { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 16px 18px; margin: 0 0 12px; }
+  .mod-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .mod-h h3 { margin: 0; font-family: var(--mono); font-size: 15px; font-weight: 600; }
+  .mod-r { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 8px 14px; margin-top: 10px; font-size: 13.5px; }
+  .mod-r dt {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding-top: 3px;
+  }
+  .mod-r dd { margin: 0; color: var(--ink-2); }
+  .mod-r dd.own { color: var(--ink); }
+
+  .debt-item { border: 1px solid var(--line); border-left: 3px solid var(--line-2); border-radius: 0 7px 7px 0; background: var(--surface); padding: 13px 17px; margin: 0 0 10px; }
+  .debt-item.d { border-left-color: var(--debt); }
+  .debt-item.h { border-left-color: var(--hole); }
+  .debt-item.a { border-left-color: var(--ok); }
+  .debt-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 5px; }
+  .debt-n { font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .debt-h h3 { margin: 0; font-size: 14.5px; }
+  .debt-item p { font-size: 13.5px; margin-bottom: 8px; color: var(--ink-2); max-width: 74ch; }
+  .debt-item p:last-child { margin-bottom: 0; }
+
+  ul.tight { margin: 0 0 14px; padding-left: 20px; max-width: 72ch; }
+  ul.tight li { margin-bottom: 5px; }
+
+  ol.rules { margin: 0 0 18px; padding-left: 0; list-style: none; counter-reset: r; max-width: 78ch; }
+  ol.rules li {
+    counter-increment: r;
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  ol.rules li:last-child { border-bottom: 0; }
+  ol.rules li::before {
+    content: counter(r);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--accent);
+    padding-top: 2px;
+  }
+  ol.rules b { display: block; margin-bottom: 2px; }
+  ol.rules span { color: var(--ink-2); font-size: 13.5px; }
+
+  hr.rule { border: 0; border-top: 1px solid var(--line); margin: 34px 0 0; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    .rail {
+      position: static; max-height: none; border-right: 0;
+      border-bottom: 1px solid var(--line); padding: 22px 20px;
+    }
+    .rail nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    .rail nav a { border-left: 0; border: 1px solid var(--line); border-radius: 5px; padding: 4px 9px; font-size: 12.5px; }
+    .rail nav a.on { border-color: var(--accent); }
+    main { padding: 24px 20px 80px; }
+    figure svg { min-width: 600px; }
+    .mod-r { grid-template-columns: 1fr; gap: 2px 0; }
+    .mod-r dt { padding-top: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-brand">Gok-boilerplates<br><b>nestjs-backend</b></div>
+    <p class="rail-label">Architecture</p>
+    <nav id="nav">
+      <a href="#context">System context</a>
+      <a href="#map">The module map</a>
+      <a href="#ownership">Who owns what</a>
+      <a href="#lifecycle">Request lifecycle</a>
+      <a href="#authn">Authentication</a>
+      <a href="#authz">Authorization</a>
+      <a href="#rules">Dependency rules</a>
+      <a href="#where">Where a change goes</a>
+      <a href="#enforcement">Enforcement</a>
+      <a href="#debt">Exceptions &amp; debt</a>
+      <a href="#absent">Deliberately absent</a>
+    </nav>
+    <div class="rail-foot">
+      <a class="xlink" href="./index.html"><span>Start here</span>Docs home</a>
+      <a class="xlink" href="./start.html"><span>Before this</span>Start a project</a>
+      <a class="xlink" href="./quickstart.html" id="sibling"><span>Companion</span>Quickstart</a>
+      <a class="xlink" href="./api-reference.html"><span>Companion</span>API Reference</a>
+      <a class="xlink" href="./skills.html"><span>Companion</span>Agent Skills</a>
+    </div>
+  </aside>
+
+  <main>
+    <p class="eyebrow">Backend boilerplate · architecture</p>
+    <h1>How this backend is put together, and why</h1>
+    <p class="lede">Which module owns what, which dependencies are allowed, how a request proves who it is and what it may then do — plus an honest register of everything currently wrong with it. Two questions this page exists to answer before any code is written: <strong>who owns this behaviour</strong>, and <strong>what may it depend on</strong>.</p>
+
+    <div class="stats">
+      <div class="stat"><b>12</b><span>Modules</span></div>
+      <div class="stat"><b>21</b><span>Nest modules</span></div>
+      <div class="stat"><b>8</b><span>Externals</span></div>
+      <div class="stat"><b>9</b><span>Dep. rules</span></div>
+      <div class="stat"><b>4</b><span>ADRs</span></div>
+      <div class="stat"><b>10</b><span>Known debts</span></div>
+    </div>
+    <p class="stats-note">12 module folders under <code>src/modules/</code>; 21 <code>*.module.ts</code> once Stripe and PayPal sub-features are counted.</p>
+
+    <!-- ============ CONTEXT ============ -->
+    <section id="context">
+      <p class="kicker">C4 level 1</p>
+      <h2>System context</h2>
+      <p>A REST API plus a WebSocket gateway over MongoDB. <strong>One process, one database.</strong> It is a boilerplate, so modules are meant to be deleted as often as extended — which is exactly why the boundaries below are enforced mechanically rather than by convention.</p>
+
+      <h3>External dependencies</h3>
+      <p>Every one of these is confined to a single module, and that confinement is checked. <strong>Two modules importing the same SDK means neither owns it.</strong></p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>System</th><th>Used for</th><th class="m">Owned by</th><th class="m">Via</th></tr></thead>
+          <tbody>
+            <tr><td>MongoDB</td><td>All persistence</td><td class="m">each module owns its collections</td><td class="m">mongoose</td></tr>
+            <tr><td>AWS S3</td><td>Uploads and downloads</td><td class="m">media</td><td class="m">@aws-sdk/client-s3</td></tr>
+            <tr><td>Brevo</td><td>Transactional email</td><td class="m">email</td><td class="m">@getbrevo/brevo</td></tr>
+            <tr><td>OneSignal</td><td>Push notifications</td><td class="m">onesignal</td><td class="m">@onesignal/node-onesignal</td></tr>
+            <tr><td>Stripe</td><td>Payments, subscriptions</td><td class="m">stripe/*</td><td class="m">stripe</td></tr>
+            <tr><td>PayPal</td><td>Payments, subscriptions</td><td class="m">paypal/*</td><td class="m">plain fetch — no SDK</td></tr>
+            <tr><td>Apple</td><td>Sign in with Apple</td><td class="m">auth</td><td class="m">jwks-rsa</td></tr>
+            <tr><td>OpenAI</td><td>Platform assistant</td><td class="m">platform-assistant</td><td class="m">openai</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Inbound traffic</h3>
+      <p>Four ways in, and they do not all authenticate the same way. Two of them are known holes.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Channel</th><th>Authentication</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="m">REST</td><td class="w">Bearer access token by default; <code>@Public()</code> opts a route out</td><td><span class="chip ok">sound</span></td></tr>
+            <tr><td class="m">Provider webhooks</td><td class="w">Signature header, verified in the handler. <code>@Public()</code> because there is no bearer token to send</td><td><span class="chip ok">sound</span></td></tr>
+            <tr><td class="m">SSE (notifications)</td><td class="w">Route param, not a token — <code>EventSource</code> cannot send headers</td><td><span class="chip hole">known hole</span></td></tr>
+            <tr><td class="m">WebSocket (chat)</td><td class="w"><strong>None.</strong> The handshake trusts a client-supplied <code>userId</code></td><td><span class="chip hole">known hole</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ MAP ============ -->
+    <section id="map">
+      <p class="kicker">C4 levels 2–3</p>
+      <h2>The module map</h2>
+      <p>Three categories, and they are about <em>reasoning</em>, not folders — nothing needs relocating to fit one.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Category</th><th>What it is</th><th class="m">Modules</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Business capability</strong></td><td>Owns domain behaviour and the data behind it</td><td class="m">auth, user, chat, notifications</td></tr>
+            <tr><td><strong>Shared support</strong></td><td>A reusable capability with no domain opinions</td><td class="m">email, media</td></tr>
+            <tr><td><strong>External integration</strong></td><td>Wraps one third-party provider</td><td class="m">stripe/*, paypal/*, onesignal, platform-assistant</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure>
+        <div class="fw">
+          <svg viewBox="0 0 1000 512" role="img" aria-label="Dependencies flow downward from feature and integration modules, through auth and user, to the shared support modules. Auth and user depend on each other — the one permitted cycle.">
+            <defs>
+              <marker id="m-arw" viewBox="0 0 8 8" refX="7.2" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L8 4 L0 8 z" class="mk-ink"/>
+              </marker>
+              <marker id="m-arw-a" viewBox="0 0 8 8" refX="7.2" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L8 4 L0 8 z" class="mk-acc"/>
+              </marker>
+            </defs>
+
+            <!-- AppModule -->
+            <rect x="20" y="14" width="960" height="36" rx="6" class="b-alt b-line"/>
+            <text x="500" y="37" text-anchor="middle" class="ttl t-ink">AppModule — composes, and nothing else</text>
+            <line x1="500" y1="52" x2="500" y2="70" class="s-mut" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#m-arw)"/>
+
+            <!-- Band 1 -->
+            <rect x="20" y="76" width="960" height="90" rx="7" class="b-fill b-line" stroke-dasharray="3 3"/>
+            <text x="32" y="98" class="mn-s t-mut">FEATURE &amp; INTEGRATION MODULES</text>
+
+            <rect x="32" y="106" width="176" height="40" rx="5" class="b-alt b-line"/>
+            <text x="120" y="131" text-anchor="middle" class="ttl t-ink">chat</text>
+
+            <rect x="224" y="106" width="176" height="40" rx="5" class="b-alt b-line"/>
+            <text x="312" y="131" text-anchor="middle" class="ttl t-ink">notifications</text>
+
+            <rect x="416" y="106" width="176" height="40" rx="5" class="b-alt b-line"/>
+            <text x="504" y="131" text-anchor="middle" class="ttl t-ink">stripe/*</text>
+
+            <rect x="608" y="106" width="176" height="40" rx="5" class="b-alt b-line"/>
+            <text x="696" y="131" text-anchor="middle" class="ttl t-ink">paypal/*</text>
+
+            <rect x="800" y="106" width="176" height="40" rx="5" class="b-alt b-line"/>
+            <text x="888" y="131" text-anchor="middle" class="ttl t-ink">platform-assistant</text>
+
+            <!-- band1 -> layer2 -->
+            <line x1="420" y1="168" x2="272" y2="236" class="s-ink" stroke-width="1.4" marker-end="url(#m-arw)"/>
+            <text x="292" y="196" text-anchor="end" class="mn t-mut">guards, @GetUser</text>
+
+            <line x1="640" y1="168" x2="546" y2="236" class="s-ink" stroke-width="1.4" marker-end="url(#m-arw)"/>
+            <text x="660" y="196" class="mn t-mut">account record</text>
+
+            <!-- Layer 2 -->
+            <text x="390" y="230" text-anchor="middle" class="mn-s t-acc">THE ONE PERMITTED CYCLE</text>
+
+            <rect x="150" y="240" width="200" height="64" rx="6" class="b-fill b-line"/>
+            <text x="250" y="266" text-anchor="middle" class="ttl t-ink">auth</text>
+            <text x="250" y="284" text-anchor="middle" class="mn t-mut">credentials · identity</text>
+
+            <rect x="430" y="240" width="200" height="64" rx="6" class="b-fill b-line"/>
+            <text x="530" y="266" text-anchor="middle" class="ttl t-ink">user</text>
+            <text x="530" y="284" text-anchor="middle" class="mn t-mut">the account record</text>
+
+            <rect x="690" y="240" width="260" height="64" rx="6" class="b-fill b-line"/>
+            <text x="820" y="266" text-anchor="middle" class="ttl t-ink">authorization</text>
+            <text x="820" y="284" text-anchor="middle" class="mn t-mut">@Global · the mechanism only</text>
+
+            <!-- cycle -->
+            <line x1="353" y1="258" x2="426" y2="258" class="s-acc" stroke-width="1.6" marker-end="url(#m-arw-a)"/>
+            <line x1="426" y1="286" x2="353" y2="286" class="s-acc" stroke-width="1.6" marker-end="url(#m-arw-a)"/>
+
+            <!-- user -> authorization -->
+            <line x1="633" y1="272" x2="686" y2="272" class="s-ink" stroke-width="1.4" marker-end="url(#m-arw)"/>
+            <text x="660" y="262" text-anchor="middle" class="mn t-mut">policies</text>
+
+            <text x="820" y="326" text-anchor="middle" class="mn t-mut">carries no domain vocabulary — which is what</text>
+            <text x="820" y="340" text-anchor="middle" class="mn t-mut">keeps it out of a user → authz → auth → user cycle</text>
+
+            <!-- layer2 -> band3 -->
+            <line x1="240" y1="306" x2="316" y2="394" class="s-ink" stroke-width="1.4" marker-end="url(#m-arw)"/>
+            <line x1="530" y1="306" x2="580" y2="394" class="s-ink" stroke-width="1.4" marker-end="url(#m-arw)"/>
+            <text x="196" y="356" class="mn t-mut">send mail, store files</text>
+
+            <!-- Band 3 -->
+            <rect x="240" y="398" width="460" height="90" rx="7" class="b-fill b-line" stroke-dasharray="3 3"/>
+            <text x="252" y="420" class="mn-s t-mut">SHARED SUPPORT</text>
+
+            <rect x="264" y="428" width="160" height="42" rx="5" class="b-alt b-line"/>
+            <text x="344" y="454" text-anchor="middle" class="ttl t-ink">email</text>
+
+            <rect x="516" y="428" width="160" height="42" rx="5" class="b-alt b-line"/>
+            <text x="596" y="454" text-anchor="middle" class="ttl t-ink">media</text>
+
+            <line x1="428" y1="449" x2="512" y2="449" class="s-ink" stroke-width="1.4" marker-end="url(#m-arw)"/>
+          </svg>
+        </div>
+        <figcaption>Dependencies run downward. The band-to-band arrows are collapsed: <code>chat</code>, <code>stripe/*</code> and <code>paypal/*</code> reach <code>user</code>; all five reach <code>auth</code>. Only the accent pair is bidirectional, and it is the single documented exception — a second one needs an ADR, not a <code>forwardRef</code>.</figcaption>
+      </figure>
+
+      <div class="call">
+        <p class="call-t">In progress on this branch</p>
+        <p><code>src/modules/announcements/</code> currently holds a subject constant and an authorization policy with its spec — no module, controller, service or schema, and it is not registered in <code>AppModule</code>. It is a policy landing ahead of the feature, not a shipped module, so it does not appear on the map.</p>
+      </div>
+    </section>
+
+    <!-- ============ OWNERSHIP ============ -->
+    <section id="ownership">
+      <p class="kicker">C4 levels 2–3</p>
+      <h2>Who owns what</h2>
+      <p>For each module: what belongs to it, what deliberately does not, and what it exposes. <strong>If two modules both look like the owner, the owner is the one that would have to change if the rule changed.</strong></p>
+
+      <div class="mod">
+        <div class="mod-h"><h3>auth</h3><span class="chip">business</span><span class="chip acc">the security boundary</span></div>
+        <p class="muted">Credentials, identity, and access decisions.</p>
+        <dl class="mod-r">
+          <dt>Owns</dt><dd class="own">The Passport strategy, the global access guard, <code>@Public()</code>, <code>@TenantScoped()</code> and <code>OrganizationAccessGuard</code>, access-token signing, refresh sessions, password-reset credentials, OTP issue and verify, and the request-context decorators (<code>@GetUser</code>, <code>@GetOrganizationId</code>).</dd>
+          <dt>Does not own</dt><dd>The user record. Auth reads the <code>User</code> model for credential checks and membership, but profile CRUD, roles-as-data and account lifecycle belong next door.</dd>
+          <dt>Exposes</dt><dd><code>AuthService</code>, <code>TokenService</code>, <code>RefreshTokenService</code>, <code>PasswordResetService</code>, <code>JwtStrategy</code>, <code>OrganizationAccessGuard</code> — plus guards and decorators imported directly by path.</dd>
+        </dl>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h"><h3>authorization</h3><span class="chip">business</span><span class="chip acc">@Global</span></div>
+        <p class="muted">What an identified caller may do.</p>
+        <dl class="mod-r">
+          <dt>Owns</dt><dd class="own">The permissions <em>mechanism</em>: ability construction, the <code>@RequirePermissions</code> route guard, record-level assertions, and the registry policies register with.</dd>
+          <dt>Does not own</dt><dd><strong>Any rule.</strong> Policies live in the module that owns the data. It carries no domain vocabulary at all — <code>AuthorizationContext.principal.role</code> is a <code>string</code>, not <code>USER_ROLES</code>.</dd>
+          <dt>Exposes</dt><dd><code>PermissionsGuard</code>, <code>AuthorizationService</code>, <code>AbilityFactory</code>, <code>PolicyRegistry</code>, <code>@RequirePermissions</code>, <code>@GetAbility</code>, <code>Action</code>.</dd>
+        </dl>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h"><h3>user</h3><span class="chip">business</span><span class="chip ok">reference module</span></div>
+        <p class="muted">The account record. Copy how this one does things.</p>
+        <dl class="mod-r">
+          <dt>Owns</dt><dd class="own">The <code>User</code> schema, profile CRUD, avatar handling, the email-change flow, and the role <em>value</em> stored on an account. Also the <em>rules</em> about user records — <code>policies/user.policy.ts</code>, the reference policy.</dd>
+          <dt>Does not own</dt><dd>How a caller proves who they are, or the permissions mechanism. It applies <code>PermissionsGuard</code> and <code>OrganizationAccessGuard</code> without implementing either.</dd>
+          <dt>Exposes</dt><dd><code>UserService</code>.</dd>
+        </dl>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h"><h3>chat</h3><span class="chip">business</span></div>
+        <dl class="mod-r">
+          <dt>Owns</dt><dd class="own">Chat rooms, messages, unread counts, and the WebSocket gateway.</dd>
+          <dt>Does not own</dt><dd>User identity — though it does query the <code>User</code> collection directly for participant validation and search, a documented cross-module read tracked as debt.</dd>
+          <dt>Exposes</dt><dd>Focused services — <code>ChatRoomService</code>, <code>ChatMessageService</code>, <code>ChatUnreadService</code> — not one general-purpose <code>ChatService</code>.</dd>
+        </dl>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h"><h3>notifications</h3><span class="chip">business</span></div>
+        <dl class="mod-r">
+          <dt>Owns</dt><dd class="own">Notification records, per-user read state, and the SSE stream.</dd>
+          <dt>Does not own</dt><dd>Push delivery (<code>onesignal</code>) or email delivery (<code>email</code>).</dd>
+          <dt>Exposes</dt><dd><code>NotificationService</code>, <code>NotificationReadService</code>, <code>NotificationStreamService</code>.</dd>
+        </dl>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h"><h3>email</h3><span class="chip">support</span></div>
+        <dl class="mod-r">
+          <dt>Owns</dt><dd class="own">Provider selection, Handlebars templates, and sending.</dd>
+          <dt>Does not own</dt><dd><em>When</em> an email is sent or what it says domain-wise — the calling module decides that and passes the data.</dd>
+          <dt>Exposes</dt><dd><code>EmailService</code>.</dd>
+        </dl>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h"><h3>media</h3><span class="chip">support</span></div>
+        <dl class="mod-r">
+          <dt>Owns</dt><dd class="own">S3 presigning and deletion.</dd>
+          <dt>Does not own</dt><dd>What a file means to the domain.</dd>
+          <dt>Exposes</dt><dd><code>MediaService</code>.</dd>
+        </dl>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h"><h3>stripe/* · paypal/*</h3><span class="chip">integration</span></div>
+        <p class="muted">Each is a thin base module exporting the SDK client, plus sub-feature modules — <code>payment</code>, <code>subscription</code>, <code>invoice</code>, <code>webhook</code>.</p>
+        <dl class="mod-r">
+          <dt>Own</dt><dd class="own">Everything provider-shaped: SDK calls, webhook signature verification, provider ID mapping.</dd>
+          <dt>Do not own</dt><dd>Application concepts that outlive the provider.</dd>
+        </dl>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h"><h3>onesignal</h3><span class="chip">integration</span></div>
+        <dl class="mod-r">
+          <dt>Owns</dt><dd class="own">The OneSignal SDK.</dd>
+          <dt>Exposes</dt><dd><code>OneSignalService</code>.</dd>
+        </dl>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h"><h3>platform-assistant</h3><span class="chip">integration</span><span class="chip acc">portable</span></div>
+        <p class="muted">A self-contained, project-agnostic LLM assistant configured through env and its own <code>context/</code> folder. It brings its own <code>ConfiguredAuthGuard</code> and is marked <code>@Public()</code> so the global guard defers to it.</p>
+        <dl class="mod-r">
+          <dt>Rule</dt><dd class="own"><strong>Do not wire application services into it.</strong> Its whole value is copying out of this repo unchanged.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ LIFECYCLE ============ -->
+    <section id="lifecycle">
+      <p class="kicker">Security model</p>
+      <h2>Request lifecycle</h2>
+      <p>What happens between the socket and your handler, in order.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="num">#</th><th>Step</th><th class="m">Component</th><th>Reads DB</th></tr></thead>
+          <tbody>
+            <tr><td class="num m">1</td><td class="w">Is this route <code>@Public()</code>? If so, straight to the handler</td><td class="m">JwtAccessGuard</td><td><span class="chip ok">no</span></td></tr>
+            <tr><td class="num m">2</td><td class="w">Verify signature, expiry, HS256, issuer, audience</td><td class="m">JwtStrategy</td><td><span class="chip ok">no</span></td></tr>
+            <tr><td class="num m">3</td><td class="w">Check <code>type === SIGNIN_TOKEN</code> and that <code>sub</code>, <code>email</code> and a known role are present</td><td class="m">isAccessTokenClaims</td><td><span class="chip ok">no</span></td></tr>
+            <tr><td class="num m">4</td><td class="w">Attach the <code>AuthenticatedPrincipal</code> to <code>request.user</code></td><td class="m">JwtStrategy</td><td><span class="chip ok">no</span></td></tr>
+            <tr><td class="num m">5</td><td class="w">On <code>@TenantScoped()</code> routes only: confirm membership of the asserted organization</td><td class="m">OrganizationAccessGuard</td><td><span class="chip debt">yes</span></td></tr>
+            <tr><td class="num m">6</td><td class="w">Compose every registered policy into one ability for this caller</td><td class="m">AbilityFactory</td><td><span class="chip ok">no</span></td></tr>
+            <tr><td class="num m">7</td><td class="w">Test <code>@RequirePermissions</code> against it — 403 if unsatisfied</td><td class="m">PermissionsGuard</td><td><span class="chip ok">no</span></td></tr>
+            <tr><td class="num m">8</td><td class="w">Strip undeclared properties, validate the DTO</td><td class="m">CustomValidationPipe</td><td><span class="chip ok">no</span></td></tr>
+            <tr><td class="num m">9</td><td class="w">Handler runs; the service loads the record and calls <code>assertCan</code> on it</td><td class="m">your service</td><td><span class="chip debt">yes</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>No step in 1–8 reads the user collection</strong>, apart from the tenant guard on routes that explicitly ask for it. That is the design, and it is asserted by a test rather than merely intended.</p>
+    </section>
+
+    <!-- ============ AUTHN ============ -->
+    <section id="authn">
+      <p class="kicker">Security model</p>
+      <h2>Authentication</h2>
+      <p>Authentication is <strong>on by default</strong>. A new controller needs no guard to be protected; it needs <code>@Public()</code> to not be.</p>
+
+      <h3>The authenticated principal</h3>
+      <p><code>JwtStrategy.validate()</code> is the only producer of this shape. Everything downstream reads it and nothing else.</p>
+<pre><code><span class="kw">type</span> AuthenticatedPrincipal = {
+  id: <span class="kw">string</span>;
+  email: <span class="kw">string</span>;
+  role: USER_ROLES;
+  sessionId?: <span class="kw">string</span>;
+};</code></pre>
+
+      <h3>Access tokens</h3>
+      <p>15-minute TTL, HS256. Every claim below is checked, not merely present.</p>
+<pre><code>{
+  <span class="st">"sub"</span>: <span class="st">"507f1f77bcf86cd799439011"</span>,
+  <span class="st">"email"</span>: <span class="st">"user@example.com"</span>,
+  <span class="st">"role"</span>: <span class="st">"ADMIN"</span>,
+  <span class="st">"type"</span>: <span class="st">"SIGNIN_TOKEN"</span>,
+  <span class="st">"sid"</span>: <span class="st">"507f1f77bcf86cd799439099"</span>,
+  <span class="st">"iss"</span>: <span class="st">"nestjs-backend"</span>,
+  <span class="st">"aud"</span>: <span class="st">"nestjs-api"</span>,
+  <span class="st">"exp"</span>: 1234567890
+}</code></pre>
+      <div class="call warn">
+        <p class="call-t">Encoded, not encrypted</p>
+        <p>Anyone holding the token can read every claim. Only what the authorization boundary actually consumes goes in — never anything else.</p>
+      </div>
+
+      <h3>Sessions and rotation</h3>
+      <figure>
+        <div class="fw">
+          <svg viewBox="0 0 960 290" role="img" aria-label="Login stores only a hash of the refresh token and issues a token pair. Refreshing retires the presented token and issues a successor. Presenting an already-retired token revokes every session for that user.">
+            <defs>
+              <marker id="t-arw" viewBox="0 0 8 8" refX="7.2" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L8 4 L0 8 z" class="mk-ink"/>
+              </marker>
+              <marker id="t-arw-h" viewBox="0 0 8 8" refX="7.2" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L8 4 L0 8 z" class="mk-hole"/>
+              </marker>
+            </defs>
+
+            <path d="M806 76 L806 44 L546 44 L546 74" fill="none" class="s-ink" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#t-arw)"/>
+            <text x="676" y="36" text-anchor="middle" class="mn t-mut">rotates on every use — store the new one each time</text>
+
+            <rect x="16" y="76" width="160" height="52" rx="6" class="b-alt b-line"/>
+            <text x="96" y="99" text-anchor="middle" class="ttl-s t-ink">POST /auth/login</text>
+            <text x="96" y="115" text-anchor="middle" class="mn t-mut">credentials</text>
+
+            <line x1="178" y1="102" x2="192" y2="102" class="s-ink" stroke-width="1.4" marker-end="url(#t-arw)"/>
+
+            <rect x="196" y="76" width="220" height="52" rx="6" class="b-fill b-line"/>
+            <text x="306" y="99" text-anchor="middle" class="ttl-s t-ink">session row created</text>
+            <text x="306" y="115" text-anchor="middle" class="mn t-mut">stores SHA-256 only</text>
+
+            <line x1="418" y1="102" x2="432" y2="102" class="s-ink" stroke-width="1.4" marker-end="url(#t-arw)"/>
+
+            <rect x="436" y="76" width="220" height="52" rx="6" class="b-ok"/>
+            <text x="546" y="99" text-anchor="middle" class="ttl-s t-ok">access 15m + refresh 60d</text>
+            <text x="546" y="115" text-anchor="middle" class="mn t-ok">returned to the client</text>
+
+            <line x1="658" y1="102" x2="672" y2="102" class="s-ink" stroke-width="1.4" marker-end="url(#t-arw)"/>
+
+            <rect x="676" y="76" width="260" height="52" rx="6" class="b-fill b-line"/>
+            <text x="806" y="99" text-anchor="middle" class="ttl-s t-ink">POST /auth/refresh-token</text>
+            <text x="806" y="115" text-anchor="middle" class="mn t-mut">claim + retire, atomically</text>
+
+            <path d="M806 130 L806 162 L450 162 L450 186" fill="none" class="s-hole" stroke-width="1.4" marker-end="url(#t-arw-h)"/>
+
+            <rect x="300" y="190" width="300" height="52" rx="6" class="b-hole"/>
+            <text x="450" y="213" text-anchor="middle" class="ttl-s t-hole">a retired token presented again</text>
+            <text x="450" y="229" text-anchor="middle" class="mn t-hole">theft, or a client that did not store the new one</text>
+
+            <line x1="602" y1="216" x2="636" y2="216" class="s-hole" stroke-width="1.4" marker-end="url(#t-arw-h)"/>
+
+            <rect x="640" y="190" width="300" height="52" rx="6" class="b-hole"/>
+            <text x="790" y="213" text-anchor="middle" class="ttl-s t-hole">EVERY session for that user</text>
+            <text x="790" y="229" text-anchor="middle" class="ttl-s t-hole">is revoked</text>
+
+            <text x="16" y="270" class="mn t-mut">Access tokens already issued stay valid until they expire — at most 15 minutes. That bounded window is the price of a stateless access check.</text>
+          </svg>
+        </div>
+        <figcaption>Only a SHA-256 of the refresh token is stored, so a database dump does not yield usable refresh tokens. Reuse detection is why a client <strong>must</strong> persist the new <code>refreshToken</code> from every refresh response — replaying the old one logs the user out everywhere.</figcaption>
+      </figure>
+
+      <h3>What revokes what</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Event</th><th>Effect</th></tr></thead>
+          <tbody>
+            <tr><td class="m">Logout</td><td class="w">Revokes the session named by <code>sid</code>. A token carrying no <code>sid</code> revokes <strong>every</strong> session, rather than reporting success having revoked nothing.</td></tr>
+            <tr><td class="m">Logout all devices</td><td class="w">Every session for the user.</td></tr>
+            <tr><td class="m">Password change</td><td class="w">Every session, plus outstanding reset links and unredeemed OTPs of both kinds.</td></tr>
+            <tr><td class="m">Password reset</td><td class="w">Same as password change.</td></tr>
+            <tr><td class="m">Suspended / deleted</td><td class="w">Refresh refused and remaining sessions revoked at the next attempt.</td></tr>
+            <tr><td class="m">Rotated token reused</td><td class="w">Every session for the user.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Password reset — two deliberate omissions</h3>
+      <ul class="tight">
+        <li><strong>It does not accept an email.</strong> <code>VerifyResetPasswordDto</code> has no such field, and the global <code>whitelist: true</code> pipe strips one if sent. The account comes from the consumed record, so the credential and the identity it authorizes come from the same place.</li>
+        <li><strong>It does not put the token in a JWT.</strong> Single-use is server-side state; a JWT cannot be un-issued.</li>
+      </ul>
+      <div class="call danger">
+        <p class="call-t">Never log a raw reset token or a full reset URL</p>
+        <p>Either one is a working password reset for that account.</p>
+      </div>
+
+      <h3>Tenancy</h3>
+      <p><code>x-organization-id</code> is <strong>an assertion by the caller</strong>, not a fact. Two request properties keep that distinction visible:</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Property</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td class="m">request.requestedOrganizationId</td><td>What they asked for. <strong>Untrusted.</strong></td></tr>
+            <tr><td class="m">request.organizationId</td><td>What they were found entitled to. Written only by <code>OrganizationAccessGuard</code>, read only via <code>@GetOrganizationId()</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Without the guard, <code>@GetOrganizationId()</code> returns <strong>403 rather than <code>undefined</code></strong>. An empty tenant filter turns "scoped to my organization" into "scoped to everything", so failing is the safe answer.</p>
+    </section>
+
+    <!-- ============ AUTHZ ============ -->
+    <section id="authz">
+      <p class="kicker">Security model</p>
+      <h2>Authorization</h2>
+      <p>Authentication answers <em>who</em>; this answers <em>what</em>. CASL is the engine (ADR 0003), and the split that matters is this: <strong>the authorization module owns the mechanism and none of the rules.</strong> Policies live in the module that owns the data and register themselves, so the authorization module never learns which domain modules exist — and adding a feature never means editing it.</p>
+
+      <h3>Vocabulary</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Term</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td class="m">Action</td><td class="w"><code>Manage</code>, <code>Create</code>, <code>Read</code>, <code>Update</code>, <code>Delete</code>, <code>List</code>. <code>Manage</code> is CASL's wildcard.</td></tr>
+            <tr><td class="m">Subject</td><td class="w">A name such as <code>'User'</code>, declared by the module that owns the data — or a record tagged with one via <code>subject()</code>.</td></tr>
+            <tr><td class="m">Ability</td><td class="w">The composed rule set for one caller, built per request, attached to <code>request.ability</code>, read with <code>@GetAbility()</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><code>List</code> is separate from <code>Read</code> because callers who may browse a directory often may not open an arbitrary entry — exactly the split this codebase already had between <code>GET /users/all</code> and <code>GET /users/:id</code>.</p>
+
+      <h3>Two stages, and why both are required</h3>
+      <p>This is <strong>not</strong> defence in depth. It is one mechanism with a hole the second stage exists to close.</p>
+
+      <figure>
+        <div class="fw">
+          <svg viewBox="0 0 980 272" role="img" aria-label="A policy with a condition passes the route guard's name-only check, and is only correctly refused by the record-level check in the service.">
+            <defs>
+              <marker id="z-arw" viewBox="0 0 8 8" refX="7.2" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L8 4 L0 8 z" class="mk-ink"/>
+              </marker>
+            </defs>
+
+            <rect x="16" y="52" width="264" height="96" rx="6" class="b-alt b-line"/>
+            <text x="30" y="72" class="mn-s t-mut">POLICY — LIVES IN `user`</text>
+            <text x="30" y="96" class="mn t-ink">can(Action.Read,</text>
+            <text x="30" y="112" class="mn t-ink">    USER_SUBJECT,</text>
+            <text x="30" y="128" class="mn t-acc">    { _id: principal.id })</text>
+
+            <line x1="284" y1="100" x2="304" y2="100" class="s-ink" stroke-width="1.4" marker-end="url(#z-arw)"/>
+
+            <rect x="308" y="40" width="316" height="120" rx="6" class="b-fill b-line"/>
+            <text x="322" y="62" class="mn-s t-mut">STAGE 1 — ROUTE GUARD</text>
+            <text x="322" y="79" class="mn t-sub">PermissionsGuard · nothing loaded yet</text>
+            <rect x="322" y="88" width="288" height="26" rx="4" class="b-alt b-line"/>
+            <text x="332" y="105" class="mn t-ink">ability.can('read', 'User')</text>
+            <text x="322" y="136" class="ttl-s t-debt">→ true</text>
+            <text x="380" y="136" class="mn t-debt">the condition is never tested</text>
+
+            <line x1="628" y1="100" x2="648" y2="100" class="s-ink" stroke-width="1.4" marker-end="url(#z-arw)"/>
+
+            <rect x="652" y="40" width="312" height="120" rx="6" class="b-fill b-line"/>
+            <text x="666" y="62" class="mn-s t-mut">STAGE 2 — THE SERVICE</text>
+            <text x="666" y="79" class="mn t-sub">assertCan · record now loaded</text>
+            <rect x="666" y="88" width="284" height="26" rx="4" class="b-alt b-line"/>
+            <text x="674" y="105" class="mn t-ink">can('read', subject('User', rec))</text>
+            <text x="666" y="136" class="ttl-s t-ok">→ false</text>
+            <text x="724" y="136" class="mn t-ok">for anyone else's record</text>
+
+            <rect x="16" y="196" width="948" height="52" rx="6" class="b-hole"/>
+            <text x="32" y="219" class="ttl-s t-hole">Skip stage 2 and "read your own profile" silently becomes "read every profile".</text>
+            <text x="32" y="238" class="mn t-hole">Rule of thumb: if a policy attaches a condition to a subject, every route reading a single record of that subject needs assertCan.</text>
+          </svg>
+        </div>
+        <figcaption>CASL's name-only check ignores conditions, so a caller who may read only their own record still passes a guard that checks the subject <em>name</em>. <code>AuthorizationService.assertCan</code> refuses when handed no ability, so a route missing <code>PermissionsGuard</code> fails closed rather than reading as permitted.</figcaption>
+      </figure>
+
+      <h3>Field-level rules</h3>
+      <p>A grant can name the fields it covers. Without this, "edit your own profile" also means "make yourself an OWNER" — the record check passes because the record <em>is</em> theirs, and an unfiltered DTO carries <code>role</code> straight through.</p>
+<pre><code>can(Action.Update, USER_SUBJECT, [<span class="st">'name'</span>, <span class="st">'phone'</span>], { _id: principal.id });</code></pre>
+      <p>Callers pass the fields they are writing to <code>assertCan</code>, which refuses if any falls outside the grant. A grant with no field list covers every field, so field checks are inert until a policy narrows one.</p>
+
+      <h3>Guard ordering — the mistake that fails silently</h3>
+      <div class="call danger">
+        <p class="call-t">Nest only respects ordering within a single @UseGuards</p>
+        <p>Controller-level guards run before route-level ones. A tenant guard applied <em>per route</em> therefore runs <strong>after</strong> <code>PermissionsGuard</code>, and the ability gets built with <code>organizationId: undefined</code> — every tenant-conditioned rule quietly evaluating against nothing. Declare both at controller level, in order:</p>
+      </div>
+<pre><code>@UseGuards(OrganizationAccessGuard, PermissionsGuard)
+<span class="kw">export class</span> UserController {
+  @Get(<span class="st">'all'</span>)
+  @TenantScoped()          <span class="cm">// the tenant guard stands aside without this</span>
+  @RequirePermissions({ action: Action.List, subject: USER_SUBJECT })</code></pre>
+
+      <h3>Statelessness, and what it costs</h3>
+      <p><code>PermissionsGuard</code> reads nothing from the database — abilities are built from token claims and already-authorized tenant context. Stated plainly: <strong>a role change takes effect when the caller's current access token expires, up to 15 minutes later.</strong> Anything needing immediate effect must revoke the refresh sessions and accept the same bounded window.</p>
+      <p>Tenant membership is the deliberate exception. It is per-user mutable state a short-lived token cannot speak for, so the guard reads it — separately, after identity is settled, and only on <code>@TenantScoped()</code> routes.</p>
+
+      <h3>401 versus 403</h3>
+      <ul class="tight">
+        <li><strong>401</strong> — no identity, or an untrustworthy one. Re-authenticating may help.</li>
+        <li><strong>403</strong> — identity established, action not permitted. Re-authenticating cannot help.</li>
+      </ul>
+      <p>Every refusal returns the <strong>same message</strong> whatever the caller lacked. Naming the missing permission tells someone probing the API which door to try next.</p>
+
+      <h3>Forbidden patterns</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Do not</th><th>Instead</th></tr></thead>
+          <tbody>
+            <tr><td>Add a role guard for business rules</td><td>Write a policy</td></tr>
+            <tr><td>Put <code>@Roles(...)</code> on a new route</td><td><code>@RequirePermissions(...)</code></td></tr>
+            <tr><td>Check roles inside a service</td><td>Take an <code>AppAbility</code> and <code>assertCan</code></td></tr>
+            <tr><td>Read the database in a policy or guard</td><td>Put the claim in the token, or check after loading</td></tr>
+            <tr><td>Pass a request into a service for authorization</td><td>Pass the <code>AppAbility</code></td></tr>
+            <tr><td>Use a raw <code>x-organization-id</code> in a policy</td><td>Use <code>context.organizationId</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">Policies must be <strong>pure</strong> — read the context, add rules, return. <code>PermissionsGuard</code> runs every policy on every guarded request, so a policy that awaits something makes authorization as slow as its slowest rule.</p>
+      <p><code>@Roles</code> and <code>RolesGuard</code> are deprecated but retained so an adopter's existing routes keep working. Nothing in <code>src/</code> still applies them.</p>
+    </section>
+
+    <!-- ============ RULES ============ -->
+    <section id="rules">
+      <p class="kicker">The contract</p>
+      <h2>Dependency rules</h2>
+      <p>Nine rules. Violating most of them blocks the commit.</p>
+      <ol class="rules">
+        <li><b>Controllers call services in their own module.</b><span>A controller may use another module's <em>contract</em> — guards, decorators, DTOs, constants — but not its internals. Reaching for a service or gateway means the boundary is in the wrong place.</span></li>
+        <li><b>Provider SDKs stay in their module.</b><span><code>stripe</code>, <code>@aws-sdk/*</code>, <code>@getbrevo/brevo</code>, <code>@onesignal/*</code>, <code>openai</code>, <code>socket.io</code>, <code>jsonwebtoken</code>, <code>bcrypt</code>, <code>otplib</code> are each confined to exactly one module, subpath imports included.</span></li>
+        <li><b>Do not import another module's schema for convenience.</b><span>Needing another module's data is a signal to call its service. Re-exporting a schema through an intermediate file does not launder it — the check follows <code>export … from '*.schema'</code> too.</span></li>
+        <li><b>Cross-module dependencies express a capability need.</b><span>"I need to send email" — not "that file happened to have what I wanted".</span></li>
+        <li><b>Two modules should not depend on each other.</b><span>One documented exception exists (<code>auth ↔ user</code>). Adding a second needs an ADR.</span></li>
+        <li><b><code>forwardRef</code> is not an architecture.</b><span>It is an escape hatch for a cycle you have decided to keep. Every current use is baselined — in modules and in providers — so the count can fall but not rise unnoticed.</span></li>
+        <li><b>Shared helpers are not a dumping ground.</b><span><code>src/utils</code>, <code>src/types</code>, <code>src/constants</code> and <code>src/guards</code> hold dependency-free code and may import no feature module. Anything that only makes sense alongside a module lives <em>in</em> it — which is why <code>@GetUser</code> moved into <code>auth</code>. <code>src/scripts</code> is exempt.</span></li>
+        <li><b><code>AppModule</code> composes and nothing else.</b><span>No business providers, no orchestration.</span></li>
+        <li><b>Export the capability, not the internals.</b><span>A module's <code>exports</code> is its contract. Keep it to what others genuinely need.</span></li>
+      </ol>
+    </section>
+
+    <!-- ============ WHERE ============ -->
+    <section id="where">
+      <p class="kicker">The contract</p>
+      <h2>Where a change goes</h2>
+      <p>Resolve ownership <em>before</em> implementing. This table is the whole point of the document.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Change</th><th>Home</th></tr></thead>
+          <tbody>
+            <tr><td>New HTTP endpoint</td><td>Controller of the owning module</td></tr>
+            <tr><td>New business rule</td><td>Focused service in the owning module</td></tr>
+            <tr><td>New Mongo schema</td><td>The module that owns that data</td></tr>
+            <tr><td>External provider call</td><td>That provider's integration module</td></tr>
+            <tr><td>Authentication / authorization</td><td><code>auth</code>, or a policy in the module owning the data</td></tr>
+            <tr><td>Reusable validation</td><td>The DTO, via <code>class-validator</code></td></tr>
+            <tr><td>Sending an email</td><td>Call <code>EmailService</code>; the template lives in <code>email</code></td></tr>
+            <tr><td>File upload / download</td><td>Call <code>MediaService</code></td></tr>
+            <tr><td>Cross-module workflow</td><td>The module that owns the <em>outcome</em>, calling others' services</td></tr>
+            <tr><td>Truly generic, dependency-free helper</td><td><code>src/utils</code>, <code>src/types</code>, <code>src/constants</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Where new auth behaviour belongs</h4>
+      <div class="tw">
+        <table>
+          <thead><tr><th>You want to…</th><th class="m">Put it in</th><th class="m">Not in</th></tr></thead>
+          <tbody>
+            <tr><td>Change what makes a token valid</td><td class="m">jwt.strategy.ts + isAccessTokenClaims()</td><td class="m">a guard, a controller</td></tr>
+            <tr><td>Add a claim to the access token</td><td class="m">token.service.ts + AccessTokenClaims</td><td class="m">the call site that needs it</td></tr>
+            <tr><td>Add a permission rule</td><td class="m">a policy in the owning module</td><td class="m">JwtStrategy, JwtAccessGuard</td></tr>
+            <tr><td>Change session / logout behaviour</td><td class="m">refresh-token.service.ts</td><td class="m">the controller</td></tr>
+            <tr><td>Change reset-credential behaviour</td><td class="m">password-reset.service.ts</td><td class="m">auth.service.ts</td></tr>
+            <tr><td>Make a route anonymous</td><td class="m">@Public() on that route</td><td class="m">removing a guard</td></tr>
+            <tr><td>Add a second credential type</td><td class="m"><strong>an ADR first</strong></td><td class="m">a second strategy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">If your change means relaxing one of the auth lint rules, that is the signal to write an ADR rather than to edit the rule.</p>
+    </section>
+
+    <!-- ============ ENFORCEMENT ============ -->
+    <section id="enforcement">
+      <p class="kicker">The contract</p>
+      <h2>Enforcement</h2>
+      <p>These rules are checked, not merely written down.</p>
+<pre><code>pnpm run architecture:check      <span class="cm"># stage 5 of `verify`</span>
+pnpm run architecture:baseline   <span class="cm"># re-record after resolving one; refuses to add</span>
+pnpm run architecture:accept     <span class="cm"># explicitly accept a documented new exception</span>
+pnpm run architecture:test       <span class="cm"># the checker's own tests</span></code></pre>
+      <p>It reports new module cycles, forbidden cross-module reads, and provider-SDK leakage — with the dependency path that caused each and the direction it expected.</p>
+
+      <div class="call">
+        <p class="call-t">The baseline is keyed by file, not by rule</p>
+        <p>So a new file cannot inherit an existing exception: <code>modules/auth</code> already reading <code>user.schema.ts</code> does not license the next file to do the same. The list can shrink but never grows on its own. Recording a <em>new</em> exception is a deliberate act — document it here first, then regenerate.</p>
+      </div>
+
+      <h3>Auth-specific lint rules</h3>
+      <p>Seven rules in <code>tools/eslint-rules/rules/auth.mjs</code>. Each bans a pattern that was real code in this repo before the auth rewrite.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Rule</th><th>Bans</th></tr></thead>
+          <tbody>
+            <tr><td class="m">no-direct-jwt-verify</td><td>A second token-verification path</td></tr>
+            <tr><td class="m">no-direct-jwt-sign</td><td>Minting tokens outside <code>TokenService</code></td></tr>
+            <tr><td class="m">no-db-in-access-auth</td><td>A model injected into a strategy or access/role guard</td></tr>
+            <tr><td class="m">no-legacy-auth-guard</td><td>Referencing the deleted <code>JwtAuthGuard</code></td></tr>
+            <tr><td class="m">no-raw-organization-header</td><td>Reading the tenant header outside its guard</td></tr>
+            <tr><td class="m">no-manual-bearer-parsing</td><td>Hand-rolled <code>Authorization</code> parsing</td></tr>
+            <tr><td class="m">one-access-strategy</td><td>A second Passport JWT strategy</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>What the rules cannot catch</h4>
+      <p>They are static checks, so they see syntax, not behaviour. Indirection defeats them — re-exporting <code>verify</code>, or taking a reference before calling it. A different JWT library is not in the allow-list of names. And a guard that delegates its lookup to an injected <strong>service</strong> reads the database without ever naming a model.</p>
+      <p>That last one is covered behaviourally instead: the authorization e2e asserts the user collection is read <strong>zero</strong> times across an authenticated request, which fails however the read is spelled. <strong>Treat the lint rules as fast feedback and that assertion as the real guarantee.</strong></p>
+
+      <h3>Security scanning — what runs, and what does not</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Layer</th><th>Catches</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>ESLint + <code>nestjs/*</code></td><td class="w">Project invariants — auth boundaries, module boundaries, response envelope</td><td><span class="chip ok">active</span></td></tr>
+            <tr><td>Dependabot version updates</td><td class="w">Outdated dependencies</td><td><span class="chip ok">active</span></td></tr>
+            <tr><td>Dependabot security alerts</td><td class="w">Dependencies that are <em>vulnerable</em>, not merely old</td><td><span class="chip debt">off — repo setting</span></td></tr>
+            <tr><td>CodeQL</td><td class="w">Semantic analysis — injection, taint flow</td><td><span class="chip hole">blocked</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>There is no CodeQL workflow on purpose. Code scanning needs GitHub Advanced Security, unavailable for a private repo on a free organisation plan — verified against the API rather than assumed. A workflow committed today would initialise, analyse, then fail at the upload step on every run: a permanently red check teaches people to ignore red checks, which is worse than no workflow. It unblocks if the org changes plan, the repo goes public, or GitHub changes the entitlement.</p>
+      <p class="muted">Security alerts are a separate, account-side switch under <strong>Settings → Code security</strong>. <code>.github/dependabot.yml</code> configures version updates only — it does not turn alerts on.</p>
+    </section>
+
+    <!-- ============ DEBT ============ -->
+    <section id="debt">
+      <p class="kicker">Honest register</p>
+      <h2>Known exceptions and debt</h2>
+      <p>Listed so they read as decisions, not as patterns to copy. One is accepted; the rest are debt, and two are live security holes.</p>
+      <p class="stats-note">
+        <span class="chip ok">accepted</span> settled, do not "fix" &nbsp;
+        <span class="chip debt">debt</span> wants an issue &nbsp;
+        <span class="chip hole">known hole</span> security-relevant
+      </p>
+
+      <div class="debt-item a">
+        <div class="debt-h"><span class="debt-n">01</span><h3><code>auth ↔ user</code> is a permitted cycle</h3><span class="chip ok">accepted</span></div>
+        <p><code>auth</code> needs the <code>User</code> model and <code>USER_ROLES</code>; <code>user</code> needs the guards, decorators and password hashing. The two are mutually defining — credentials without an account record mean nothing.</p>
+        <p><strong>Do not</strong> "fix" it with more <code>forwardRef</code>. If it is ever broken, that is an ADR.</p>
+      </div>
+
+      <div class="debt-item d">
+        <div class="debt-h"><span class="debt-n">02</span><h3><code>AuthModule</code> and <code>UserModule</code> each declare <code>UserService</code></h3><span class="chip debt">debt</span></div>
+        <p>Rather than importing <code>UserModule</code>, both list <code>UserService</code> (and <code>MediaService</code>, <code>EmailService</code>) in <code>providers</code>. Nest therefore builds <strong>separate instances</strong> — harmless while these services are stateless, wrong the moment one caches anything.</p>
+        <p>The fix is a one-directional import once the cycle above is resolved.</p>
+      </div>
+
+      <div class="debt-item d">
+        <div class="debt-h"><span class="debt-n">03</span><h3>Payment and chat schemas reference the <code>User</code> schema directly</h3><span class="chip debt">debt</span></div>
+        <p><code>stripe/card</code>, <code>stripe/subscription</code>, <code>paypal/subscription</code> and <code>chat</code> import <code>User</code> to declare <code>ref</code> relationships — a Mongoose idiom rather than a business dependency. Baselined per file. The fix is a shared <code>ref</code> constant so the schema type is not the coupling point.</p>
+      </div>
+
+      <div class="debt-item d">
+        <div class="debt-h"><span class="debt-n">04</span><h3><code>chat</code> reads the <code>User</code> collection directly</h3><span class="chip debt">debt</span></div>
+        <p>It queries users for participant validation and search rather than calling <code>UserService</code>. Narrow and deliberate, and baselined so it cannot spread.</p>
+      </div>
+
+      <div class="debt-item d">
+        <div class="debt-h"><span class="debt-n">05</span><h3>Clearing <code>emailVerified</code> leaves no way to re-verify</h3><span class="chip debt">debt</span></div>
+        <p><code>UserService.changeEmail</code> and <code>update</code> both set <code>emailVerified: false</code> when the address changes but leave <code>status</code> as <code>ACTIVE</code>. Signup verification is the only path that sets it true, and it refuses anything not <code>PENDING</code> — so once an active user changes their address, the flag stays false with no route back.</p>
+        <p>Harmless today because nothing gates on it for an active account. It becomes a live bug the moment something does. Wants either a re-verification flow or a decision that the flag means nothing after signup.</p>
+      </div>
+
+      <div class="debt-item d">
+        <div class="debt-h"><span class="debt-n">06</span><h3><code>POST /users</code> and <code>GET /users</code> carry no permission at all</h3><span class="chip debt">debt</span><span class="chip hole">most serious of the debts</span></div>
+        <p>Neither route has ever had a role or permission check — <strong>any authenticated caller may create a user or list every user.</strong> The CASL migration preserved behaviour rather than changing it, so they are still open. Confirmed in <code>user.controller.ts</code>: the guarded routes carry <code>@RequirePermissions</code>; these two do not.</p>
+        <p>Adding it is a small change with a real behaviour impact, so it wants its own issue and its own review.</p>
+      </div>
+
+      <div class="debt-item d">
+        <div class="debt-h"><span class="debt-n">07</span><h3>Payment controllers resolve the user from the request payload</h3><span class="chip debt">debt</span></div>
+        <p>Stripe and PayPal handlers take the user from the body instead of the authenticated principal. They <em>are</em> authenticated — the global guard covers them — but they should read <code>@GetUser</code>.</p>
+      </div>
+
+      <div class="debt-item h">
+        <div class="debt-h"><span class="debt-n">08</span><h3>The notifications SSE stream identifies its subscriber by route param</h3><span class="chip hole">known hole</span></div>
+        <p><code>EventSource</code> cannot send an <code>Authorization</code> header, so the stream is <code>@Public()</code> and trusts <code>:userId</code>. The fix is a short-lived stream ticket minted by an authenticated endpoint.</p>
+      </div>
+
+      <div class="debt-item h">
+        <div class="debt-h"><span class="debt-n">09</span><h3><code>ChatGateway</code> trusts a client-supplied <code>userId</code></h3><span class="chip hole">known hole</span></div>
+        <p>The WebSocket handshake performs no verification whatsoever. Flagged in the gateway itself. <strong>Must be closed before production.</strong></p>
+      </div>
+
+      <div class="debt-item d">
+        <div class="debt-h"><span class="debt-n">10</span><h3>Most modules answer errors with HTTP 200</h3><span class="chip debt">debt</span><span class="chip">largest remaining</span></div>
+        <p>Outside <code>auth</code>, a failure returns <code>SerializeHttpResponse(null, 4xx, …)</code> — an envelope carrying the status in its body while the response itself is <code>200</code>. Auth was converted to real status codes; chat, notifications, Stripe and PayPal were not, because that refactor explicitly required preserving HTTP contracts.</p>
+        <p>It means <strong>a client cannot rely on the HTTP status anywhere but <code>auth</code>.</strong> Converting it is a breaking change for every consumer and wants its own issue.</p>
+      </div>
+
+      <div class="call warn">
+        <p class="call-t">A numbering bug in the source doc</p>
+        <p><code>docs/architecture/module-architecture.md</code> numbers two different items <strong>8</strong>, so the list reads as nine entries when there are ten. The register above is renumbered 01–10.</p>
+      </div>
+    </section>
+
+    <!-- ============ ABSENT ============ -->
+    <section id="absent">
+      <p class="kicker">Honest register</p>
+      <h2>Deliberately absent</h2>
+      <p>Noted so their absence reads as a decision rather than an oversight. Adding any of them is an ADR.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Not here</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>API gateway, service mesh, queue</td><td>One process, one database.</td></tr>
+            <tr><td>Caching layer</td><td>Authentication needs none by design; nothing else has needed one yet.</td></tr>
+            <tr><td>Multi-region or replication strategy</td><td>Deployment is left to the project that adopts this kit.</td></tr>
+            <tr><td>Hexagonal / DDD / CQRS / repository layer</td><td>The architecture documents and constrains the module structure that exists. It does not mandate a folder migration.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="rule">
+      <h3>The four ADRs</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">ADR</th><th>Decision</th></tr></thead>
+          <tbody>
+            <tr><td class="m">0001</td><td>Authentication boundaries — stateless access checks, rotating sessions, what each claim must prove</td></tr>
+            <tr><td class="m">0002</td><td>Markdown + Mermaid as canonical documentation — not PlantUML, Structurizr or a whiteboard photo</td></tr>
+            <tr><td class="m">0003</td><td>CASL as the canonical authorization engine</td></tr>
+            <tr><td class="m">0004</td><td>pnpm as the canonical package manager</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">A document describes how things <em>are</em>; an ADR records <em>why</em> — and survives the code it was written about.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('#nav a'));
+    var map = {};
+    links.forEach(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) map[el.id] = a;
+    });
+    var visible = {};
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bestVal = 0;
+      Object.keys(visible).forEach(function (id) {
+        if (visible[id] > bestVal) { bestVal = visible[id]; best = id; }
+      });
+      links.forEach(function (a) { a.classList.remove('on'); });
+      if (best && map[best]) map[best].classList.add('on');
+    }, { rootMargin: '-8% 0px -70% 0px', threshold: [0, 0.25, 0.6, 1] });
+    Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "businessos",
+  "private": true,
+  "version": "1.0.0",
+  "description": "BusinessOS — run your entire distribution business from one place, even through WhatsApp.",
+  "engines": { "node": ">=22.0.0" },
+  "scripts": {
+    "install:all": "pnpm -C BE install && pnpm -C FE install",
+    "dev": "node scripts/dev.mjs",
+    "dev:be": "pnpm -C BE run start:dev",
+    "dev:fe": "pnpm -C FE run dev",
+    "build": "pnpm -C BE run build && pnpm -C FE run build",
+    "verify": "pnpm -C BE run verify && pnpm -C FE run verify",
+    "verify:be": "pnpm -C BE run verify",
+    "verify:fe": "pnpm -C FE run verify",
+    "seed": "pnpm -C BE run seed"
+  }
+}

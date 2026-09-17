@@ -1,0 +1,66 @@
+# Dependency update discovery. Nothing here validates anything — Dependabot
+# opens PRs, and those PRs go through the same gates as human ones (see
+# .github/workflows/ci.yml, which triggers on `pull_request` unqualified).
+#
+# Deliberately the only dependency automation in this repository: no Renovate,
+# no custom update script. Two bots proposing the same bump is noise nobody
+# reads.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Etc/UTC
+    # Conservative on purpose. A backlog of update PRs nobody reviews is worse
+    # than a slower cadence, because it trains people to close them unread.
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: chore
+      include: scope
+
+    groups:
+      # Non-breaking updates are batched so routine maintenance is one review
+      # rather than a dozen. Majors are deliberately excluded from every group
+      # below, so each arrives as its own PR with its own changelog to read —
+      # which is the whole point of separating them.
+      production-dependencies:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      development-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    # "/" is correct even though the workflows live in .github/workflows —
+    # Dependabot resolves that path itself for this ecosystem, and pointing
+    # `directory` at the workflows folder is a common way to get silently
+    # zero updates.
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+      - ci
+    commit-message:
+      prefix: ci
+      include: scope
+
+    groups:
+      github-actions:
+        update-types:
+          - minor
+          - patch

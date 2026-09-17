@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>BE Boilerplate API Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #F4F6F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F6;
+    --ink: #0E1520;
+    --ink-2: #4C5A6B;
+    --ink-3: #7E8B9C;
+    --line: #DCE3EB;
+    --line-2: #C6D0DB;
+    --accent: #2440BE;
+    --accent-soft: #E9ECFC;
+    --ok: #0E7A52;
+    --ok-soft: #E2F3EC;
+    --debt: #8F5B05;
+    --debt-soft: #FAEEDA;
+    --hole: #AB2743;
+    --hole-soft: #FBE7EB;
+    --shadow: 0 1px 2px rgba(14, 21, 32, .05);
+
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --disp: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0B0F15;
+      --surface: #131A23;
+      --surface-2: #1A222D;
+      --ink: #E4EBF3;
+      --ink-2: #9FADBE;
+      --ink-3: #6B7889;
+      --line: #212B37;
+      --line-2: #2E3A48;
+      --accent: #8098FF;
+      --accent-soft: #1A2242;
+      --ok: #40C08C;
+      --ok-soft: #10281F;
+      --debt: #DBA33F;
+      --debt-soft: #2A2113;
+      --hole: #F4708B;
+      --hole-soft: #2C141A;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0B0F15;
+    --surface: #131A23;
+    --surface-2: #1A222D;
+    --ink: #E4EBF3;
+    --ink-2: #9FADBE;
+    --ink-3: #6B7889;
+    --line: #212B37;
+    --line-2: #2E3A48;
+    --accent: #8098FF;
+    --accent-soft: #1A2242;
+    --ok: #40C08C;
+    --ok-soft: #10281F;
+    --debt: #DBA33F;
+    --debt-soft: #2A2113;
+    --hole: #F4708B;
+    --hole-soft: #2C141A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell { display: grid; grid-template-columns: 232px minmax(0, 1fr); max-width: 1400px; margin: 0 auto; }
+
+  .rail {
+    border-right: 1px solid var(--line);
+    padding: 34px 22px 60px;
+    position: sticky; top: 0; align-self: start;
+    max-height: 100vh; overflow-y: auto;
+  }
+  .rail-brand { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--ink-3); margin-bottom: 26px; line-height: 1.5; }
+  .rail-brand b { color: var(--ink); font-weight: 600; }
+  .rail-label {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: .13em; color: var(--ink-3); margin: 0 0 10px;
+  }
+  .rail nav { display: flex; flex-direction: column; gap: 1px; }
+  .rail nav a {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+    padding: 5px 10px; border-left: 2px solid transparent;
+    color: var(--ink-2); text-decoration: none; font-size: 13.5px; border-radius: 0 4px 4px 0;
+  }
+  .rail nav a i { font-style: normal; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .rail nav a:hover { color: var(--ink); background: var(--surface-2); }
+  .rail nav a.on { color: var(--accent); border-left-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+  .rail nav a.on i { color: var(--accent); }
+  .rail nav a:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .rail-foot { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+  .xlink {
+    display: block; font-size: 13px; color: var(--ink-2); text-decoration: none;
+    padding: 7px 10px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface);
+  }
+  .xlink:hover { border-color: var(--accent); color: var(--accent); }
+  .xlink span {
+    display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--ink-3); margin-bottom: 2px;
+  }
+
+  main { padding: 34px 44px 120px; min-width: 0; }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 12px;
+  }
+  h1 {
+    font-family: var(--disp); font-weight: 700;
+    font-size: clamp(34px, 4.6vw, 50px); line-height: 1.04;
+    letter-spacing: -.015em; margin: 0 0 14px; text-wrap: balance;
+  }
+  .lede { font-size: 17px; color: var(--ink-2); max-width: 68ch; margin: 0 0 28px; }
+
+  h2 { font-family: var(--disp); font-weight: 700; font-size: 26px; letter-spacing: -.01em; margin: 0 0 6px; text-wrap: balance; }
+  h3 { font-weight: 600; font-size: 16px; margin: 26px 0 8px; letter-spacing: -.005em; }
+  h3 code { font-size: 14px; }
+
+  section { scroll-margin-top: 20px; padding-top: 42px; }
+  section > .kicker {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--ink-3);
+    border-top: 1px solid var(--line); padding-top: 14px; margin: 0 0 14px;
+    display: flex; justify-content: space-between; gap: 12px;
+  }
+  p { max-width: 72ch; margin: 0 0 14px; }
+  .muted { color: var(--ink-2); }
+  strong { font-weight: 600; }
+  a { color: var(--accent); }
+
+  code {
+    font-family: var(--mono); font-size: .875em;
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 4px; padding: .08em .34em; white-space: nowrap;
+  }
+  pre {
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.62;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 7px; padding: 15px 17px; overflow-x: auto;
+    margin: 0 0 16px; box-shadow: var(--shadow);
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: inherit; white-space: pre; }
+  .cm { color: var(--ink-3); }
+  .kw { color: var(--accent); }
+  .st { color: var(--ok); }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
+    border-radius: 8px; overflow: hidden; margin: 0 0 8px;
+  }
+  .stat { background: var(--surface); padding: 13px 15px; }
+  .stat b {
+    display: block; font-family: var(--disp); font-size: 27px; font-weight: 700;
+    line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+  }
+  .stat span {
+    display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--ink-3); margin-top: 6px;
+  }
+  .stat.warn b { color: var(--hole); }
+  .stats-note { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin: 0 0 4px; }
+
+  .tw { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--ink-3); font-weight: 500;
+    background: var(--surface-2); white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.m, th.m { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  td.w { white-space: normal; }
+  .num { font-variant-numeric: tabular-nums; text-align: right; }
+
+  /* route tables */
+  table.routes td { padding: 8px 12px; }
+  table.routes td.path { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  table.routes td.path b { font-weight: 500; color: var(--ink); }
+  table.routes td.body { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); white-space: normal; min-width: 190px; }
+  table.routes td.note { white-space: normal; font-size: 13px; color: var(--ink-2); }
+  table.routes tr.flag td { background: var(--hole-soft); }
+
+  .mth {
+    display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 600;
+    letter-spacing: .06em; padding: 2px 6px; border-radius: 3px; min-width: 52px;
+    text-align: center; border: 1px solid transparent;
+  }
+  .mth.get { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+  .mth.post { color: var(--ok); background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 32%, transparent); }
+  .mth.patch { color: var(--debt); background: var(--debt-soft); border-color: color-mix(in srgb, var(--debt) 32%, transparent); }
+  .mth.del { color: var(--hole); background: var(--hole-soft); border-color: color-mix(in srgb, var(--hole) 32%, transparent); }
+  .mth.sse { color: var(--ink-2); background: var(--surface-2); border-color: var(--line-2); }
+
+  .chip {
+    display: inline-block; font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em;
+    padding: 1px 7px; border-radius: 3px; border: 1px solid var(--line-2);
+    color: var(--ink-2); background: var(--surface-2); white-space: nowrap;
+  }
+  .chip + .chip { margin-left: 3px; }
+  .chip.ok { color: var(--ok); background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+  .chip.debt { color: var(--debt); background: var(--debt-soft); border-color: color-mix(in srgb, var(--debt) 35%, transparent); }
+  .chip.hole { color: var(--hole); background: var(--hole-soft); border-color: color-mix(in srgb, var(--hole) 35%, transparent); }
+  .chip.acc { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+
+  .call {
+    border: 1px solid var(--line); border-left: 3px solid var(--accent);
+    background: var(--surface); border-radius: 0 7px 7px 0;
+    padding: 13px 17px; margin: 0 0 18px; max-width: 76ch;
+  }
+  .call p:last-child { margin-bottom: 0; }
+  .call.warn { border-left-color: var(--debt); }
+  .call.danger { border-left-color: var(--hole); }
+  .call-t {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 6px;
+  }
+  .call.warn .call-t { color: var(--debt); }
+  .call.danger .call-t { color: var(--hole); }
+
+  .modhead { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 0 0 4px; }
+  .modhead .base { font-family: var(--mono); font-size: 13px; color: var(--ink-3); }
+
+  ul.tight { margin: 0 0 14px; padding-left: 20px; max-width: 72ch; }
+  ul.tight li { margin-bottom: 5px; }
+
+  hr.rule { border: 0; border-top: 1px solid var(--line); margin: 34px 0 0; }
+
+  @media (max-width: 980px) {
+    .shell { grid-template-columns: 1fr; }
+    .rail {
+      position: static; max-height: none; border-right: 0;
+      border-bottom: 1px solid var(--line); padding: 22px 20px;
+    }
+    .rail nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    .rail nav a { border-left: 0; border: 1px solid var(--line); border-radius: 5px; padding: 4px 9px; font-size: 12.5px; }
+    .rail nav a.on { border-color: var(--accent); }
+    main { padding: 24px 20px 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-brand">Gok-boilerplates<br><b>nestjs-backend</b></div>
+    <p class="rail-label">API Reference</p>
+    <nav id="nav">
+      <a href="#conventions">Conventions</a>
+      <a href="#auth">Auth <i>15</i></a>
+      <a href="#users">Users <i>8</i></a>
+      <a href="#chat">Chat <i>10</i></a>
+      <a href="#notifications">Notifications <i>5</i></a>
+      <a href="#media">Media <i>6</i></a>
+      <a href="#stripe">Stripe <i>25</i></a>
+      <a href="#paypal">PayPal <i>17</i></a>
+      <a href="#assistant">Assistant <i>3</i></a>
+      <a href="#root">Root <i>1</i></a>
+      <a href="#nohttp">No HTTP surface</a>
+    </nav>
+    <div class="rail-foot">
+      <a class="xlink" href="./index.html"><span>Start here</span>Docs home</a>
+      <a class="xlink" href="./start.html"><span>Before this</span>Start a project</a>
+      <a class="xlink" href="./quickstart.html"><span>Companion</span>Quickstart</a>
+      <a class="xlink" href="./architecture.html"><span>Companion</span>Architecture</a>
+      <a class="xlink" href="./skills.html"><span>Companion</span>Agent Skills</a>
+    </div>
+  </aside>
+
+  <main>
+    <p class="eyebrow">Backend boilerplate · API surface</p>
+    <h1>Every endpoint in the repo, and what guards it</h1>
+    <p class="lede">All 90 routes across 16 controllers — method, path, what authenticates it, what body or query it takes, and what is worth knowing before you call it. Counted from <code>src/</code>, not from the Swagger output, so what is written here is what the decorators actually say.</p>
+
+    <div class="stats">
+      <div class="stat"><b>90</b><span>Routes</span></div>
+      <div class="stat"><b>16</b><span>Controllers</span></div>
+      <div class="stat"><b>17</b><span>@Public</span></div>
+      <div class="stat"><b>4</b><span>Permissioned</span></div>
+      <div class="stat warn"><b>2</b><span>Known holes</span></div>
+      <div class="stat warn"><b>2</b><span>Unguarded</span></div>
+    </div>
+    <p class="stats-note">Live Swagger UI at <code>/api-docs</code> — bearer auth persists between reloads.</p>
+
+    <!-- ============ CONVENTIONS ============ -->
+    <section id="conventions">
+      <p class="kicker"><span>How to read this page</span></p>
+      <h2>Conventions</h2>
+
+      <h3>Authentication is on by default</h3>
+      <p>There is a global access guard. A route is protected unless it carries <code>@Public()</code>, so the chips below describe what a route <em>adds</em> or <em>removes</em>, not what it opted into.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Chip</th><th>Means</th></tr></thead>
+          <tbody>
+            <tr><td><span class="chip ok">public</span></td><td class="w">No token needed. Reached before a credential exists, authenticated by something else, or a health check.</td></tr>
+            <tr><td><span class="chip">bearer</span></td><td class="w">Needs <code>Authorization: Bearer &lt;accessToken&gt;</code>. The default.</td></tr>
+            <tr><td><span class="chip acc">permission</span></td><td class="w">Also carries <code>@RequirePermissions</code> — a CASL check before anything is loaded.</td></tr>
+            <tr><td><span class="chip acc">record</span></td><td class="w">The service also runs <code>assertCan</code> on the loaded record. Required wherever a policy attaches a condition.</td></tr>
+            <tr><td><span class="chip acc">tenant</span></td><td class="w"><code>@TenantScoped()</code> — needs <code>x-organization-id</code>, and membership is verified.</td></tr>
+            <tr><td><span class="chip debt">signature</span></td><td class="w">Public, but authenticated by a provider signature header verified in the handler.</td></tr>
+            <tr><td><span class="chip hole">unverified</span></td><td class="w">Trusts a client-supplied identifier. A known hole, not a design.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Every response uses one envelope</h3>
+<pre><code>{ <span class="st">"data"</span>: … , <span class="st">"status"</span>: 200, <span class="st">"message"</span>: <span class="st">"…"</span> }</code></pre>
+      <div class="call danger">
+        <p class="call-t">Read this before writing a client</p>
+        <p>Only <strong><code>/auth/*</code></strong> returns real HTTP status codes. Everywhere else — users, chat, notifications, media, Stripe, PayPal — a failure comes back as <strong>HTTP 200</strong> with the real status inside <code>body.status</code>. So outside auth you must branch on the body, not the response code. It is tracked debt, not a convention to copy.</p>
+      </div>
+
+      <h3>Request bodies are stripped</h3>
+      <p>The global validation pipe runs with <code>whitelist: true</code>. Any property your DTO does not declare is deleted before the handler sees it — so sending an extra field is not an error, it simply has no effect. That is a security property: <code>POST /auth/verify-reset-password</code> relies on it to make a supplied <code>email</code> unreachable.</p>
+
+      <h3>Counts by module</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Module</th><th class="m">Base path</th><th class="num">Routes</th><th>Default auth</th></tr></thead>
+          <tbody>
+            <tr><td>Auth</td><td class="m">/auth</td><td class="num m">15</td><td>10 public, 5 bearer</td></tr>
+            <tr><td>Users</td><td class="m">/users</td><td class="num m">8</td><td>bearer + guards <span class="chip hole">2 unguarded</span></td></tr>
+            <tr><td>Chat</td><td class="m">/chat</td><td class="num m">10</td><td>bearer</td></tr>
+            <tr><td>Notifications</td><td class="m">/notifications</td><td class="num m">5</td><td>bearer <span class="chip hole">1 open SSE</span></td></tr>
+            <tr><td>Media</td><td class="m">/mediabucket</td><td class="num m">6</td><td>bearer</td></tr>
+            <tr><td>Stripe</td><td class="m">/stripe/*</td><td class="num m">25</td><td>bearer, webhook by signature</td></tr>
+            <tr><td>PayPal</td><td class="m">/paypal/*</td><td class="num m">17</td><td>bearer, webhook by signature</td></tr>
+            <tr><td>Platform Assistant</td><td class="m">/platform-assistant</td><td class="num m">3</td><td>own <code>ConfiguredAuthGuard</code></td></tr>
+            <tr><td>Root</td><td class="m">/</td><td class="num m">1</td><td>public</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ AUTH ============ -->
+    <section id="auth">
+      <p class="kicker"><span>Module</span><span>15 routes</span></p>
+      <div class="modhead"><h2>Auth</h2><span class="base">/auth</span><span class="chip">@ApiTags('Auth')</span></div>
+      <p>Credentials and sessions. The only module that returns real HTTP status codes — <code>401</code> for bad credentials, <code>403</code> for a spent reset token, <code>429</code> for OTP cooldown.</p>
+
+      <h3>Before a credential exists</h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/signup</b></td><td><span class="chip ok">public</span></td><td class="body">name, email, phone, password</td><td class="note">Creates a <code>PENDING</code> account and sends a signup OTP.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/verify-signup-otp</b></td><td><span class="chip ok">public</span></td><td class="body">email, otp</td><td class="note">Activates the account. Only path that sets <code>emailVerified: true</code>, and it refuses anything not <code>PENDING</code>.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/resend-signup-otp</b></td><td><span class="chip ok">public</span></td><td class="body">email</td><td class="note">Subject to a cooldown — <code>429</code> if too soon.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/login</b></td><td><span class="chip ok">public</span></td><td class="body">email, password</td><td class="note">Returns <code>accessToken</code>, <code>refreshToken</code>, <code>expiresIn</code>, <code>refreshExpiresIn</code>, <code>user</code>.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/apple/callback</b></td><td><span class="chip ok">public</span></td><td class="body">idToken</td><td class="note">Verified against Apple's JWKS. Writes the response status itself via <code>@Res()</code>.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/refresh-token</b></td><td><span class="chip ok">public</span></td><td class="body">refreshToken</td><td class="note">Public because the usual reason to call it is that the access token just expired — the refresh token <em>is</em> the credential. <strong>Rotates: store the new one.</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Password reset</h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/forgot-password</b></td><td><span class="chip ok">public</span></td><td class="body">email</td><td class="note">Emails an OTP.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/verify-forgot-password-otp</b></td><td><span class="chip ok">public</span></td><td class="body">email, otp</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/forgot-password-link</b></td><td><span class="chip ok">public</span></td><td class="body">email</td><td class="note">Emails a single-use link. Only a SHA-256 of the token is stored; the raw token is sent once.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/verify-reset-password</b></td><td><span class="chip ok">public</span></td><td class="body">password, token</td><td class="note"><strong>Takes no email</strong> — the account comes from the consumed record. A supplied <code>email</code> is stripped by the pipe. Revokes every session. Replay returns <code>403</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Authenticated</h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/auth/get-authenticated-user</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">The caller's own user record.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/change-password</b></td><td><span class="chip">bearer</span></td><td class="body">currentPassword, newPassword</td><td class="note">Revokes every session, outstanding reset links, and unredeemed OTPs of both kinds.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/logout</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Revokes the session named by <code>sid</code> in the token. A token without <code>sid</code> revokes <em>all</em> sessions rather than silently nothing.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/auth/logout-all-devices</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/auth/active-sessions</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Live sessions for the caller.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="call warn">
+        <p class="call-t">Refresh-token reuse revokes everything</p>
+        <p>Tokens rotate on every refresh. Presenting an already-rotated one is treated as theft and revokes <strong>every</strong> session for that user. A client that fails to persist the new <code>refreshToken</code> will log its user out everywhere.</p>
+      </div>
+    </section>
+
+    <!-- ============ USERS ============ -->
+    <section id="users">
+      <p class="kicker"><span>Module</span><span>8 routes</span></p>
+      <div class="modhead"><h2>Users</h2><span class="base">/users</span><span class="chip acc">reference module</span></div>
+      <p>The class declares <code>@UseGuards(OrganizationAccessGuard, PermissionsGuard)</code> — in that order, at controller level, because Nest only respects guard ordering within a single <code>@UseGuards</code> and the ability must be built <em>after</em> tenant context exists.</p>
+
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body / query</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr class="flag"><td class="path"><span class="mth post">POST</span> <b>/users</b></td><td><span class="chip">bearer</span></td><td class="body">multipart: name, email, phone, role, organization, avatar</td><td class="note"><strong>No permission check.</strong> Any authenticated caller may create a user, including setting <code>role</code>. Tracked debt.</td></tr>
+            <tr class="flag"><td class="path"><span class="mth get">GET</span> <b>/users</b></td><td><span class="chip">bearer</span></td><td class="body">?search</td><td class="note"><strong>No permission check.</strong> Any authenticated caller may list every user in the system. Tracked debt.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/users/all</b></td><td><span class="chip">bearer</span><span class="chip acc">tenant</span><span class="chip acc">List</span></td><td class="body">header: x-organization-id</td><td class="note">Scoped to the organization the caller was found entitled to — not the one they asked for.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/users/:id</b></td><td><span class="chip">bearer</span><span class="chip acc">Read</span><span class="chip acc">record</span></td><td class="body">—</td><td class="note">Guard checks the subject name; the service checks the record. Both are needed — see the two-stage note below.</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/users/change-email</b></td><td><span class="chip">bearer</span></td><td class="body">email, password</td><td class="note">Password-verified. Sets <code>emailVerified: false</code> — and today nothing can set it back for an active account.</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/users/me</b></td><td><span class="chip">bearer</span></td><td class="body">multipart: name, phone, languagePreference, avatar</td><td class="note">Self-service. Only those three fields are forwarded — <code>role</code>, <code>email</code> and <code>password</code> are dropped, so this cannot be used to escalate. Registered before <code>:id</code> so "me" is not matched as an id.</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/users/:id</b></td><td><span class="chip">bearer</span><span class="chip acc">Update</span><span class="chip acc">record</span></td><td class="body">multipart: name, email, phone, role, password, languagePreference, avatar</td><td class="note">The admin path. Field-level grants apply here.</td></tr>
+            <tr><td class="path"><span class="mth del">DELETE</span> <b>/users/:id</b></td><td><span class="chip">bearer</span><span class="chip acc">Delete</span><span class="chip acc">record</span></td><td class="body">—</td><td class="note">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="call danger">
+        <p class="call-t">Two routes carry no permission at all</p>
+        <p><code>POST /users</code> and <code>GET /users</code> have never had a role or permission check. The CASL migration preserved existing behaviour rather than changing it, so they are still open to any authenticated caller. This is the most serious item on the repo's debt register.</p>
+      </div>
+    </section>
+
+    <!-- ============ CHAT ============ -->
+    <section id="chat">
+      <p class="kicker"><span>Module</span><span>10 routes + gateway</span></p>
+      <div class="modhead"><h2>Chat</h2><span class="base">/chat</span></div>
+      <p>Rooms, messages and unread counts. The user is always taken from the token via <code>@GetUser('id')</code>, never from a query or body parameter.</p>
+
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body / query</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/chat/rooms</b></td><td><span class="chip">bearer</span></td><td class="body">?page &amp;limit &amp;filter &amp;search</td><td class="note">The caller's rooms.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/chat/unread-count</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Total across every room.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/chat/rooms/:roomId</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Participation is checked in the service.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/chat/rooms/user/:otherUserId</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note"><strong>Get or create</strong> the one-to-one room with that user. Not idempotent in the "read only" sense — it may write.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/chat/rooms/:roomId/messages</b></td><td><span class="chip">bearer</span></td><td class="body">?page = 1 &amp;limit = 20</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/chat/rooms/:roomId/messages</b></td><td><span class="chip">bearer</span></td><td class="body">content</td><td class="note">Also emitted over the WebSocket gateway.</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/chat/rooms/:roomId/mark-read</b></td><td><span class="chip">bearer</span></td><td class="body">messageIds?: string[]</td><td class="note">Omit the body to mark everything read.</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/chat/rooms/:roomId/mark-all-read-if-last-read</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Conditional bulk mark — only if the last message was already read.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/chat/rooms/:roomId/unread-count</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth del">DELETE</span> <b>/chat/rooms/:roomId</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>WebSocket gateway</h3>
+      <div class="call danger">
+        <p class="call-t">The handshake is not authenticated</p>
+        <p><code>ChatGateway</code> trusts a client-supplied <code>userId</code> on connect and performs no verification — anyone can connect as anyone. It is flagged in the gateway itself and must be closed before production. The REST routes above are unaffected; they authenticate normally.</p>
+      </div>
+      <p class="muted">The module also reads the <code>User</code> collection directly for participant validation and search, rather than calling <code>UserService</code>. Deliberate, narrow, and baselined so it cannot spread.</p>
+    </section>
+
+    <!-- ============ NOTIFICATIONS ============ -->
+    <section id="notifications">
+      <p class="kicker"><span>Module</span><span>5 routes</span></p>
+      <div class="modhead"><h2>Notifications</h2><span class="base">/notifications</span></div>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body / query</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr class="flag"><td class="path"><span class="mth sse">SSE</span> <b>/notifications/stream/:userId</b></td><td><span class="chip hole">unverified</span></td><td class="body">—</td><td class="note"><code>@Public()</code>, and the subscriber is identified by the <strong>route param</strong>. <code>EventSource</code> cannot send an <code>Authorization</code> header, so this was left open. Anyone can subscribe to anyone's stream.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/notifications/user</b></td><td><span class="chip">bearer</span></td><td class="body">?page = 1 &amp;limit = 10</td><td class="note">The caller's notifications.</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/notifications/mark-all-read</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/notifications/:notificationId/read</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/notifications/unread-count</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Writes the response via <code>@Res()</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">The fix for the stream is a short-lived stream ticket minted by an authenticated endpoint, then passed in the URL. Until then, treat the SSE channel as public data.</p>
+    </section>
+
+    <!-- ============ MEDIA ============ -->
+    <section id="media">
+      <p class="kicker"><span>Module</span><span>6 routes</span></p>
+      <div class="modhead"><h2>Media</h2><span class="base">/mediabucket</span></div>
+      <p>The API never proxies file bytes. It signs a URL and the client talks to S3 directly — so uploads and downloads do not consume app bandwidth.</p>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/mediabucket/presign-upload</b></td><td><span class="chip">bearer</span></td><td class="body">fileName, folderName?, contentType?</td><td class="note">Returns a presigned <code>PUT</code> URL. <code>folderName</code> is a <code>FOLDER_NAME</code> enum value.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/mediabucket/presign-upload/bulk</b></td><td><span class="chip">bearer</span></td><td class="body">fileNames[], folderName?, contentType?</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/mediabucket/presign-download</b></td><td><span class="chip">bearer</span></td><td class="body">fileName, folderName?</td><td class="note">Returns a presigned <code>GET</code> URL, valid for <code>AWS_EXPIRES_IN</code>.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/mediabucket/presign-download/bulk</b></td><td><span class="chip">bearer</span></td><td class="body">fileNames[]</td><td class="note">Ignores any folder you send and forces <code>FOLDER_NAME.PROFILE</code>.</td></tr>
+            <tr><td class="path"><span class="mth del">DELETE</span> <b>/mediabucket</b></td><td><span class="chip">bearer</span></td><td class="body">fileName, folderName?</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth del">DELETE</span> <b>/mediabucket/bulk</b></td><td><span class="chip">bearer</span></td><td class="body">fileNames[]</td><td class="note">Also forces <code>FOLDER_NAME.PROFILE</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="call warn">
+        <p class="call-t">No ownership check on delete</p>
+        <p>These routes authenticate but do not verify that the caller owns the file being signed or deleted. Any authenticated caller can name any key in the bucket. Worth knowing before exposing this module to untrusted users.</p>
+      </div>
+    </section>
+
+    <!-- ============ STRIPE ============ -->
+    <section id="stripe">
+      <p class="kicker"><span>Module</span><span>25 routes</span></p>
+      <div class="modhead"><h2>Stripe</h2><span class="base">/stripe/*</span><span class="chip">4 sub-modules + webhook</span></div>
+      <p>A thin base module exporting the SDK client, plus <code>card</code>, <code>invoice</code>, <code>payment</code>, <code>subscription</code> and <code>webhook</code>. The <code>stripe</code> SDK appears in no other module, and that is enforced.</p>
+
+      <h3>Cards — <code>/stripe/cards</code></h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/cards</b></td><td><span class="chip">bearer</span></td><td class="body">paymentMethodId</td><td class="note">User taken from the token.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/stripe/cards</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">The caller's cards.</td></tr>
+            <tr class="flag"><td class="path"><span class="mth get">GET</span> <b>/stripe/cards/all</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Documented "admin only" in its Swagger summary, but <strong>carries no role or permission check</strong> — every authenticated caller sees every user's cards.</td></tr>
+            <tr><td class="path"><span class="mth del">DELETE</span> <b>/stripe/cards/:id</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/stripe/cards/:id/default</b></td><td><span class="chip">bearer</span></td><td class="body">cardId</td><td class="note">The id appears both in the path and the body.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Payments — <code>/stripe/payments</code></h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/payments/intent</b></td><td><span class="chip">bearer</span></td><td class="body">amount, currency, description, metadata?, guestEmail?</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/stripe/payments/intent/:id</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/payments/checkout</b></td><td><span class="chip">bearer</span></td><td class="body">amount, currency, description, successUrl, cancelUrl, metadata?, guestEmail?</td><td class="note">Returns a hosted checkout URL to redirect to.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/stripe/payments/verify-session/:sessionId</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Call on return from checkout. <strong>Do not treat this as settlement</strong> — the webhook is the source of truth.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Subscriptions — <code>/stripe/subscriptions</code></h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/stripe/subscriptions/plans</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Available plans.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/stripe/subscriptions</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">The caller's current active subscription.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/stripe/subscriptions/history</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/subscriptions/checkout</b></td><td><span class="chip">bearer</span></td><td class="body">priceId, successUrl, cancelUrl, metadata?</td><td class="note">Hosted checkout — the web path.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/subscriptions/intent</b></td><td><span class="chip">bearer</span></td><td class="body">priceId, paymentMethodId?, metadata?</td><td class="note">In-app path.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/subscriptions/payment-sheet</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Mobile: returns the params for Stripe's native payment sheet.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/subscriptions/subscribe-mobile</b></td><td><span class="chip">bearer</span></td><td class="body">priceId, setupIntentId</td><td class="note">Completes the mobile flow after the sheet.</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/stripe/subscriptions/upgrade</b></td><td><span class="chip">bearer</span></td><td class="body">newPriceId</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/stripe/subscriptions/downgrade</b></td><td><span class="chip">bearer</span></td><td class="body">newPriceId</td><td class="note">Same DTO as upgrade; the service decides proration.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/subscriptions/cancel</b></td><td><span class="chip">bearer</span></td><td class="body">cancelAtPeriodEnd? = true</td><td class="note">Defaults to cancelling at period end, not immediately.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/subscriptions/resume</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/stripe/subscriptions/verify/:sessionId</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Invoices &amp; webhook</h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/invoices</b></td><td><span class="chip">bearer</span></td><td class="body">customerId, amount, currency, description, metadata?</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/stripe/invoices/:id</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/invoices/pay/:id</b></td><td><span class="chip">bearer</span></td><td class="body">payWithCard</td><td class="note">Records a manual payment.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/stripe/webhooks</b></td><td><span class="chip debt">signature</span></td><td class="body">raw body</td><td class="note"><code>@Public()</code> at class level. Verified with <code>STRIPE_WEBHOOK_SECRET</code> against the <strong>raw</strong> body — a JSON-parsing middleware in front of it breaks verification.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ PAYPAL ============ -->
+    <section id="paypal">
+      <p class="kicker"><span>Module</span><span>17 routes</span></p>
+      <div class="modhead"><h2>PayPal</h2><span class="base">/paypal/*</span><span class="chip">no SDK — plain fetch</span></div>
+      <p>Deliberately mirrors the Stripe surface so the two are swappable. The main shape difference: PayPal speaks <code>planId</code> where Stripe speaks <code>priceId</code>, and revise replaces the upgrade/downgrade pair.</p>
+
+      <h3>Payments — <code>/paypal/payments</code></h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/paypal/payments/intent</b></td><td><span class="chip">bearer</span></td><td class="body">amount, currency, description, metadata?, guestEmail?</td><td class="note">Creates a PayPal order.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/paypal/payments/intent/:id</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Retrieves the order.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/paypal/payments/checkout</b></td><td><span class="chip">bearer</span></td><td class="body">amount, currency, description, successUrl, cancelUrl, metadata?, guestEmail?</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/paypal/payments/verify-session/:orderId</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Note the param is <code>orderId</code>, not <code>sessionId</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Subscriptions — <code>/paypal/subscriptions</code></h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/paypal/subscriptions/plans</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/paypal/subscriptions</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Reads the user from the raw request rather than <code>@GetUser</code> — tracked debt.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/paypal/subscriptions/history</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">Same.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/paypal/subscriptions/checkout</b></td><td><span class="chip">bearer</span></td><td class="body">planId, successUrl, cancelUrl, metadata?</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/paypal/subscriptions/intent</b></td><td><span class="chip">bearer</span></td><td class="body">planId, paymentSourceToken?, metadata?</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth patch">PATCH</span> <b>/paypal/subscriptions/revise</b></td><td><span class="chip">bearer</span></td><td class="body">newPlanId</td><td class="note">One route where Stripe has two (upgrade and downgrade).</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/paypal/subscriptions/cancel</b></td><td><span class="chip">bearer</span></td><td class="body">cancelImmediately? = true, reason?</td><td class="note"><strong>Defaults to immediate</strong>, the opposite of Stripe's default. Easy to get wrong when supporting both.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/paypal/subscriptions/resume</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">The DTO is an empty placeholder.</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/paypal/subscriptions/verify/:subscriptionId</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Invoices &amp; webhook</h3>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/paypal/invoices</b></td><td><span class="chip">bearer</span></td><td class="body">customerId, amount, currency, description, metadata?</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/paypal/invoices/:id</b></td><td><span class="chip">bearer</span></td><td class="body">—</td><td class="note">—</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/paypal/invoices/pay/:id</b></td><td><span class="chip">bearer</span></td><td class="body">payOffline, note?</td><td class="note">Records a manual payment.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/paypal/webhooks</b></td><td><span class="chip debt">signature</span></td><td class="body">raw body</td><td class="note"><code>@Public()</code> at class level. Verified against <code>PAYPAL_WEBHOOK_ID</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="call warn">
+        <p class="call-t">Payment controllers take the user from the payload</p>
+        <p>Several Stripe and PayPal handlers resolve the user from the request body or raw request rather than the authenticated principal. They <em>are</em> authenticated — the global guard covers them — but they should read <code>@GetUser</code>. Tracked debt; do not copy the pattern into new code.</p>
+      </div>
+    </section>
+
+    <!-- ============ ASSISTANT ============ -->
+    <section id="assistant">
+      <p class="kicker"><span>Module</span><span>3 routes</span></p>
+      <div class="modhead"><h2>Platform Assistant</h2><span class="base">/platform-assistant</span><span class="chip acc">portable</span></div>
+      <p>A self-contained LLM assistant designed to be copied out of this repo unchanged. It is <code>@Public()</code> at class level so the global guard defers, and brings its own <code>ConfiguredAuthGuard</code> instead.</p>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body / query</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/platform-assistant/message</b></td><td><span class="chip debt">own guard</span></td><td class="body">message, sessionId?</td><td class="note">Rate-limited per IP by <code>PLATFORM_ASSISTANT_RATE_LIMIT</code> (default 10).</td></tr>
+            <tr><td class="path"><span class="mth sse">SSE</span> <b>/platform-assistant/stream</b></td><td><span class="chip debt">own guard</span></td><td class="body">?message &amp;sessionId</td><td class="note">Same answer, streamed token by token. Params in the query, since SSE has no body.</td></tr>
+            <tr><td class="path"><span class="mth post">POST</span> <b>/platform-assistant/reload-context</b></td><td><span class="chip debt">own guard</span></td><td class="body">—</td><td class="note">Re-reads the <code>context/</code> folder without a restart.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">Conversations persist to MongoDB via the store configured in <code>AppModule</code>. <strong>Do not wire application services into this module</strong> — its portability is the whole point.</p>
+    </section>
+
+    <!-- ============ ROOT ============ -->
+    <section id="root">
+      <p class="kicker"><span>Module</span><span>1 route</span></p>
+      <div class="modhead"><h2>Root</h2><span class="base">/</span></div>
+      <div class="tw">
+        <table class="routes">
+          <thead><tr><th>Route</th><th>Auth</th><th>Body</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="path"><span class="mth get">GET</span> <b>/</b></td><td><span class="chip ok">public</span></td><td class="body">—</td><td class="note">Returns a hello string. The default Nest scaffold route — useful as a liveness check.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ NO HTTP ============ -->
+    <section id="nohttp">
+      <p class="kicker"><span>The rest of the repo</span></p>
+      <h2>Modules with no HTTP surface</h2>
+      <p>Four modules ship no controller. They are still part of the repo, and three of them are load-bearing.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Module</th><th>What it is</th><th>How you use it</th></tr></thead>
+          <tbody>
+            <tr><td class="m">authorization</td><td class="w"><code>@Global</code>. The permissions mechanism — abilities, the route guard, record assertions, the policy registry.</td><td class="w">Import <code>PermissionsGuard</code>, <code>@RequirePermissions</code>, <code>@GetAbility</code>, <code>Action</code>. Register a policy from your own module.</td></tr>
+            <tr><td class="m">email</td><td class="w">Provider selection, Handlebars templates, sending.</td><td class="w">Inject <code>EmailService</code>. Your module decides <em>when</em> and passes the data; the template lives in <code>email</code>.</td></tr>
+            <tr><td class="m">onesignal</td><td class="w">Push delivery.</td><td class="w">Inject <code>OneSignalService</code>.</td></tr>
+            <tr><td class="m">announcements</td><td class="w"><span class="chip hole">not wired</span> A subject constant and an authorization policy with its spec — no module, controller, service or schema.</td><td class="w">Nothing yet. It is not registered in <code>AppModule</code>, so its policy never reaches the registry and grants nobody anything at runtime.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="rule">
+      <h3>Quick audit of what is open</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Route</th><th>Problem</th><th>Severity</th></tr></thead>
+          <tbody>
+            <tr><td class="m">ChatGateway (WS)</td><td class="w">Handshake trusts a client-supplied <code>userId</code>; no verification at all.</td><td><span class="chip hole">close before prod</span></td></tr>
+            <tr><td class="m">SSE /notifications/stream/:userId</td><td class="w">Public, subscriber identified by route param.</td><td><span class="chip hole">known hole</span></td></tr>
+            <tr><td class="m">POST /users</td><td class="w">Any authenticated caller may create a user, including setting <code>role</code>.</td><td><span class="chip hole">unguarded</span></td></tr>
+            <tr><td class="m">GET /users</td><td class="w">Any authenticated caller may list every user.</td><td><span class="chip hole">unguarded</span></td></tr>
+            <tr><td class="m">GET /stripe/cards/all</td><td class="w">Says "admin only"; enforces nothing.</td><td><span class="chip debt">mislabelled</span></td></tr>
+            <tr><td class="m">/mediabucket/*</td><td class="w">No ownership check on the key being signed or deleted.</td><td><span class="chip debt">worth review</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">Everything here is drawn from the decorators in <code>src/</code> and the repo's own debt register — none of it is speculation. The Architecture page has the full register with status and intended fixes.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('#nav a[href^="#"]'));
+    var map = {};
+    links.forEach(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) map[el.id] = a;
+    });
+    var visible = {};
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bestVal = 0;
+      Object.keys(visible).forEach(function (id) {
+        if (visible[id] > bestVal) { bestVal = visible[id]; best = id; }
+      });
+      links.forEach(function (a) { a.classList.remove('on'); });
+      if (best && map[best]) map[best].classList.add('on');
+    }, { rootMargin: '-8% 0px -70% 0px', threshold: [0, 0.25, 0.6, 1] });
+    Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
+  })();
+</script>
+
+</body>
+</html>

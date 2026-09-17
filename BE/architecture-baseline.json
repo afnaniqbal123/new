@@ -1,0 +1,80 @@
+{
+  "$comment": "Architecture debt that predates the check. This list may shrink, never grow — see docs/architecture/modules.md. Regenerate with: npm run architecture:baseline",
+  "accepted": [
+    {
+      "key": "controller-cross-module-service:src/modules/auth/auth.controller.ts -> src/modules/user/user.service.ts",
+      "rule": "controller-cross-module-service",
+      "detail": "modules/auth controller -> modules/user service"
+    },
+    {
+      "key": "foreign-schema-import:src/modules/auth/auth.module.ts -> src/modules/user/user.schema.ts",
+      "rule": "foreign-schema-import",
+      "detail": "modules/auth -> modules/user (user.schema.ts)"
+    },
+    {
+      "key": "foreign-schema-import:src/modules/auth/auth.service.ts -> src/modules/user/user.schema.ts",
+      "rule": "foreign-schema-import",
+      "detail": "modules/auth -> modules/user (user.schema.ts)"
+    },
+    {
+      "key": "foreign-schema-import:src/modules/auth/guards/organization-access.guard.ts -> src/modules/user/user.schema.ts",
+      "rule": "foreign-schema-import",
+      "detail": "modules/auth -> modules/user (user.schema.ts)"
+    },
+    {
+      "key": "foreign-schema-import:src/modules/auth/otp.service.ts -> src/modules/user/user.schema.ts",
+      "rule": "foreign-schema-import",
+      "detail": "modules/auth -> modules/user (user.schema.ts)"
+    },
+    {
+      "key": "foreign-schema-import:src/modules/auth/refresh-token.service.ts -> src/modules/user/user.schema.ts",
+      "rule": "foreign-schema-import",
+      "detail": "modules/auth -> modules/user (user.schema.ts)"
+    },
+    {
+      "key": "foreign-schema-import:src/modules/auth/social-auth.service.ts -> src/modules/user/user.schema.ts",
+      "rule": "foreign-schema-import",
+      "detail": "modules/auth -> modules/user (user.schema.ts)"
+    },
+    {
+      "key": "foreign-schema-import:src/modules/stripe/card/schemas/card.schema.ts -> src/modules/user/user.schema.ts",
+      "rule": "foreign-schema-import",
+      "detail": "modules/stripe -> modules/user (user.schema.ts)"
+    },
+    {
+      "key": "foreign-schema-import:src/modules/stripe/stripe.service.ts -> src/modules/user/user.schema.ts",
+      "rule": "foreign-schema-import",
+      "detail": "modules/stripe -> modules/user (user.schema.ts)"
+    },
+    {
+      "key": "foreign-schema-import:src/modules/stripe/subscription/schemas/user-subscription.schema.ts -> src/modules/user/user.schema.ts",
+      "rule": "foreign-schema-import",
+      "detail": "modules/stripe -> modules/user (user.schema.ts)"
+    },
+    {
+      "key": "forward-ref:src/modules/stripe/card/card.module.ts -> UserModule",
+      "rule": "forward-ref",
+      "detail": "src/modules/stripe/card/card.module.ts -> UserModule"
+    },
+    {
+      "key": "forward-ref:src/modules/stripe/invoice/invoice.module.ts -> UserModule",
+      "rule": "forward-ref",
+      "detail": "src/modules/stripe/invoice/invoice.module.ts -> UserModule"
+    },
+    {
+      "key": "forward-ref:src/modules/stripe/payment/payment.module.ts -> UserModule",
+      "rule": "forward-ref",
+      "detail": "src/modules/stripe/payment/payment.module.ts -> UserModule"
+    },
+    {
+      "key": "forward-ref:src/modules/stripe/subscription/subscription.module.ts -> UserModule",
+      "rule": "forward-ref",
+      "detail": "src/modules/stripe/subscription/subscription.module.ts -> UserModule"
+    },
+    {
+      "key": "module-cycle:modules/auth -> modules/user -> modules/auth",
+      "rule": "module-cycle",
+      "detail": "modules/auth -> modules/user -> modules/auth"
+    }
+  ]
+}

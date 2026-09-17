@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "module": "node16",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "ignoreDeprecations": "6.0",
+    "typeRoots": ["./node_modules/@types"],
+    // TypeScript 6 no longer picks these up automatically. Only ambient
+    // packages need listing: `node` and `jest` for globals, `express` and
+    // `multer` for the `Express.Multer.File` namespace used across the
+    // upload routes. Types for packages the code imports by name resolve
+    // through normal module resolution and do not belong here.
+    "types": ["node", "jest", "express", "multer"],
+    // TypeScript 6 turns `strict` on by default. Kept on, with the one flag
+    // that genuinely conflicts with this codebase switched off:
+    // `@Prop()`/DTO fields are assigned by Mongoose and the validation pipe,
+    // not by a constructor, so `strictPropertyInitialization` reports 181
+    // false positives against declarations that are correct as written.
+    // Turning off `strict` wholesale would also have disabled
+    // `strictFunctionTypes`, `noImplicitThis` and `useUnknownInCatchVariables`,
+    // none of which this codebase violates.
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "incremental": true,
+    // Kept inside outDir on purpose. `nest-cli.json` sets `deleteOutDir`, so
+    // every `nest start` wipes dist/ — and a build cache living outside it
+    // survives that wipe, tells tsc everything is already emitted, and leaves
+    // dist/ empty. The build then reports "Found 0 errors" and the app dies on
+    // `Cannot find module dist/main`. Storing the cache in the directory it
+    // describes means the two cannot disagree.
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo",
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "moduleResolution": "node16",
+    "esModuleInterop": true
+  }
+}

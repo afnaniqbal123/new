@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>BE Boilerplate Quickstart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #F4F6F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F6;
+    --ink: #0E1520;
+    --ink-2: #4C5A6B;
+    --ink-3: #7E8B9C;
+    --line: #DCE3EB;
+    --line-2: #C6D0DB;
+    --accent: #2440BE;
+    --accent-soft: #E9ECFC;
+    --ok: #0E7A52;
+    --ok-soft: #E2F3EC;
+    --debt: #8F5B05;
+    --debt-soft: #FAEEDA;
+    --hole: #AB2743;
+    --hole-soft: #FBE7EB;
+    --shadow: 0 1px 2px rgba(14, 21, 32, .05);
+
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --disp: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0B0F15;
+      --surface: #131A23;
+      --surface-2: #1A222D;
+      --ink: #E4EBF3;
+      --ink-2: #9FADBE;
+      --ink-3: #6B7889;
+      --line: #212B37;
+      --line-2: #2E3A48;
+      --accent: #8098FF;
+      --accent-soft: #1A2242;
+      --ok: #40C08C;
+      --ok-soft: #10281F;
+      --debt: #DBA33F;
+      --debt-soft: #2A2113;
+      --hole: #F4708B;
+      --hole-soft: #2C141A;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0B0F15;
+    --surface: #131A23;
+    --surface-2: #1A222D;
+    --ink: #E4EBF3;
+    --ink-2: #9FADBE;
+    --ink-3: #6B7889;
+    --line: #212B37;
+    --line-2: #2E3A48;
+    --accent: #8098FF;
+    --accent-soft: #1A2242;
+    --ok: #40C08C;
+    --ok-soft: #10281F;
+    --debt: #DBA33F;
+    --debt-soft: #2A2113;
+    --hole: #F4708B;
+    --hole-soft: #2C141A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: 0;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ---------- rail ---------- */
+  .rail {
+    border-right: 1px solid var(--line);
+    padding: 34px 22px 60px;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  .rail-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    color: var(--ink-3);
+    margin-bottom: 26px;
+    line-height: 1.5;
+  }
+  .rail-brand b { color: var(--ink); font-weight: 600; }
+  .rail-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .13em;
+    color: var(--ink-3);
+    margin: 0 0 10px;
+  }
+  .rail nav { display: flex; flex-direction: column; gap: 1px; }
+  .rail nav a {
+    display: block;
+    padding: 5px 10px;
+    border-left: 2px solid transparent;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 13.5px;
+    border-radius: 0 4px 4px 0;
+  }
+  .rail nav a:hover { color: var(--ink); background: var(--surface-2); }
+  .rail nav a.on {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+  .rail nav a:focus-visible,
+  .xlink:focus-visible,
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .rail-foot { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+  .xlink {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--surface);
+  }
+  .xlink:hover { border-color: var(--accent); color: var(--accent); }
+  .xlink span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 2px;
+  }
+
+  /* ---------- main ---------- */
+  main { padding: 34px 44px 120px; min-width: 0; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+
+  h1 {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: clamp(34px, 4.6vw, 50px);
+    line-height: 1.04;
+    letter-spacing: -.015em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    font-size: 17px;
+    color: var(--ink-2);
+    max-width: 68ch;
+    margin: 0 0 28px;
+  }
+
+  h2 {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -.01em;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 16px;
+    margin: 26px 0 8px;
+    letter-spacing: -.005em;
+  }
+  h4 {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 22px 0 8px;
+  }
+
+  section { scroll-margin-top: 20px; padding-top: 42px; }
+  section > .kicker {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin: 0 0 14px;
+  }
+  p { max-width: 72ch; margin: 0 0 14px; }
+  .muted { color: var(--ink-2); }
+  strong { font-weight: 600; }
+
+  a { color: var(--accent); }
+
+  code {
+    font-family: var(--mono);
+    font-size: .875em;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: .08em .34em;
+    white-space: nowrap;
+  }
+
+  pre {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.62;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 15px 17px;
+    overflow-x: auto;
+    margin: 0 0 16px;
+    box-shadow: var(--shadow);
+  }
+  pre code {
+    background: none; border: 0; padding: 0; font-size: inherit; white-space: pre;
+  }
+  .cm { color: var(--ink-3); }
+  .kw { color: var(--accent); }
+  .st { color: var(--ok); }
+
+  /* ---------- stats ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 0 8px;
+  }
+  .stat { background: var(--surface); padding: 13px 15px; }
+  .stat b {
+    display: block;
+    font-family: var(--disp);
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 6px;
+  }
+  .stats-note { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin: 0 0 4px; }
+
+  /* ---------- tables ---------- */
+  .tw { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.m, th.m { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  td.m b { font-weight: 500; }
+  .num { font-variant-numeric: tabular-nums; text-align: right; }
+
+  /* ---------- chips ---------- */
+  .chip {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .05em;
+    padding: 1px 7px;
+    border-radius: 3px;
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+  .chip.ok { color: var(--ok); background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+  .chip.debt { color: var(--debt); background: var(--debt-soft); border-color: color-mix(in srgb, var(--debt) 35%, transparent); }
+  .chip.hole { color: var(--hole); background: var(--hole-soft); border-color: color-mix(in srgb, var(--hole) 35%, transparent); }
+  .chip.acc { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+
+  /* ---------- callouts ---------- */
+  .call {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 7px 7px 0;
+    padding: 13px 17px;
+    margin: 0 0 18px;
+    max-width: 76ch;
+  }
+  .call p:last-child { margin-bottom: 0; }
+  .call.warn { border-left-color: var(--debt); }
+  .call.danger { border-left-color: var(--hole); }
+  .call-t {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+  .call.warn .call-t { color: var(--debt); }
+  .call.danger .call-t { color: var(--hole); }
+
+  /* ---------- steps ---------- */
+  .steps { display: flex; flex-direction: column; gap: 0; margin: 0 0 18px; counter-reset: s; }
+  .step { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 14px; padding: 0 0 22px; position: relative; }
+  .step::before {
+    counter-increment: s;
+    content: counter(s);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    margin-top: 1px;
+  }
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 13px; top: 30px; bottom: 6px;
+    width: 1px; background: var(--line);
+  }
+  .step-b { min-width: 0; }
+  .step-b h3 { margin: 2px 0 8px; }
+  .step-b > :last-child { margin-bottom: 0; }
+
+  /* ---------- figure ---------- */
+  figure { margin: 0 0 20px; }
+  .fw { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 16px; }
+  figure svg { display: block; width: 100%; min-width: 640px; height: auto; color: var(--ink-2); }
+  figcaption { font-size: 12.5px; color: var(--ink-3); margin-top: 9px; max-width: 74ch; }
+
+  .b-fill { fill: var(--surface); }
+  .b-alt { fill: var(--surface-2); }
+  .b-line { stroke: var(--line-2); }
+  .t-ink { fill: var(--ink); }
+  .t-mut { fill: var(--ink-3); }
+  .s-ink { stroke: var(--ink-2); }
+  .s-acc { stroke: var(--accent); }
+  .t-acc { fill: var(--accent); }
+  .s-hole { stroke: var(--hole); }
+  .t-hole { fill: var(--hole); }
+  .b-hole { fill: var(--hole-soft); stroke: color-mix(in srgb, var(--hole) 40%, transparent); }
+  .b-acc { fill: var(--accent-soft); stroke: color-mix(in srgb, var(--accent) 35%, transparent); }
+  .b-ok { fill: var(--ok-soft); stroke: color-mix(in srgb, var(--ok) 40%, transparent); }
+  .t-ok { fill: var(--ok); }
+  .mk-ink { fill: var(--ink-2); }
+  .mk-acc { fill: var(--accent); }
+  .mk-hole { fill: var(--hole); }
+  .ttl { font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .lbl { font-family: var(--sans); font-size: 12px; }
+  .mn { font-family: var(--mono); font-size: 11px; }
+  .mn-s { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; }
+
+  /* ---------- misc ---------- */
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 0 0 18px; }
+  .card { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 15px 17px; }
+  .card h3 { margin-top: 0; }
+  .card > :last-child { margin-bottom: 0; }
+  .card p { font-size: 14px; }
+
+  ul.tight { margin: 0 0 14px; padding-left: 20px; max-width: 72ch; }
+  ul.tight li { margin-bottom: 5px; }
+
+  .tree { color: var(--ink-2); }
+  .tree b { color: var(--ink); font-weight: 500; }
+  .tree i { color: var(--ink-3); font-style: normal; }
+
+  hr.rule { border: 0; border-top: 1px solid var(--line); margin: 34px 0 0; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    .rail {
+      position: static; max-height: none; border-right: 0;
+      border-bottom: 1px solid var(--line); padding: 22px 20px;
+    }
+    .rail nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    .rail nav a { border-left: 0; border: 1px solid var(--line); border-radius: 5px; padding: 4px 9px; font-size: 12.5px; }
+    .rail nav a.on { border-color: var(--accent); }
+    main { padding: 24px 20px 80px; }
+    figure svg { min-width: 560px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-brand">Gok-boilerplates<br><b>nestjs-backend</b></div>
+    <p class="rail-label">Quickstart</p>
+    <nav id="nav">
+      <a href="#overview">What this is</a>
+      <a href="#stack">Stack</a>
+      <a href="#run">Get it running</a>
+      <a href="#env">Environment</a>
+      <a href="#commands">Commands</a>
+      <a href="#anatomy">Anatomy of a module</a>
+      <a href="#endpoint">Your first endpoint</a>
+      <a href="#responses">Response envelope</a>
+      <a href="#gate">The commit gate</a>
+      <a href="#testing">Testing</a>
+      <a href="#trouble">Troubleshooting</a>
+    </nav>
+    <div class="rail-foot">
+      <a class="xlink" href="./index.html"><span>Start here</span>Docs home</a>
+      <a class="xlink" href="./start.html"><span>Before this</span>Start a project</a>
+      <a class="xlink" href="./architecture.html" id="sibling"><span>Companion</span>Architecture</a>
+      <a class="xlink" href="./api-reference.html"><span>Companion</span>API Reference</a>
+      <a class="xlink" href="./skills.html"><span>Companion</span>Agent Skills</a>
+    </div>
+  </aside>
+
+  <main>
+    <p class="eyebrow">Backend boilerplate · onboarding</p>
+    <h1>Get productive in this repo in an afternoon</h1>
+    <p class="lede">A NestJS + MongoDB starter with authentication, authorization, chat, notifications, media, two payment providers and an LLM assistant already wired in — and a commit gate that stops you putting code in the wrong place. This page is everything you need to run it and ship your first endpoint.</p>
+
+    <div class="stats">
+      <div class="stat"><b>12</b><span>Modules</span></div>
+      <div class="stat"><b>16</b><span>Controllers</span></div>
+      <div class="stat"><b>90</b><span>Routes</span></div>
+      <div class="stat"><b>14</b><span>Schemas</span></div>
+      <div class="stat"><b>15</b><span>Lint rules</span></div>
+      <div class="stat"><b>6</b><span>Gate stages</span></div>
+    </div>
+    <p class="stats-note">Counted from <code>src/</code> on branch <code>feat/announcements</code>.</p>
+
+    <!-- ============ OVERVIEW ============ -->
+    <section id="overview">
+      <p class="kicker">Orientation</p>
+      <h2>What this is</h2>
+      <p>A <strong>boilerplate</strong>, not a product. Modules here are meant to be deleted as often as they are extended — if your project has no PayPal, delete <code>paypal/</code>. That expectation is why boundaries are enforced by tooling instead of by convention: deleting a module should never unpick three others.</p>
+
+      <p>It is also <strong>agent-first</strong>. The premise in the README is that most code here will be written by AI agents, and every architectural question left unanswered is one an agent re-answers from scratch on every task — differently each time. So the answers are decided once by people, written down in <code>docs/architecture/</code>, and enforced by lint rules and a ratcheted baseline.</p>
+
+      <div class="call">
+        <p class="call-t">The practical consequence</p>
+        <p>You rarely need to decide <em>where</em> code goes. There is a documented owner for every kind of change, and if you get it wrong the commit is blocked with the rule name, the offending import path, and the doc that explains it. Treat a blocked commit as architecture feedback, not an obstacle.</p>
+      </div>
+
+      <h3>What you get out of the box</h3>
+      <div class="grid2">
+        <div class="card">
+          <h3>Identity &amp; access</h3>
+          <p class="muted">JWT access tokens (15 min) with rotating refresh sessions (60 days), OTP flows, password reset, Sign in with Apple, and CASL-based permissions with per-record and per-field rules.</p>
+        </div>
+        <div class="card">
+          <h3>Product surface</h3>
+          <p class="muted">Users, chat rooms with a WebSocket gateway, notifications with an SSE stream, S3 media presigning, Handlebars email, OneSignal push.</p>
+        </div>
+        <div class="card">
+          <h3>Money</h3>
+          <p class="muted">Stripe and PayPal side by side — payments, subscriptions, invoices, cards and signature-verified webhooks, each fully confined to its own module.</p>
+        </div>
+        <div class="card">
+          <h3>Guard rails</h3>
+          <p class="muted">A six-stage pre-commit gate, 15 custom ESLint rules, a module-dependency checker, a documentation checker, and CI that runs all of it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STACK ============ -->
+    <section id="stack">
+      <p class="kicker">Orientation</p>
+      <h2>Stack at a glance</h2>
+      <p>Everything below is already installed and wired. Versions are the ranges pinned in <code>package.json</code>.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Concern</th><th>Choice</th><th class="m">Package</th><th>Where it lives</th></tr></thead>
+          <tbody>
+            <tr><td>Runtime</td><td>Node 22</td><td class="m">—</td><td>pinned in CI</td></tr>
+            <tr><td>Framework</td><td>NestJS 11</td><td class="m">@nestjs/core</td><td><code>src/main.ts</code></td></tr>
+            <tr><td>HTTP</td><td>Express 5</td><td class="m">@nestjs/platform-express</td><td>default adapter</td></tr>
+            <tr><td>Database</td><td>MongoDB</td><td class="m">mongoose 9</td><td><code>MongooseModule.forRootAsync</code></td></tr>
+            <tr><td>Authentication</td><td>Passport JWT</td><td class="m">passport-jwt, @nestjs/jwt</td><td><code>auth</code></td></tr>
+            <tr><td>Authorization</td><td>CASL</td><td class="m">@casl/ability</td><td><code>authorization</code></td></tr>
+            <tr><td>Realtime</td><td>Socket.IO</td><td class="m">@nestjs/platform-socket.io</td><td><code>chat</code></td></tr>
+            <tr><td>File storage</td><td>AWS S3, presigned</td><td class="m">@aws-sdk/client-s3</td><td><code>media</code></td></tr>
+            <tr><td>Email</td><td>Brevo + Handlebars</td><td class="m">@getbrevo/brevo</td><td><code>email</code></td></tr>
+            <tr><td>Push</td><td>OneSignal</td><td class="m">@onesignal/node-onesignal</td><td><code>onesignal</code></td></tr>
+            <tr><td>Payments</td><td>Stripe &amp; PayPal</td><td class="m">stripe, plain fetch</td><td><code>stripe/*</code>, <code>paypal/*</code></td></tr>
+            <tr><td>LLM</td><td>OpenAI</td><td class="m">openai</td><td><code>platform-assistant</code></td></tr>
+            <tr><td>API docs</td><td>Swagger / OpenAPI</td><td class="m">@nestjs/swagger</td><td><code>/api-docs</code></td></tr>
+            <tr><td>Validation</td><td>class-validator</td><td class="m">class-validator</td><td>global pipe, <code>whitelist: true</code></td></tr>
+            <tr><td>Tests</td><td>Jest + Supertest</td><td class="m">jest 30</td><td><code>*.spec.ts</code>, <code>test/</code></td></tr>
+            <tr><td>Package manager</td><td>pnpm 11.24.0</td><td class="m">pinned, enforced</td><td>ADR 0004</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">PayPal is the odd one out on purpose: it has no SDK dependency and talks to the REST API through plain <code>fetch</code>.</p>
+    </section>
+
+    <!-- ============ RUN ============ -->
+    <section id="run">
+      <p class="kicker">Setup</p>
+      <h2>Get it running</h2>
+      <p>You need Node 22, a MongoDB you can reach, and pnpm. Nothing else — there is no Docker Compose, no queue, no cache to start.</p>
+
+      <div class="steps">
+        <div class="step"><div class="step-b">
+          <h3>Activate the pinned pnpm</h3>
+          <p class="muted">pnpm is the only supported package manager, and CI fails the build if a <code>package-lock.json</code> or <code>yarn.lock</code> appears. Corepack reads the exact version out of <code>package.json</code>.</p>
+<pre><code>corepack enable
+pnpm install --frozen-lockfile</code></pre>
+          <p class="muted">This also installs the Husky hooks via the <code>prepare</code> script — which is what puts the commit gate in place.</p>
+        </div></div>
+
+        <div class="step"><div class="step-b">
+          <h3>Create your <code>.env</code></h3>
+          <p class="muted">Copy the template, then fill in at minimum <code>MONGODB_URI</code> and <code>JWT_SECRET</code>. Everything else can stay empty until you touch the module that needs it.</p>
+<pre><code>cp .env.example .env
+openssl rand -base64 48   <span class="cm"># paste into JWT_SECRET</span></code></pre>
+          <div class="call warn">
+            <p class="call-t">The app refuses to boot on a weak secret</p>
+            <p><code>validateAuthEnv</code> runs at <code>ConfigModule</code> load and rejects a <code>JWT_SECRET</code> under 32 characters. That is deliberate — a short signing key is brute-forceable offline, and every token it ever signed would be forgeable. Better to fail at startup than at the first login.</p>
+          </div>
+        </div></div>
+
+        <div class="step"><div class="step-b">
+          <h3>Know which env file wins</h3>
+          <p class="muted">Config resolves <code>.env.&lt;NODE_ENV&gt;</code> first and falls back to <code>.env</code>, with <code>NODE_ENV</code> defaulting to <code>dev</code>. So a stray <code>.env.dev</code> silently outranks your <code>.env</code> — worth checking first when a value looks ignored.</p>
+<pre><code>envFilePath: [`.env.${process.env.NODE_ENV ?? 'dev'}`, '.env']</code></pre>
+        </div></div>
+
+        <div class="step"><div class="step-b">
+          <h3>Start it</h3>
+<pre><code>pnpm run start:dev</code></pre>
+          <p class="muted">Listens on <code>PORT</code>, defaulting to <strong>8080</strong>. CORS is open in development.</p>
+        </div></div>
+
+        <div class="step"><div class="step-b">
+          <h3>Open the API docs</h3>
+          <p class="muted">Swagger UI is mounted at <code>/api-docs</code> with bearer auth persisted between reloads — paste an access token once and every subsequent call carries it.</p>
+<pre><code>http://localhost:8080/api-docs</code></pre>
+        </div></div>
+
+        <div class="step"><div class="step-b">
+          <h3>Seed, if you need data</h3>
+<pre><code>pnpm run seed</code></pre>
+          <p class="muted">Runs <code>src/scripts/seed.ts</code>. Scripts are the one place exempt from the shared-helper rules — they are applications in their own right.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ============ ENV ============ -->
+    <section id="env">
+      <p class="kicker">Setup</p>
+      <h2>Environment variables</h2>
+      <p>Grouped exactly as <code>.env.example</code> groups them. Only <code>JWT_SECRET</code> is validated at boot; the rest fail at the point of use, so an empty Stripe key costs you nothing until something calls Stripe.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Variable</th><th>Needed for</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="m"><b>MONGODB_URI</b></td><td>Everything</td><td>Connection string. No app without it.</td></tr>
+            <tr><td class="m"><b>JWT_SECRET</b></td><td>Auth</td><td><span class="chip hole">boot-checked</span> ≥ 32 chars, HS256. Signs and verifies access tokens.</td></tr>
+            <tr><td class="m">NODE_ENV</td><td>Config resolution</td><td>Selects <code>.env.&lt;value&gt;</code>. Defaults to <code>dev</code>.</td></tr>
+            <tr><td class="m">PORT</td><td>HTTP</td><td>Defaults to <code>8080</code>.</td></tr>
+            <tr><td class="m">FRONTEND_URL</td><td>Email links</td><td>Base for password-reset and verification links.</td></tr>
+            <tr><td class="m">OTP_SECRET</td><td>Auth</td><td>Signup and password-reset OTP generation (<code>otplib</code>).</td></tr>
+            <tr><td class="m">TEMPLATES_PATH</td><td>Email</td><td>Where Handlebars templates are read from.</td></tr>
+            <tr><td class="m">GOOGLE_CLIENT_ID<br>GOOGLE_CLIENT_SECRET</td><td>Social login</td><td>Present in the template; Apple is the flow actually implemented today.</td></tr>
+            <tr><td class="m">EMAIL_SENDER<br>EMAIL_PROVIDER</td><td>Email</td><td>Sender address, and which provider sends. Each provider adds its own key — see <code>.env.example</code>, which lists exactly what this build needs.</td></tr>
+            <tr><td class="m">AWS_ACCESS_KEY_ID<br>AWS_SECRET_ACCESS_KEY<br>AWS_REGION<br>AWS_BUCKET_NAME<br>AWS_EXPIRES_IN</td><td>Media</td><td>S3 credentials and presigned-URL lifetime.</td></tr>
+            <tr><td class="m">ONESIGNAL_APP_ID<br>ONESIGNAL_API_KEY</td><td>Push</td><td>—</td></tr>
+            <tr><td class="m">STRIPE_SECRET_KEY<br>STRIPE_PUBLISHABLE_KEY<br>STRIPE_WEBHOOK_SECRET</td><td>Stripe</td><td>The webhook secret is what makes <code>POST /stripe/webhooks</code> safe to leave <code>@Public()</code>.</td></tr>
+            <tr><td class="m">PAYPAL_CLIENT_ID<br>PAYPAL_CLIENT_SECRET<br>PAYPAL_ENVIRONMENT<br>PAYPAL_WEBHOOK_ID</td><td>PayPal</td><td><code>PAYPAL_ENVIRONMENT</code> switches sandbox vs live.</td></tr>
+            <tr><td class="m">LLM_PROVIDER<br>OPENAI_API_KEY<br>OPENAI_MODEL<br>PLATFORM_ASSISTANT_RATE_LIMIT</td><td>Assistant</td><td>Defaults: <code>openai</code>, <code>gpt-4.1-mini</code>, <code>10</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="call">
+        <p class="call-t">Never read process.env directly</p>
+        <p>The <code>nestjs/no-process-env</code> rule blocks it. Config is read through <code>ConfigService</code> with a key from the <code>CONFIG</code> enum in <code>src/constants/config.constant.ts</code>, which is also where non-secret auth parameters live — token TTLs, issuer, audience, algorithm.</p>
+      </div>
+    </section>
+
+    <!-- ============ COMMANDS ============ -->
+    <section id="commands">
+      <p class="kicker">Daily work</p>
+      <h2>The commands you'll actually use</h2>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Command</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td class="m"><b>pnpm run start:dev</b></td><td>Watch mode. Your default.</td></tr>
+            <tr><td class="m">pnpm run start:prod</td><td>Runs the compiled <code>dist/main</code>.</td></tr>
+            <tr><td class="m">pnpm run build</td><td><code>nest build</code>.</td></tr>
+            <tr><td class="m">pnpm run seed</td><td>Seed the database.</td></tr>
+            <tr><td class="m"><b>pnpm test</b></td><td>Unit specs (<code>*.spec.ts</code> under <code>src/</code>).</td></tr>
+            <tr><td class="m">pnpm run test:e2e</td><td>End-to-end suites in <code>test/</code>.</td></tr>
+            <tr><td class="m">pnpm run test:e2e:auth</td><td>Just the auth contract — no database needed.</td></tr>
+            <tr><td class="m">pnpm run test:cov</td><td>Coverage report.</td></tr>
+            <tr><td class="m"><b>pnpm run verify</b></td><td>The whole six-stage gate across the repo. Run this before pushing.</td></tr>
+            <tr><td class="m">pnpm run lint</td><td>ESLint with <code>--fix</code>, plus Prettier.</td></tr>
+            <tr><td class="m">pnpm run lint:check</td><td>Strict — zero warnings tolerated.</td></tr>
+            <tr><td class="m">pnpm run typecheck</td><td><code>tsc --noEmit</code>.</td></tr>
+            <tr><td class="m">pnpm run debt</td><td>What convention debt is still baselined.</td></tr>
+            <tr><td class="m">pnpm run architecture:check</td><td>Module cycles, foreign schema reads, SDK leakage.</td></tr>
+            <tr><td class="m">pnpm run docs:check</td><td>Link resolution, Mermaid sanity, ADR structure.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="call warn">
+        <p class="call-t">Heads up on a docs typo</p>
+        <p>The README and <code>docs/quality-gate.md</code> spell several of these <code>ppnpm run …</code> — a stray find-and-replace. The real command is <code>pnpm run …</code> everywhere.</p>
+      </div>
+    </section>
+
+    <!-- ============ ANATOMY ============ -->
+    <section id="anatomy">
+      <p class="kicker">The shape of the code</p>
+      <h2>Anatomy of a module</h2>
+      <p>Every feature module has the same skeleton, and the structure stage of the commit gate checks that folder names and file suffixes agree. <code>user</code> is the reference implementation — when in doubt, copy how it does something.</p>
+
+<pre class="tree"><code><b>src/modules/user/</b>
+├── <b>user.module.ts</b>          <i>wiring only — imports, providers, exports</i>
+├── <b>user.controller.ts</b>      <i>HTTP: route, validate, map, delegate</i>
+├── <b>user.service.ts</b>         <i>business behaviour + Mongoose calls</i>
+├── <b>user.schema.ts</b>          <i>the collection this module owns</i>
+├── <b>README.md</b>               <i>required for every new module</i>
+├── dto/                     <i>request/response shapes, one class per file</i>
+│   └── update-user.dto.ts   <i>must end in `Dto`</i>
+├── policies/                <i>CASL rules about this module's records</i>
+│   └── user.policy.ts
+└── constants/
+    └── api-response/        <i>every user-facing message, as an enum</i></code></pre>
+
+      <figure>
+        <div class="fw">
+          <svg viewBox="0 0 1000 208" role="img" aria-label="A request passes through the guard chain, the global validation pipe, the controller, the service and the Mongoose model before reaching MongoDB.">
+            <defs>
+              <marker id="q-arw" viewBox="0 0 8 8" refX="7.2" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L8 4 L0 8 z" class="mk-ink"/>
+              </marker>
+            </defs>
+
+            <rect x="16" y="52" width="144" height="52" rx="6" class="b-alt b-line"/>
+            <text x="88" y="76" text-anchor="middle" class="ttl t-ink">Request</text>
+            <text x="88" y="92" text-anchor="middle" class="mn t-mut">HTTP or WS</text>
+
+            <line x1="162" y1="78" x2="172" y2="78" class="s-ink" stroke-width="1.4" marker-end="url(#q-arw)"/>
+
+            <rect x="176" y="52" width="144" height="52" rx="6" class="b-acc"/>
+            <text x="248" y="76" text-anchor="middle" class="ttl t-acc">Guards</text>
+            <text x="248" y="92" text-anchor="middle" class="mn t-acc">access · tenant · perms</text>
+
+            <line x1="322" y1="78" x2="332" y2="78" class="s-ink" stroke-width="1.4" marker-end="url(#q-arw)"/>
+
+            <rect x="336" y="52" width="144" height="52" rx="6" class="b-fill b-line"/>
+            <text x="408" y="76" text-anchor="middle" class="ttl t-ink">Validation pipe</text>
+            <text x="408" y="92" text-anchor="middle" class="mn t-mut">whitelist: true</text>
+
+            <line x1="482" y1="78" x2="492" y2="78" class="s-ink" stroke-width="1.4" marker-end="url(#q-arw)"/>
+
+            <rect x="496" y="52" width="144" height="52" rx="6" class="b-fill b-line"/>
+            <text x="568" y="76" text-anchor="middle" class="ttl t-ink">Controller</text>
+            <text x="568" y="92" text-anchor="middle" class="mn t-mut">no database access</text>
+
+            <line x1="642" y1="78" x2="652" y2="78" class="s-ink" stroke-width="1.4" marker-end="url(#q-arw)"/>
+
+            <rect x="656" y="52" width="144" height="52" rx="6" class="b-fill b-line"/>
+            <text x="728" y="76" text-anchor="middle" class="ttl t-ink">Service</text>
+            <text x="728" y="92" text-anchor="middle" class="mn t-mut">rules + assertCan</text>
+
+            <line x1="802" y1="78" x2="812" y2="78" class="s-ink" stroke-width="1.4" marker-end="url(#q-arw)"/>
+
+            <rect x="816" y="52" width="168" height="52" rx="6" class="b-alt b-line"/>
+            <text x="900" y="76" text-anchor="middle" class="ttl t-ink">Model → MongoDB</text>
+            <text x="900" y="92" text-anchor="middle" class="mn t-mut">only this module's</text>
+
+            <text x="16" y="140" class="mn-s t-mut">FILE</text>
+            <line x1="16" y1="148" x2="984" y2="148" class="b-line" stroke-width="1" stroke-dasharray="2 3"/>
+            <text x="248" y="168" text-anchor="middle" class="mn t-mut">*.guard.ts</text>
+            <text x="408" y="168" text-anchor="middle" class="mn t-mut">dto/*.dto.ts</text>
+            <text x="568" y="168" text-anchor="middle" class="mn t-mut">*.controller.ts</text>
+            <text x="728" y="168" text-anchor="middle" class="mn t-mut">*.service.ts</text>
+            <text x="900" y="168" text-anchor="middle" class="mn t-mut">*.schema.ts</text>
+
+            <text x="408" y="190" text-anchor="middle" class="mn t-mut">unknown properties stripped before the handler sees them</text>
+          </svg>
+        </div>
+        <figcaption>The path every request takes. The validation pipe is global and set to <code>whitelist: true</code>, so any field your DTO does not declare is deleted before your handler runs — which is a security property, not just tidiness.</figcaption>
+      </figure>
+
+      <h3>Rules worth knowing before you write anything</h3>
+      <ul class="tight">
+        <li><strong>Controllers never touch a model.</strong> <code>nestjs/no-db-in-controller</code> blocks an injected model in a controller.</li>
+        <li><strong>No barrel files.</strong> <code>index.ts</code> re-exports are banned outright.</li>
+        <li><strong>Cross-module imports are absolute</strong> — <code>src/modules/...</code>, never <code>../../</code>.</li>
+        <li><strong>Never import another module's schema.</strong> Needing its data means calling its service.</li>
+        <li><strong>User-facing strings come from an <code>api-response</code> enum</strong>, not string literals at the call site.</li>
+        <li><strong>Use <code>@GetUser()</code>, not <code>@Req()</code>.</strong> Raw request access is blocked.</li>
+      </ul>
+    </section>
+
+    <!-- ============ ENDPOINT ============ -->
+    <section id="endpoint">
+      <p class="kicker">Daily work</p>
+      <h2>Your first endpoint</h2>
+      <p>A worked example: a guarded <code>GET /users/:id/summary</code>. Every step below exists because a gate stage will ask for it — this is the shortest path that commits cleanly on the first try.</p>
+
+      <div class="steps">
+        <div class="step"><div class="step-b">
+          <h3>Add the messages to an enum</h3>
+          <p class="muted">Hard-coded user-facing strings are blocked by <code>nestjs/no-hardcoded-message</code>.</p>
+<pre><code><span class="cm">// src/modules/user/constants/api-response/user.response.ts</span>
+<span class="kw">export enum</span> USER_RESPONSE {
+  SUMMARY_FETCHED = <span class="st">'User summary fetched successfully'</span>,
+  NOT_FOUND = <span class="st">'User not found'</span>,
+}</code></pre>
+        </div></div>
+
+        <div class="step"><div class="step-b">
+          <h3>Declare the DTO</h3>
+          <p class="muted">Every field needs both an <code>@ApiProperty()</code> and a <code>class-validator</code> decorator — two separate rules enforce this. The class name must end in <code>Dto</code>.</p>
+<pre><code><span class="cm">// src/modules/user/dto/user-summary-query.dto.ts</span>
+<span class="kw">export class</span> UserSummaryQueryDto {
+  @ApiProperty({ required: <span class="kw">false</span>, example: <span class="st">'30d'</span> })
+  @IsOptional()
+  @IsIn([<span class="st">'7d'</span>, <span class="st">'30d'</span>])
+  window?: <span class="kw">string</span>;
+}</code></pre>
+        </div></div>
+
+        <div class="step"><div class="step-b">
+          <h3>Put the behaviour in the service</h3>
+          <p class="muted">Errors go through <code>SerializeHttpError</code> so the response keeps the <code>{ data, status, message }</code> envelope — raw <code>throw new HttpException</code> is blocked.</p>
+<pre><code><span class="cm">// src/modules/user/user.service.ts</span>
+<span class="kw">async</span> getSummary(id: <span class="kw">string</span>, ability: AppAbility) {
+  <span class="kw">const</span> user = <span class="kw">await this</span>.userModel.findById(id).lean();
+  <span class="kw">if</span> (!user) SerializeHttpError(<span class="kw">null</span>, 404, USER_RESPONSE.NOT_FOUND);
+
+  <span class="cm">// the record-level check — the route guard could not do this one</span>
+  <span class="kw">this</span>.authorization.assertCan(ability, Action.Read, subject(USER_SUBJECT, user));
+
+  <span class="kw">return</span> buildSummary(user);
+}</code></pre>
+        </div></div>
+
+        <div class="step"><div class="step-b">
+          <h3>Wire the route</h3>
+          <p class="muted">Authentication is already on — you do not add a guard for it. You add the <em>permission</em>.</p>
+<pre><code><span class="cm">// src/modules/user/user.controller.ts</span>
+@Get(<span class="st">':id/summary'</span>)
+@RequirePermissions({ action: Action.Read, subject: USER_SUBJECT })
+<span class="kw">async</span> summary(
+  @Param(<span class="st">'id'</span>) id: <span class="kw">string</span>,
+  @Query() query: UserSummaryQueryDto,
+  @GetAbility() ability: AppAbility,
+) {
+  <span class="kw">const</span> data = <span class="kw">await this</span>.userService.getSummary(id, ability);
+  <span class="kw">return</span> SerializeHttpResponse(data, 200, USER_RESPONSE.SUMMARY_FETCHED);
+}</code></pre>
+          <p class="muted">The controller class already carries <code>@ApiTags()</code>, <code>@ApiBearerAuth()</code> and <code>@UseGuards(OrganizationAccessGuard, PermissionsGuard)</code> — a new controller needs all three, and two lint rules will tell you so.</p>
+        </div></div>
+
+        <div class="step"><div class="step-b">
+          <h3>Cover it with a policy test</h3>
+          <p class="muted">Every policy needs five cases: allow, deny, ownership, elevated role, unknown role. <code>src/modules/user/policies/user.policy.spec.ts</code> is the reference.</p>
+        </div></div>
+      </div>
+
+      <div class="call">
+        <p class="call-t">If it's a new module, not a new route</p>
+        <p>Add a <code>README.md</code> in the module folder — the structure stage blocks a new module without one — register it in <code>AppModule</code>, and check the module map first to be sure the behaviour does not already have an owner.</p>
+      </div>
+    </section>
+
+    <!-- ============ RESPONSES ============ -->
+    <section id="responses">
+      <p class="kicker">Daily work</p>
+      <h2>The response envelope</h2>
+      <p>Every response is wrapped in the same three-field shape by <code>src/utils/serializer.ts</code>.</p>
+<pre><code><span class="kw">interface</span> Serialized&lt;T&gt; { data: T; status: <span class="kw">number</span>; message: <span class="kw">string</span>; }
+
+SerializeHttpResponse(data, 200, MESSAGE)  <span class="cm">// returns the envelope</span>
+SerializeHttpError(<span class="kw">null</span>, 404, MESSAGE)      <span class="cm">// throws HttpException with it</span></code></pre>
+
+      <div class="call danger">
+        <p class="call-t">Known inconsistency — read this before integrating a client</p>
+        <p>Only the <strong>auth</strong> module returns real HTTP status codes. Everywhere else — chat, notifications, media, Stripe, PayPal — a failure comes back as <strong>HTTP 200</strong> with the actual status inside the body. A refactor deliberately preserved those HTTP contracts rather than breaking every existing consumer.</p>
+        <p>So a client cannot trust the HTTP status outside <code>/auth/*</code> yet, and must read <code>body.status</code> there. New code should not treat this as two equally valid conventions — it is tracked debt, and the auth module shows the intended direction.</p>
+      </div>
+    </section>
+
+    <!-- ============ GATE ============ -->
+    <section id="gate">
+      <p class="kicker">The guard rails</p>
+      <h2>The commit gate</h2>
+      <p>Hooks install themselves on <code>pnpm install</code>. Every stage runs even after an earlier one fails, so a blocked commit shows you the complete list of problems in one pass rather than one per attempt.</p>
+
+      <figure>
+        <div class="fw">
+          <svg viewBox="0 0 1000 300" role="img" aria-label="Pre-commit runs six stages and blocks the commit; commit-msg checks the message and blocks; after the commit is created, post-commit runs related tests and only reports.">
+            <defs>
+              <marker id="g-arw" viewBox="0 0 8 8" refX="7.2" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L8 4 L0 8 z" class="mk-ink"/>
+              </marker>
+              <marker id="g-arw-h" viewBox="0 0 8 8" refX="7.2" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L8 4 L0 8 z" class="mk-hole"/>
+              </marker>
+            </defs>
+
+            <rect x="8" y="100" width="100" height="50" rx="6" class="b-alt b-line"/>
+            <text x="58" y="122" text-anchor="middle" class="ttl t-ink">git</text>
+            <text x="58" y="138" text-anchor="middle" class="ttl t-ink">commit</text>
+
+            <line x1="110" y1="125" x2="124" y2="125" class="s-ink" stroke-width="1.4" marker-end="url(#g-arw)"/>
+
+            <rect x="128" y="58" width="440" height="122" rx="7" class="b-fill b-line" stroke-dasharray="3 3"/>
+            <text x="140" y="78" class="mn-s t-hole">PRE-COMMIT · BLOCKS</text>
+
+            <rect x="140" y="86" width="136" height="36" rx="5" class="b-alt b-line"/>
+            <text x="150" y="103" class="mn t-acc">1</text>
+            <text x="166" y="103" class="lbl t-ink">Guard rails</text>
+            <text x="166" y="115" class="mn t-mut">secrets, .env</text>
+
+            <rect x="284" y="86" width="136" height="36" rx="5" class="b-alt b-line"/>
+            <text x="294" y="103" class="mn t-acc">2</text>
+            <text x="310" y="103" class="lbl t-ink">Lint</text>
+            <text x="310" y="115" class="mn t-mut">15 conventions</text>
+
+            <rect x="428" y="86" width="136" height="36" rx="5" class="b-alt b-line"/>
+            <text x="438" y="103" class="mn t-acc">3</text>
+            <text x="454" y="103" class="lbl t-ink">Types</text>
+            <text x="454" y="115" class="mn t-mut">tsc --noEmit</text>
+
+            <rect x="140" y="130" width="136" height="36" rx="5" class="b-alt b-line"/>
+            <text x="150" y="147" class="mn t-acc">4</text>
+            <text x="166" y="147" class="lbl t-ink">Structure</text>
+            <text x="166" y="159" class="mn t-mut">naming, README</text>
+
+            <rect x="284" y="130" width="136" height="36" rx="5" class="b-alt b-line"/>
+            <text x="294" y="147" class="mn t-acc">5</text>
+            <text x="310" y="147" class="lbl t-ink">Architecture</text>
+            <text x="310" y="159" class="mn t-mut">cycles, leakage</text>
+
+            <rect x="428" y="130" width="136" height="36" rx="5" class="b-alt b-line"/>
+            <text x="438" y="147" class="mn t-acc">6</text>
+            <text x="454" y="147" class="lbl t-ink">Docs</text>
+            <text x="454" y="159" class="mn t-mut">links, ADRs</text>
+
+            <line x1="570" y1="125" x2="584" y2="125" class="s-ink" stroke-width="1.4" marker-end="url(#g-arw)"/>
+
+            <rect x="588" y="100" width="120" height="50" rx="6" class="b-fill b-line"/>
+            <text x="648" y="120" text-anchor="middle" class="ttl t-ink">commit-msg</text>
+            <text x="648" y="136" text-anchor="middle" class="mn t-mut">conventional</text>
+
+            <line x1="710" y1="125" x2="724" y2="125" class="s-ink" stroke-width="1.4" marker-end="url(#g-arw)"/>
+
+            <rect x="728" y="100" width="120" height="50" rx="6" class="b-ok"/>
+            <text x="788" y="120" text-anchor="middle" class="ttl t-ok">commit</text>
+            <text x="788" y="136" text-anchor="middle" class="ttl t-ok">created</text>
+
+            <line x1="850" y1="125" x2="864" y2="125" class="s-ink" stroke-width="1.4" stroke-dasharray="3 3" marker-end="url(#g-arw)"/>
+
+            <rect x="868" y="100" width="124" height="50" rx="6" class="b-fill b-line" stroke-dasharray="3 3"/>
+            <text x="930" y="120" text-anchor="middle" class="ttl t-ink">post-commit</text>
+            <text x="930" y="136" text-anchor="middle" class="mn t-mut">related tests</text>
+            <text x="930" y="170" text-anchor="middle" class="mn t-mut">reports, never blocks</text>
+
+            <path d="M348 180 L348 236 L58 236 L58 156" fill="none" class="s-hole" stroke-width="1.4" marker-end="url(#g-arw-h)"/>
+            <path d="M648 156 L648 214 L58 214" fill="none" class="s-hole" stroke-width="1.4" stroke-dasharray="3 3"/>
+            <text x="368" y="256" class="mn t-hole">blocked — nothing is committed, and you see every failing stage at once</text>
+          </svg>
+        </div>
+        <figcaption>Tests run <em>after</em> the commit on purpose. A commit is a local checkpoint; making every one wait on Jest is what pushes people toward <code>--no-verify</code>. The full suite is CI's job.</figcaption>
+      </figure>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th class="num">#</th><th>Stage</th><th>Checks</th><th class="m">Typical</th></tr></thead>
+          <tbody>
+            <tr><td class="num m">1</td><td>Guard rails</td><td>Staged <code>.env</code> files, hard-coded credentials, build output, files over 1 MB, merge-conflict markers</td><td class="m">&lt;1s</td></tr>
+            <tr><td class="num m">2</td><td>Lint &amp; conventions</td><td><code>eslint --fix</code> and Prettier on staged files, then the strict gate: TypeScript correctness plus 15 <code>nestjs/*</code> rules</td><td class="m">2–5s</td></tr>
+            <tr><td class="num m">3</td><td>Type safety</td><td><code>tsc --noEmit</code> across the project</td><td class="m">~2s</td></tr>
+            <tr><td class="num m">4</td><td>Structure</td><td>File and folder naming, folder–suffix agreement, README for new modules</td><td class="m">&lt;1s</td></tr>
+            <tr><td class="num m">5</td><td>Architecture</td><td>Module cycles, foreign schema reads, provider-SDK leakage — ratcheted against <code>architecture-baseline.json</code></td><td class="m">&lt;1s</td></tr>
+            <tr><td class="num m">6</td><td>Documentation</td><td>Relative links resolve, Mermaid sanity check, ADR naming and fields, architecture index completeness</td><td class="m">&lt;1s</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Stage 2 fixes what it can</strong> — formatting, quote style, import order, every auto-fixable rule — and re-stages the result. You only ever see what needs a human decision.</p>
+
+      <h3>The 15 convention rules</h3>
+      <p>They are ESLint rules rather than a bespoke script for one reason: violations show up <strong>live in your editor as you type</strong>, not when you try to commit.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Rule</th><th>Enforces</th></tr></thead>
+          <tbody>
+            <tr><td class="m">no-raw-http-exception</td><td>Errors go through <code>SerializeHttpError</code></td></tr>
+            <tr><td class="m">no-hardcoded-message</td><td>Messages come from an <code>api-response</code> enum</td></tr>
+            <tr><td class="m">require-api-property</td><td>Every DTO field has <code>@ApiProperty()</code></td></tr>
+            <tr><td class="m">require-dto-validation</td><td>Every DTO field has a validator</td></tr>
+            <tr><td class="m">dto-class-suffix</td><td>Classes in <code>dto/</code> end in <code>Dto</code></td></tr>
+            <tr><td class="m">require-api-tags</td><td>Every controller has <code>@ApiTags()</code></td></tr>
+            <tr><td class="m">require-api-bearer-auth</td><td>Guarded endpoints declare <code>@ApiBearerAuth()</code></td></tr>
+            <tr><td class="m">no-db-in-controller</td><td>No injected models in controllers</td></tr>
+            <tr><td class="m">no-raw-request-decorator</td><td><code>@GetUser()</code> instead of <code>@Req()</code></td></tr>
+            <tr><td class="m">require-schema-timestamps</td><td><code>@Schema({ timestamps: true })</code></td></tr>
+            <tr><td class="m">require-schema-exports</td><td>Schema files export class, schema and document type</td></tr>
+            <tr><td class="m">no-process-env</td><td>Config via <code>ConfigService</code> and the <code>CONFIG</code> enum</td></tr>
+            <tr><td class="m">no-cross-module-relative-import</td><td>Absolute <code>src/...</code> across module boundaries</td></tr>
+            <tr><td class="m">no-barrel-file</td><td>No <code>index.ts</code> barrels</td></tr>
+            <tr><td class="m">no-focused-tests</td><td>No <code>.only</code> or <code>fdescribe</code> reaching CI</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The suppressions baseline</h3>
+      <p><code>eslint-suppressions.json</code> records violations that already existed when the gate was introduced. It is a <strong>ratchet</strong>: new and changed code must be fully clean, pre-existing violations do not block unrelated work, and the list can only shrink.</p>
+<pre><code>pnpm run debt                    <span class="cm"># what is still baselined</span>
+pnpm run lint:baseline:prune     <span class="cm"># drop suppressions now unused</span></code></pre>
+      <div class="call warn">
+        <p class="call-t">Never run --suppress-all to make a failure go away</p>
+        <p>It re-suppresses your new violations along with the old ones, which is exactly what the ratchet exists to prevent.</p>
+      </div>
+
+      <h3>When it blocks you</h3>
+      <p>Every finding names the file, the line, what is wrong, the concrete fix, and the convention page that explains it.</p>
+<pre><code>claude "/fix-commit"   <span class="cm"># have Claude apply the fixes</span>
+
+pnpm run lint          <span class="cm"># or work through it yourself</span>
+pnpm run typecheck
+pnpm run lint:check
+pnpm run verify</code></pre>
+
+      <h3>Escape hatches</h3>
+      <p>There is deliberately almost none. <code>--no-verify</code> skips every hook, but anything committed that way still fails CI — it buys minutes, not permission. A false positive on a secret takes <code>quality-gate:allow</code> on the line. A rule that is genuinely wrong for a case gets <em>changed</em> in <code>tools/eslint-rules/</code>, not disabled inline.</p>
+    </section>
+
+    <!-- ============ TESTING ============ -->
+    <section id="testing">
+      <p class="kicker">The guard rails</p>
+      <h2>Testing</h2>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Kind</th><th class="m">Lives in</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Unit</td><td class="m">src/**/*.spec.ts</td><td>Runs on <code>pnpm test</code>; <code>rootDir</code> is <code>src</code>.</td></tr>
+            <tr><td>Auth contract</td><td class="m">test/auth/</td><td><span class="chip ok">no database</span> Real HTTP via Supertest.</td></tr>
+            <tr><td>Authorization contract</td><td class="m">test/authorization/</td><td><span class="chip ok">no database</span> Includes the zero-reads assertion.</td></tr>
+            <tr><td>App smoke</td><td class="m">test/app.e2e-spec.ts</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>That the auth suites need <strong>no database</strong> is itself part of the contract. The authorization e2e asserts the user collection is read <strong>zero</strong> times across an authenticated request — so if authentication ever starts reading from the database again, however that read is spelled, this test fails. The lint rules are the fast feedback; that assertion is the real guarantee.</p>
+      <p>CI runs the gate, the checkers' own tests, unit tests, a build, and the auth contract on every push to <code>main</code> and every pull request.</p>
+    </section>
+
+    <!-- ============ TROUBLESHOOTING ============ -->
+    <section id="trouble">
+      <p class="kicker">Reference</p>
+      <h2>Troubleshooting</h2>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Symptom</th><th>Cause and fix</th></tr></thead>
+          <tbody>
+            <tr><td>App exits at startup complaining about the secret</td><td><code>JWT_SECRET</code> is missing or under 32 characters. <code>openssl rand -base64 48</code>.</td></tr>
+            <tr><td>An env value seems ignored</td><td>A <code>.env.dev</code> (or <code>.env.&lt;NODE_ENV&gt;</code>) is shadowing <code>.env</code>. It is first in the lookup order.</td></tr>
+            <tr><td>Hooks are not running</td><td><code>pnpm run prepare</code>, then check <code>git config core.hooksPath</code> prints <code>.husky/_</code>.</td></tr>
+            <tr><td>A field you sent never reaches the handler</td><td>The global pipe uses <code>whitelist: true</code>. Undeclared DTO properties are stripped. Add it to the DTO — with both decorators.</td></tr>
+            <tr><td>401 on a route you expected to be open</td><td>Authentication is on by default. Add <code>@Public()</code> — visibly, and only for pre-credential, signature-authenticated, or health routes.</td></tr>
+            <tr><td>403 from <code>@GetOrganizationId()</code></td><td>The route is missing <code>@TenantScoped()</code> and <code>OrganizationAccessGuard</code>. It fails closed rather than returning <code>undefined</code>, because an empty tenant filter means "everything".</td></tr>
+            <tr><td>A permission rule seems to be ignored</td><td>Guard ordering. Declare <code>@UseGuards(OrganizationAccessGuard, PermissionsGuard)</code> at <em>controller</em> level, in that order — Nest only respects ordering within a single <code>@UseGuards</code>.</td></tr>
+            <tr><td>Role change hasn't taken effect</td><td>Abilities are built from token claims. It applies when the access token expires — up to 15 minutes. Revoke sessions to shorten that.</td></tr>
+            <tr><td>Commit blocked by <code>architecture:check</code></td><td>You crossed a module boundary. Read the named rule, then call the owning module's service instead of importing its internals.</td></tr>
+            <tr><td>An error returns HTTP 200</td><td>Expected outside <code>auth</code>. Read <code>body.status</code>. Tracked debt.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="rule">
+      <h3>Where to go next</h3>
+      <ul class="tight">
+        <li><strong>The companion Architecture page</strong> — module map, ownership, the auth and authorization models, dependency rules, and the full debt register.</li>
+        <li><code>docs/architecture/</code> — the canonical, checked-in versions of the same.</li>
+        <li><code>docs/adr/</code> — four decisions and why they were made.</li>
+        <li><code>docs/guides/permissions.md</code> — day-to-day instructions for writing policies.</li>
+        <li><code>docs/frontend-auth-integration.md</code> — for whoever is integrating a client.</li>
+        <li><code>.claude/skills/best-practices/</code> — the coding conventions the lint rules encode.</li>
+      </ul>
+    </section>
+  </main>
+</div>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('#nav a'));
+    var map = {};
+    links.forEach(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) map[el.id] = a;
+    });
+    var visible = {};
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bestVal = 0;
+      Object.keys(visible).forEach(function (id) {
+        if (visible[id] > bestVal) { bestVal = visible[id]; best = id; }
+      });
+      links.forEach(function (a) { a.classList.remove('on'); });
+      if (best && map[best]) map[best].classList.add('on');
+    }, { rootMargin: '-8% 0px -70% 0px', threshold: [0, 0.25, 0.6, 1] });
+    Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
+  })();
+</script>
+
+</body>
+</html>

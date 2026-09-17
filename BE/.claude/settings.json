@@ -1,0 +1,68 @@
+{
+  "skillOverrides": {
+    "mattpocock-skills:ask-matt": "off",
+    "mattpocock-skills:code-review": "off",
+    "mattpocock-skills:codebase-design": "off",
+    "mattpocock-skills:diagnosing-bugs": "off",
+    "mattpocock-skills:domain-modeling": "off",
+    "mattpocock-skills:grill-with-docs": "off",
+    "mattpocock-skills:grilling": "off",
+    "mattpocock-skills:implement": "off",
+    "mattpocock-skills:improve-codebase-architecture": "off",
+    "mattpocock-skills:research": "off",
+    "mattpocock-skills:resolving-merge-conflicts": "off",
+    "mattpocock-skills:setup-matt-pocock-skills": "off",
+    "mattpocock-skills:tdd": "off",
+    "mattpocock-skills:to-spec": "off",
+    "mattpocock-skills:to-tickets": "off",
+    "mattpocock-skills:triage": "off",
+    "mattpocock-skills:wayfinder": "off",
+    "mattpocock-skills:prototype": "off",
+    "mattpocock-skills:wizard": "off",
+    "superpowers:brainstorming": "off"
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/claude-skill-router.mjs",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/claude-lint-fix-on-edit.mjs",
+            "timeout": 20,
+            "statusMessage": "Lint-fixing..."
+          },
+          {
+            "type": "command",
+            "command": "node scripts/hooks/claude-typecheck-on-edit.mjs",
+            "timeout": 30,
+            "statusMessage": "Typechecking..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/claude-auto-review.mjs",
+            "timeout": 15,
+            "statusMessage": "Checking if a code review is due..."
+          }
+        ]
+      }
+    ]
+  }
+}

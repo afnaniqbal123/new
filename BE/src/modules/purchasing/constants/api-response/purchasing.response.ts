@@ -1,0 +1,31 @@
+export enum PURCHASING_RESPONSE {
+  SUPPLIER_CREATED = 'Supplier created successfully',
+  SUPPLIERS_FETCHED = 'Suppliers fetched successfully',
+  SUPPLIER_FETCHED = 'Supplier fetched successfully',
+  SUPPLIER_UPDATED = 'Supplier updated successfully',
+  SUPPLIER_DELETED = 'Supplier deactivated successfully',
+  SUPPLIER_NOT_FOUND = 'Supplier not found',
+  SUPPLIER_LEDGER_FETCHED = 'Supplier ledger fetched successfully',
+  SUPPLIER_PAYMENT_RECORDED = 'Supplier payment recorded successfully',
+  PAYABLES_FETCHED = 'Payables fetched successfully',
+
+  ORDER_CREATED = 'Purchase order created successfully',
+  ORDERS_FETCHED = 'Purchase orders fetched successfully',
+  ORDER_FETCHED = 'Purchase order fetched successfully',
+  ORDER_UPDATED = 'Purchase order updated successfully',
+  ORDER_SENT = 'Purchase order sent successfully',
+  ORDER_CANCELLED = 'Purchase order cancelled successfully',
+  ORDER_NOT_FOUND = 'Purchase order not found',
+  ORDER_NOT_EDITABLE = 'Only a draft purchase order can be edited',
+  ORDER_NOT_RECEIVABLE = 'This purchase order cannot receive goods',
+  ORDER_ALREADY_RECEIVED = 'This purchase order is already fully received',
+
+  RECEIPT_CREATED = 'Goods received successfully',
+  RECEIPTS_FETCHED = 'Goods receipts fetched successfully',
+  RECEIPT_NOT_FOUND = 'Goods receipt not found',
+  RECEIPT_EXCEEDS_ORDER = 'You cannot receive more than was ordered',
+  NO_LINES = 'A purchase order needs at least one line',
+
+  SUGGESTIONS_FETCHED = 'Reorder suggestions fetched successfully',
+  LEDGER_IMMUTABLE = 'Ledger entries cannot be edited. Record a correcting adjustment instead.',
+}

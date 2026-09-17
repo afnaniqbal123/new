@@ -1,0 +1,30 @@
+export enum ORGANIZATION_RESPONSE {
+  CREATED = 'Organization created successfully',
+  FETCHED = 'Organization fetched successfully',
+  UPDATED = 'Organization updated successfully',
+  NOT_FOUND = 'Organization not found',
+  SLUG_TAKEN = 'That workspace address is already in use',
+  ALREADY_MEMBER = 'This user already belongs to an organization',
+
+  LOCATION_CREATED = 'Location created successfully',
+  LOCATIONS_FETCHED = 'Locations fetched successfully',
+  LOCATION_UPDATED = 'Location updated successfully',
+  LOCATION_DELETED = 'Location deleted successfully',
+  LOCATION_NOT_FOUND = 'Location not found',
+  LOCATION_CODE_TAKEN = 'Another location already uses that code',
+  LOCATION_HAS_STOCK = 'This location still holds stock and cannot be removed',
+  LAST_LOCATION = 'An organization must keep at least one location',
+
+  MEMBER_INVITED = 'Invitation sent successfully',
+  MEMBERS_FETCHED = 'Team members fetched successfully',
+  MEMBER_UPDATED = 'Team member updated successfully',
+  MEMBER_REMOVED = 'Team member removed successfully',
+  CANNOT_REMOVE_SELF = 'You cannot remove your own account',
+  CANNOT_DEMOTE_LAST_OWNER = 'An organization must keep at least one owner',
+
+  PLAN_LIMIT_USERS = 'Your plan does not allow any more team members',
+  PLAN_LIMIT_PRODUCTS = 'Your plan does not allow any more products',
+  PLAN_LIMIT_LOCATIONS = 'Your plan does not allow any more locations',
+  PLAN_LIMIT_SALES = 'Your plan’s monthly sales allowance is used up',
+  PLAN_FEATURE_UNAVAILABLE = 'Your plan does not include this feature',
+}

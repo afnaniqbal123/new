@@ -1,0 +1,91 @@
+<html dir='ltr' lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>{{appName}} payment issue</title>
+  </head>
+  <body
+    style="margin:0;padding:0;background-color:{{backgroundColor}};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:{{textColor}};"
+  >
+    <table
+      role='presentation'
+      width='100%'
+      cellspacing='0'
+      cellpadding='0'
+      style='background-color:{{backgroundColor}};padding:24px 12px;'
+    >
+      <tr>
+        <td align='center'>
+          <table
+            role='presentation'
+            width='600'
+            cellspacing='0'
+            cellpadding='0'
+            style='max-width:600px;width:100%;background-color:#ffffff;border-radius:8px;overflow:hidden;'
+          >
+            <tr>
+              <td style='padding:32px 32px 24px;text-align:center;'>
+                <img
+                  src='{{logoSrc}}'
+                  alt='{{appName}}'
+                  width='216'
+                  height='45'
+                  style='display:inline-block;max-width:100%;height:auto;border:0;'
+                />
+              </td>
+            </tr>
+            <tr>
+              <td style='padding:0 32px 32px;font-size:16px;line-height:1.6;'>
+                <p style='margin:0 0 16px;'>Hi {{name}},</p>
+                {{#if isFinalAttempt}}
+                  <p style='margin:0 0 24px;'>
+                    We were unable to process your subscription payment after
+                    {{attemptCount}} attempts. Your dealer account has been
+                    deactivated until you add a valid payment method and
+                    reactivate your plan.
+                  </p>
+                {{else}}
+                  <p style='margin:0 0 24px;'>
+                    We could not process your latest subscription payment
+                    (attempt {{attemptCount}} of {{maxAttempts}}). Please update
+                    your payment method so your next charge can go through.
+                  </p>
+                {{/if}}
+                <p style='margin:0 0 24px;'>
+                  {{message}}
+                </p>
+                {{#if updatePaymentUrl}}
+                  <p style='margin:0 0 24px;text-align:center;'>
+                    <a
+                      href='{{updatePaymentUrl}}'
+                      style='display:inline-block;padding:14px 28px;background-color:{{primaryColor}};color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;'
+                    >Update payment method</a>
+                  </p>
+                {{/if}}
+                <p style='margin:0 0 24px;'>
+                  If you have questions, contact us at
+                  <a
+                    href='mailto:{{supportEmail}}'
+                    style='color:{{primaryColor}};text-decoration:none;font-weight:600;'
+                  >{{supportEmail}}</a>.
+                </p>
+                <p style='margin:0;'>The Team at {{appName}}</p>
+              </td>
+            </tr>
+            <tr>
+              <td
+                style='padding:20px 32px;background-color:{{primaryColor}};color:#ffffff;font-size:12px;line-height:1.5;text-align:center;'
+              >
+                <p style='margin:0 0 12px;'>
+                  This email was sent to {{email}}. This is a required billing
+                  notice and is not a marketing email.
+                </p>
+                <p style='margin:0;'>&copy; {{currentYear}} {{appName}}.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

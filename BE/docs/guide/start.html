@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>BE Boilerplate · Start a project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #F4F6F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F6;
+    --ink: #0E1520;
+    --ink-2: #4C5A6B;
+    --ink-3: #7E8B9C;
+    --line: #DCE3EB;
+    --line-2: #C6D0DB;
+    --accent: #2440BE;
+    --accent-soft: #E9ECFC;
+    --ok: #0E7A52;
+    --ok-soft: #E2F3EC;
+    --debt: #8F5B05;
+    --debt-soft: #FAEEDA;
+    --hole: #AB2743;
+    --hole-soft: #FBE7EB;
+    --shadow: 0 1px 2px rgba(14, 21, 32, .05);
+
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --disp: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0B0F15;
+      --surface: #131A23;
+      --surface-2: #1A222D;
+      --ink: #E4EBF3;
+      --ink-2: #9FADBE;
+      --ink-3: #6B7889;
+      --line: #212B37;
+      --line-2: #2E3A48;
+      --accent: #8098FF;
+      --accent-soft: #1A2242;
+      --ok: #40C08C;
+      --ok-soft: #10281F;
+      --debt: #DBA33F;
+      --debt-soft: #2A2113;
+      --hole: #F4708B;
+      --hole-soft: #2C141A;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0B0F15;
+    --surface: #131A23;
+    --surface-2: #1A222D;
+    --ink: #E4EBF3;
+    --ink-2: #9FADBE;
+    --ink-3: #6B7889;
+    --line: #212B37;
+    --line-2: #2E3A48;
+    --accent: #8098FF;
+    --accent-soft: #1A2242;
+    --ok: #40C08C;
+    --ok-soft: #10281F;
+    --debt: #DBA33F;
+    --debt-soft: #2A2113;
+    --hole: #F4708B;
+    --hole-soft: #2C141A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: 0;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ---------- rail ---------- */
+  .rail {
+    border-right: 1px solid var(--line);
+    padding: 34px 22px 60px;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  .rail-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    color: var(--ink-3);
+    margin-bottom: 26px;
+    line-height: 1.5;
+  }
+  .rail-brand b { color: var(--ink); font-weight: 600; }
+  .rail-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .13em;
+    color: var(--ink-3);
+    margin: 0 0 10px;
+  }
+  .rail nav { display: flex; flex-direction: column; gap: 1px; }
+  .rail nav a {
+    display: block;
+    padding: 5px 10px;
+    border-left: 2px solid transparent;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 13.5px;
+    border-radius: 0 4px 4px 0;
+  }
+  .rail nav a:hover { color: var(--ink); background: var(--surface-2); }
+  .rail nav a.on {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+  .rail nav a:focus-visible,
+  .xlink:focus-visible,
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .rail-foot { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+  .xlink {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--surface);
+  }
+  .xlink:hover { border-color: var(--accent); color: var(--accent); }
+  .xlink span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 2px;
+  }
+
+  /* ---------- main ---------- */
+  main { padding: 34px 44px 120px; min-width: 0; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+
+  h1 {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: clamp(34px, 4.6vw, 50px);
+    line-height: 1.04;
+    letter-spacing: -.015em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    font-size: 17px;
+    color: var(--ink-2);
+    max-width: 68ch;
+    margin: 0 0 28px;
+  }
+
+  h2 {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -.01em;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 16px;
+    margin: 26px 0 8px;
+    letter-spacing: -.005em;
+  }
+  h4 {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 22px 0 8px;
+  }
+
+  section { scroll-margin-top: 20px; padding-top: 42px; }
+  section > .kicker {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin: 0 0 14px;
+  }
+  p { max-width: 72ch; margin: 0 0 14px; }
+  .muted { color: var(--ink-2); }
+  strong { font-weight: 600; }
+
+  a { color: var(--accent); }
+
+  code {
+    font-family: var(--mono);
+    font-size: .875em;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: .08em .34em;
+    white-space: nowrap;
+  }
+
+  pre {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.62;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 15px 17px;
+    overflow-x: auto;
+    margin: 0 0 16px;
+    box-shadow: var(--shadow);
+  }
+  pre code {
+    background: none; border: 0; padding: 0; font-size: inherit; white-space: pre;
+  }
+  .cm { color: var(--ink-3); }
+  .kw { color: var(--accent); }
+  .st { color: var(--ok); }
+
+  /* ---------- stats ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 0 8px;
+  }
+  .stat { background: var(--surface); padding: 13px 15px; }
+  .stat b {
+    display: block;
+    font-family: var(--disp);
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 6px;
+  }
+  .stats-note { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin: 0 0 4px; }
+
+  /* ---------- tables ---------- */
+  .tw { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.m, th.m { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  td.m b { font-weight: 500; }
+  .num { font-variant-numeric: tabular-nums; text-align: right; }
+
+  /* ---------- chips ---------- */
+  .chip {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .05em;
+    padding: 1px 7px;
+    border-radius: 3px;
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+  .chip.ok { color: var(--ok); background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+  .chip.debt { color: var(--debt); background: var(--debt-soft); border-color: color-mix(in srgb, var(--debt) 35%, transparent); }
+  .chip.hole { color: var(--hole); background: var(--hole-soft); border-color: color-mix(in srgb, var(--hole) 35%, transparent); }
+  .chip.acc { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+
+  /* ---------- callouts ---------- */
+  .call {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 7px 7px 0;
+    padding: 13px 17px;
+    margin: 0 0 18px;
+    max-width: 76ch;
+  }
+  .call p:last-child { margin-bottom: 0; }
+  .call.warn { border-left-color: var(--debt); }
+  .call.danger { border-left-color: var(--hole); }
+  .call-t {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+  .call.warn .call-t { color: var(--debt); }
+  .call.danger .call-t { color: var(--hole); }
+
+  /* ---------- steps ---------- */
+  .steps { display: flex; flex-direction: column; gap: 0; margin: 0 0 18px; counter-reset: s; }
+  .step { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 14px; padding: 0 0 22px; position: relative; }
+  .step::before {
+    counter-increment: s;
+    content: counter(s);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    margin-top: 1px;
+  }
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 13px; top: 30px; bottom: 6px;
+    width: 1px; background: var(--line);
+  }
+  .step-b { min-width: 0; }
+  .step-b h3 { margin: 2px 0 8px; }
+  .step-b > :last-child { margin-bottom: 0; }
+
+  /* ---------- figure ---------- */
+  figure { margin: 0 0 20px; }
+  .fw { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 16px; }
+  figure svg { display: block; width: 100%; min-width: 640px; height: auto; color: var(--ink-2); }
+  figcaption { font-size: 12.5px; color: var(--ink-3); margin-top: 9px; max-width: 74ch; }
+
+  .b-fill { fill: var(--surface); }
+  .b-alt { fill: var(--surface-2); }
+  .b-line { stroke: var(--line-2); }
+  .t-ink { fill: var(--ink); }
+  .t-mut { fill: var(--ink-3); }
+  .s-ink { stroke: var(--ink-2); }
+  .s-acc { stroke: var(--accent); }
+  .t-acc { fill: var(--accent); }
+  .s-hole { stroke: var(--hole); }
+  .t-hole { fill: var(--hole); }
+  .b-hole { fill: var(--hole-soft); stroke: color-mix(in srgb, var(--hole) 40%, transparent); }
+  .b-acc { fill: var(--accent-soft); stroke: color-mix(in srgb, var(--accent) 35%, transparent); }
+  .b-ok { fill: var(--ok-soft); stroke: color-mix(in srgb, var(--ok) 40%, transparent); }
+  .t-ok { fill: var(--ok); }
+  .mk-ink { fill: var(--ink-2); }
+  .mk-acc { fill: var(--accent); }
+  .mk-hole { fill: var(--hole); }
+  .ttl { font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .lbl { font-family: var(--sans); font-size: 12px; }
+  .mn { font-family: var(--mono); font-size: 11px; }
+  .mn-s { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; }
+
+  /* ---------- misc ---------- */
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 0 0 18px; }
+  .card { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 15px 17px; }
+  .card h3 { margin-top: 0; }
+  .card > :last-child { margin-bottom: 0; }
+  .card p { font-size: 14px; }
+
+  ul.tight { margin: 0 0 14px; padding-left: 20px; max-width: 72ch; }
+  ul.tight li { margin-bottom: 5px; }
+
+  .tree { color: var(--ink-2); }
+  .tree b { color: var(--ink); font-weight: 500; }
+  .tree i { color: var(--ink-3); font-style: normal; }
+
+  hr.rule { border: 0; border-top: 1px solid var(--line); margin: 34px 0 0; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    .rail {
+      position: static; max-height: none; border-right: 0;
+      border-bottom: 1px solid var(--line); padding: 22px 20px;
+    }
+    .rail nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    .rail nav a { border-left: 0; border: 1px solid var(--line); border-radius: 5px; padding: 4px 9px; font-size: 12.5px; }
+    .rail nav a.on { border-color: var(--accent); }
+    main { padding: 24px 20px 80px; }
+    figure svg { min-width: 560px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-brand">Gok-boilerplates<br><b>nestjs-backend</b></div>
+    <p class="rail-label">Start a project</p>
+    <nav id="nav">
+      <a href="#fork">Which one are you?</a>
+      <a href="#new">A new service</a>
+      <a href="#modules">What you can leave out</a>
+      <a href="#existing">A project you already have</a>
+      <a href="#gate">The six stages</a>
+      <a href="#trouble">When it goes wrong</a>
+    </nav>
+    <div class="rail-foot">
+      <a class="xlink" href="./index.html"><span>Start here</span>Docs home</a>
+      <a class="xlink" href="./quickstart.html" id="sibling"><span>Next</span>Quickstart</a>
+      <a class="xlink" href="./architecture.html"><span>Companion</span>Architecture</a>
+      <a class="xlink" href="./skills.html"><span>Companion</span>Agent Skills</a>
+    </div>
+  </aside>
+
+  <main>
+    <p class="eyebrow">Backend boilerplate · getting a repo</p>
+    <h1>Two ways in, one quality gate</h1>
+    <p class="lede">Start a new service from this boilerplate, or add its conventions and enforcement to a codebase you have been shipping from for months. Both paths end with the same six-stage gate running on every commit. Once you have a repo, <a href="./quickstart.html">Quickstart</a> takes over.</p>
+
+    <div class="stats">
+      <div class="stat"><b>6</b><span>Optional modules</span></div>
+      <div class="stat"><b>3</b><span>Email providers</span></div>
+      <div class="stat"><b>6</b><span>Gate stages</span></div>
+      <div class="stat"><b>24</b><span>Custom lint rules</span></div>
+    </div>
+    <p class="stats-note">Everything below needs <code>gh auth login</code>, Node 20+, and read access to this repo. The repo is private; <code>gh</code> authenticates every fetch, so anyone without access gets a 404 and never reaches the wizard.</p>
+
+    <h2 id="fork">Which one are you?</h2>
+    <div class="grid2">
+      <div class="card">
+        <p class="call-t">Starting something new</p>
+        <p class="muted">Pick the modules you want. Everything else is removed — folders, config keys, env vars and npm dependencies together.</p>
+        <p><a href="#new">Start a new service →</a></p>
+      </div>
+      <div class="card">
+        <p class="call-t">You already have a codebase</p>
+        <p class="muted">Skills, custom lint rules and the gate land in your repo. Existing violations are recorded, not fixed — nothing you shipped starts failing.</p>
+        <p><a href="#existing">Add the toolkit →</a></p>
+      </div>
+    </div>
+
+    <h2 id="new">A new service</h2>
+    <p>The wizard copies the boilerplate, then strips out what you did not tick. Removal touches five places at once, which is the part that goes wrong when people do it by hand.</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-b">
+        <h3>Get the template</h3>
+        <p class="muted">Clone it under the name you want, then convert the clone in place:</p>
+<pre><code>git clone https://github.com/Gok-boilerplates/nestjs-backend.git my-api
+cd my-api
+node scripts/setup.mjs --in-place</code></pre>
+        <p class="muted">Or skip cloning entirely — this fetches the template into a temp folder, runs the wizard, and deletes itself:</p>
+<pre><code>bash &lt;(gh api repos/Gok-boilerplates/nestjs-backend/contents/create.sh \
+  -H "Accept: application/vnd.github.raw") my-api</code></pre>
+        <div class="call warn">
+          <p class="call-t">Use <code>bash &lt;(…)</code>, never <code>… | bash</code></p>
+          <p>Piping makes the script itself stdin, so the wizard's prompts read end-of-file and it silently answers with defaults. You get a project you did not choose, with no error to explain it.</p>
+        </div>
+      </div></div>
+
+      <div class="step"><div class="step-b">
+        <h3>Pick your modules</h3>
+        <p class="muted">Arrow keys to move, space to toggle, enter to accept. The first five are locked — the cursor skips them.</p>
+<pre><code>  Which modules do you want?
+  ↑↓ move · space toggle · enter accept
+
+    ◉ auth                JWT access/refresh, OTP, password reset  (always included)
+    ◉ user                User accounts and profile management     (always included)
+    ◉ authorization       CASL policies and permission guards      (always included)
+    ◉ email               Transactional email + Handlebars         (always included)
+    ◉ media               S3 upload/download and presigned URLs    (always included)
+
+  › ◉ stripe              Stripe — cards, invoices, payments, subscriptions
+    ○ paypal              PayPal — invoices, payments, subscriptions
+    ◉ notifications       In-app notifications (feed, read state)
+    ○ chat                Realtime chat (Socket.IO gateway, rooms)
+    ○ onesignal           Push notifications via OneSignal
+    ○ platform-assistant  AI assistant (OpenAI, conversation store)</code></pre>
+      </div></div>
+
+      <div class="step"><div class="step-b">
+        <h3>Pick how it sends email</h3>
+        <p class="muted">A radio, not a checkbox — <code>EMAIL_PROVIDER</code> activates one at runtime, so keeping two only means carrying an SDK the project never calls.</p>
+<pre><code>  How should this project send email?
+  ↑↓ move · enter accept
+
+  › ◉ brevo     Brevo — the default; one API key (EMAIL_API_KEY)
+    ○ ses       AWS SES — reuses your AWS_* credentials; sender must be verified
+    ○ sendgrid  SendGrid — SENDGRID_API_KEY, with its own sender override</code></pre>
+        <p class="muted">Know what you want already? Skip both screens: <code>--modules=stripe,chat --email=ses --yes</code>. Or see the plan without writing anything: <code>--dry-run</code>.</p>
+      </div></div>
+
+      <div class="step"><div class="step-b">
+        <h3>Install and run</h3>
+<pre><code>git remote set-url origin &lt;your-new-repo&gt;
+pnpm install            <span class="cm"># writes a fresh lockfile — commit it</span>
+cp .env.example .env    <span class="cm"># then fill in the values</span>
+pnpm run verify
+pnpm dev</code></pre>
+        <div class="call">
+          <p class="call-t">The lockfile is deliberately removed</p>
+          <p>When modules are dropped it still pins the packages that went with them, and CI runs <code>pnpm install --frozen-lockfile</code>, which rejects a mismatch rather than reconciling it. The first install writes a correct one.</p>
+        </div>
+        <p class="muted">Fill in at least <code>MONGODB_URI</code> and <code>JWT_SECRET</code>. A secret under 32 characters is rejected at startup, on purpose.</p>
+      </div></div>
+    </div>
+
+    <h2 id="modules">What you can leave out</h2>
+    <p>Which modules are optional is not a preference. Five are imported by other modules rather than only by <code>AppModule</code>, so removing one does not give you a smaller project — it gives you one that does not compile.</p>
+
+    <table>
+      <thead><tr><th>Module</th><th>Default</th><th>What it is</th><th>Why it is core</th></tr></thead>
+      <tbody>
+        <tr><td><code>auth</code></td><td><span class="chip">core</span></td><td>JWT access/refresh, OTP, password reset, Google sign-in</td><td class="muted">Imported by six modules</td></tr>
+        <tr><td><code>user</code></td><td><span class="chip">core</span></td><td>User accounts and profile management</td><td class="muted">Imported by five</td></tr>
+        <tr><td><code>media</code></td><td><span class="chip">core</span></td><td>S3 upload/download and presigned URLs</td><td class="muted">Imported by auth, email, user</td></tr>
+        <tr><td><code>email</code></td><td><span class="chip">core</span></td><td>Transactional email + Handlebars templates</td><td class="muted">Imported by auth, user</td></tr>
+        <tr><td><code>authorization</code></td><td><span class="chip">core</span></td><td>CASL policies and permission guards</td><td class="muted">Imported by stripe, user</td></tr>
+        <tr><td><code>stripe</code></td><td><span class="chip ok">on</span></td><td>Cards, invoices, payments, subscriptions, webhooks</td><td class="muted">—</td></tr>
+        <tr><td><code>notifications</code></td><td><span class="chip ok">on</span></td><td>In-app notifications (feed, read state, preferences)</td><td class="muted">—</td></tr>
+        <tr><td><code>paypal</code></td><td><span class="chip">off</span></td><td>Invoices, payments, subscriptions, webhooks</td><td class="muted">—</td></tr>
+        <tr><td><code>chat</code></td><td><span class="chip">off</span></td><td>Realtime chat — Socket.IO gateway, rooms, messages</td><td class="muted">—</td></tr>
+        <tr><td><code>onesignal</code></td><td><span class="chip">off</span></td><td>Push notifications via OneSignal</td><td class="muted">Pulls in notifications</td></tr>
+        <tr><td><code>platform-assistant</code></td><td><span class="chip">off</span></td><td>AI assistant — OpenAI, conversation store, context files</td><td class="muted">—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="call">
+      <p class="call-t">Dropping a module is not just deleting a folder</p>
+      <p>It removes the folder, its <code>#region</code> block in <code>app.module.ts</code>, its keys in <code>config.constant.ts</code> and <code>.env.example</code>, its half of the seed script, and its npm dependencies. Those last four are the ones missed by hand. Choosing an email provider does the same to the other two implementations, SDKs included.</p>
+    </div>
+
+    <h2 id="existing">A project you already have</h2>
+    <p>Nothing you have shipped starts failing. Existing violations are recorded in two baseline files, so the rules bind new code only — and the whole export is undone by one git command.</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-b">
+        <h3>Start from a clean tree</h3>
+<pre><code>cd ~/work/your-project
+git status          <span class="cm"># must be clean — the script refuses otherwise</span></code></pre>
+        <p class="muted">That refusal is the safety story: with a clean tree, <code>git checkout . &amp;&amp; git clean -fd</code> puts everything back exactly.</p>
+      </div></div>
+
+      <div class="step"><div class="step-b">
+        <h3>Run the installer</h3>
+<pre><code>gh api -H "Accept: application/vnd.github.raw" \
+  repos/Gok-boilerplates/nestjs-backend/contents/scripts/install-toolkit.sh | sh</code></pre>
+        <p class="muted">Here <code>| sh</code> is correct — this script asks nothing. Only the new-project wizard needs <code>bash &lt;(…)</code>.</p>
+        <div class="call">
+          <p class="call-t">Your ESLint config is never rewritten</p>
+          <p>It is kept verbatim as <code>eslint.config.project.mjs</code>, and the new <code>eslint.config.mjs</code> spreads it and appends the 24 custom rules on top. Nothing of yours is parsed or edited.</p>
+        </div>
+      </div></div>
+
+      <div class="step"><div class="step-b">
+        <h3>Install and wire up the hooks</h3>
+<pre><code>npm install
+npx husky            <span class="cm"># husky 8 needs `husky install` instead</span></code></pre>
+        <p class="muted">Use whichever package manager your project already uses — the installer detects it and prints the matching commands, including the right husky invocation for the version you have.</p>
+      </div></div>
+
+      <div class="step"><div class="step-b">
+        <h3>Record what is already there</h3>
+<pre><code>npm run architecture:accept
+npm run lint:baseline</code></pre>
+        <div class="call warn">
+          <p class="call-t">This step is not optional</p>
+          <p>Skip it and a codebase with months of history opens with hundreds of errors and no way to commit. Those are real numbers from a three-month-old project: 163 architecture violations and 209 lint violations, recorded and forgiven in about two seconds.</p>
+        </div>
+        <div class="call">
+          <p class="call-t"><code>architecture:accept</code>, not <code>architecture:baseline</code></p>
+          <p>The plain baseline command refuses to record violations it has not seen before — which is the behaviour you want every day after today, and exactly wrong on the first run, when everything is new to it.</p>
+        </div>
+      </div></div>
+
+      <div class="step"><div class="step-b">
+        <h3>Check the gate — and check the rules actually fire</h3>
+<pre><code>npm run verify
+npm run debt         <span class="cm"># the recorded debt, by rule</span></code></pre>
+        <div class="call warn">
+          <p class="call-t">If <code>debt</code> lists no <code>nestjs/*</code> rules, stop</p>
+          <p>It means the rules were copied but never loaded — the gate would report green while enforcing nothing, which is the one failure here that looks exactly like success.</p>
+        </div>
+        <p class="muted">Changed your mind? <code>git checkout . &amp;&amp; git clean -fd</code> removes every trace. Re-running the installer later is safe too: files that already exist are left alone, and only what is missing is added.</p>
+      </div></div>
+    </div>
+
+    <h2 id="gate">The six stages</h2>
+    <p>Both paths end here. <code>npm run verify</code> runs the same six stages the pre-commit hook does, across the whole repo instead of just the staged files.</p>
+
+    <table>
+      <thead><tr><th>#</th><th>Stage</th><th>What it checks</th></tr></thead>
+      <tbody>
+        <tr><td class="num m">01</td><td><b>Guard rails</b></td><td class="muted">Secrets, large files, anything that should never be committed</td></tr>
+        <tr><td class="num m">02</td><td><b>Lint &amp; conventions</b></td><td class="muted">Formatting plus 24 custom rules that encode this repo's conventions</td></tr>
+        <tr><td class="num m">03</td><td><b>Type safety</b></td><td class="muted">A full <code>tsc --noEmit</code>, not just the changed files</td></tr>
+        <tr><td class="num m">04</td><td><b>Structure &amp; naming</b></td><td class="muted">New files land where the module map says they belong</td></tr>
+        <tr><td class="num m">05</td><td><b>Architecture boundaries</b></td><td class="muted">Module cycles, cross-module reads, provider SDK leakage</td></tr>
+        <tr><td class="num m">06</td><td><b>Documentation</b></td><td class="muted">Links resolve, ADRs are named and structured, the index is complete</td></tr>
+      </tbody>
+    </table>
+
+    <div class="call">
+      <p class="call-t">Blocked by it?</p>
+      <p><code>claude "/fix-commit"</code> reads the failure and fixes the cause. Both baseline files may shrink and never grow — that is what stops today's exception becoming tomorrow's convention.</p>
+    </div>
+
+    <h2 id="trouble">When it goes wrong</h2>
+    <p>Each of these came out of a real adoption. Search this page for the message your terminal printed.</p>
+
+    <h3><code>163 violation(s) are not in the baseline</code></h3>
+    <p class="muted">You ran <code>architecture:baseline</code> on a project that has never been baselined. That command deliberately will not record violations it has not seen before. On the first adoption run <code>architecture:accept</code> instead.</p>
+
+    <h3><code>Invalid option '--suppress-all'</code></h3>
+    <p class="muted">Your ESLint predates 9.24, where suppressions landed. The installer warns about this, but if you got here anyway: upgrade ESLint, then re-run <code>lint:baseline</code>.</p>
+
+    <h3><code>No files matching the pattern "test/**/*.ts"</code></h3>
+    <p class="muted">An older copy of the toolkit assumed every project has a <code>test/</code> directory. Re-run the installer; the lint scripts now glob only the roots that exist.</p>
+
+    <h3><code>ERR_PNPM_IGNORED_BUILDS</code></h3>
+    <p class="muted">A dependency wants to run an install script and nothing has ruled on it. <code>pnpm approve-builds</code> answers it for your machine — but record the answer in <code>pnpm-workspace.yaml</code> under <code>allowBuilds</code> and commit it, so the next person is not asked again.</p>
+
+    <h3><code>husky - Usage: husky install [dir]</code></h3>
+    <p class="muted">You ran the husky 9 command on husky 8. Before v9 the command is <code>husky install</code>. The hooks stay off silently until it runs, so check <code>.husky/_</code> exists afterwards.</p>
+
+    <h3><code>Skipped · scripts/hooks (exists)</code> — but the folder is empty</h3>
+    <p class="muted"><code>git clean -fd</code> can leave a directory behind after removing its files, and an older installer treated an empty directory as already done. The current one merges directories file by file. On an older copy, delete the empty directories with <code>rm -rf</code> first — <code>git clean</code> will not, because git does not track empty directories.</p>
+
+    <h3>The wizard never asked anything</h3>
+    <p class="muted">You piped the bootstrap into a shell. Use <code>bash &lt;(gh api …)</code> instead of <code>gh api … | bash</code>.</p>
+
+    <h3><code>Cannot find module '…/dist/main'</code> — after a clean compile</h3>
+    <p class="muted">A stale TypeScript build cache. <code>nest start</code> wipes <code>dist/</code>, and a cache living outside it survives, reports everything as already emitted, and leaves the folder empty. Fixed in the boilerplate by keeping the cache inside <code>dist/</code>; on an older copy, <code>rm -f tsconfig.build.tsbuildinfo</code>.</p>
+
+    <h3>Two lockfiles in the repo</h3>
+    <p class="muted">Running a package manager the project does not use leaves its lockfile behind, and then whichever one you invoke decides the dependency tree. Two developers can install different versions and neither will notice. Pick one, delete the other, commit the deletion.</p>
+
+    <div class="call">
+      <p class="call-t">Adopting into an existing project?</p>
+      <p><code>.claude/skills/best-practices/</code> describes <em>this</em> boilerplate, not your codebase. Read it and edit it to match what your project actually does — a skill that describes the wrong conventions is worse than none.</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('#nav a'));
+    var map = {};
+    links.forEach(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) map[el.id] = a;
+    });
+    var visible = {};
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bestVal = 0;
+      Object.keys(visible).forEach(function (id) {
+        if (visible[id] > bestVal) { bestVal = visible[id]; best = id; }
+      });
+      links.forEach(function (a) { a.classList.remove('on'); });
+      if (best && map[best]) map[best].classList.add('on');
+    }, { rootMargin: '-8% 0px -70% 0px', threshold: [0, 0.25, 0.6, 1] });
+    Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
+  })();
+</script>
+
+</body>
+</html>

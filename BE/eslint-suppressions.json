@@ -1,0 +1,148 @@
+{
+  "src/app.controller.ts": {
+    "nestjs/require-api-tags": {
+      "count": 1
+    }
+  },
+  "src/guards/validation.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 2
+    }
+  },
+  "src/main.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/modules/auth/social-auth.service.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 3
+    },
+    "no-console": {
+      "count": 5
+    }
+  },
+  "src/modules/auth/utils/auth.util.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "nestjs/no-raw-http-exception": {
+      "count": 2
+    }
+  },
+  "src/modules/email/dto/send-email.dto.ts": {
+    "nestjs/require-api-property": {
+      "count": 5
+    }
+  },
+  "src/modules/media/dto/presigned-url.dto.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 3
+    }
+  },
+  "src/modules/media/media.service.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "nestjs/no-raw-http-exception": {
+      "count": 2
+    },
+    "no-console": {
+      "count": 3
+    }
+  },
+  "src/modules/notifications/notifications.controller.ts": {
+    "nestjs/require-api-tags": {
+      "count": 1
+    }
+  },
+  "src/modules/stripe/card/card.service.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 6
+    },
+    "nestjs/no-raw-http-exception": {
+      "count": 4
+    }
+  },
+  "src/modules/stripe/card/schemas/card.schema.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/modules/stripe/invoice/invoice.service.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 5
+    }
+  },
+  "src/modules/stripe/payment/payment.controller.ts": {
+    "nestjs/no-raw-http-exception": {
+      "count": 1
+    }
+  },
+  "src/modules/stripe/payment/payment.service.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 5
+    }
+  },
+  "src/modules/stripe/stripe.service.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "nestjs/no-raw-http-exception": {
+      "count": 1
+    }
+  },
+  "src/modules/stripe/subscription/dto/resume-subscription.dto.ts": {
+    "nestjs/require-dto-validation": {
+      "count": 1
+    }
+  },
+  "src/modules/stripe/subscription/schemas/user-subscription.schema.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    }
+  },
+  "src/modules/stripe/subscription/subscription.controller.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "src/modules/stripe/subscription/subscription.service.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 7
+    },
+    "nestjs/no-hardcoded-message": {
+      "count": 1
+    }
+  },
+  "src/modules/stripe/webhook/webhook.controller.ts": {
+    "nestjs/no-raw-http-exception": {
+      "count": 1
+    },
+    "nestjs/no-raw-request-decorator": {
+      "count": 1
+    }
+  },
+  "src/modules/stripe/webhook/webhook.service.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 6
+    }
+  },
+  "src/modules/user/dto/user.dto.ts": {
+    "nestjs/require-api-property": {
+      "count": 13
+    }
+  }
+}

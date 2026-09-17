@@ -1,0 +1,20 @@
+# Which dependencies may run their install scripts. Every package that has one
+# must be listed, or pnpm stops the install to ask — which lands on whoever
+# generates a project, for a decision the boilerplate should already have made.
+allowBuilds:
+  '@scarf/scarf': false
+  bcrypt: true
+  unrs-resolver: false
+  # Nest's file watcher. Verified to compile and run with the native build
+  # skipped, so this only records the behaviour already in place.
+  '@parcel/watcher': false
+  # Gemini SDK. Its postinstall is telemetry/codegen only; the published JS
+  # client works untouched. Verified: the assistant module imports and runs
+  # with the script skipped.
+  '@google/genai': false
+  # Optional native accelerator for msgpackr (a BullMQ transitive dep). Falls
+  # back to its pure-JS encoder, which is what we already rely on in CI.
+  msgpackr-extract: false
+  # Postinstall only regenerates protobufjs's own CLI type stubs. Nothing in
+  # this project uses the CLI.
+  protobufjs: false

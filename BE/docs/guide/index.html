@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>BE Boilerplate Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #F4F6F9; --surface: #FFFFFF; --surface-2: #EDF1F6;
+    --ink: #0E1520; --ink-2: #4C5A6B; --ink-3: #7E8B9C;
+    --line: #DCE3EB; --line-2: #C6D0DB;
+    --accent: #2440BE; --accent-soft: #E9ECFC;
+    --ok: #0E7A52; --ok-soft: #E2F3EC;
+    --debt: #8F5B05; --debt-soft: #FAEEDA;
+    --hole: #AB2743; --hole-soft: #FBE7EB;
+    --shadow: 0 1px 2px rgba(14, 21, 32, .05);
+    --shadow-lift: 0 6px 20px rgba(14, 21, 32, .10);
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --disp: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0B0F15; --surface: #131A23; --surface-2: #1A222D;
+      --ink: #E4EBF3; --ink-2: #9FADBE; --ink-3: #6B7889;
+      --line: #212B37; --line-2: #2E3A48;
+      --accent: #8098FF; --accent-soft: #1A2242;
+      --ok: #40C08C; --ok-soft: #10281F;
+      --debt: #DBA33F; --debt-soft: #2A2113;
+      --hole: #F4708B; --hole-soft: #2C141A;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+      --shadow-lift: 0 6px 20px rgba(0, 0, 0, .5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0B0F15; --surface: #131A23; --surface-2: #1A222D;
+    --ink: #E4EBF3; --ink-2: #9FADBE; --ink-3: #6B7889;
+    --line: #212B37; --line-2: #2E3A48;
+    --accent: #8098FF; --accent-soft: #1A2242;
+    --ok: #40C08C; --ok-soft: #10281F;
+    --debt: #DBA33F; --debt-soft: #2A2113;
+    --hole: #F4708B; --hole-soft: #2C141A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+    --shadow-lift: 0 6px 20px rgba(0, 0, 0, .5);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ground); color: var(--ink); font-family: var(--sans);
+    font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 56px 32px 100px; }
+
+  header.top { margin-bottom: 40px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 14px;
+  }
+  h1 {
+    font-family: var(--disp); font-weight: 700;
+    font-size: clamp(38px, 6vw, 62px); line-height: 1.02;
+    letter-spacing: -.02em; margin: 0 0 16px; text-wrap: balance;
+  }
+  .lede { font-size: 18px; color: var(--ink-2); max-width: 62ch; margin: 0; }
+
+  h2 {
+    font-family: var(--disp); font-weight: 700; font-size: 24px;
+    letter-spacing: -.01em; margin: 0 0 4px; text-wrap: balance;
+  }
+  .sec { margin-top: 52px; }
+  .sec > .kicker {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--ink-3);
+    border-top: 1px solid var(--line); padding-top: 14px; margin: 0 0 16px;
+  }
+  p { max-width: 70ch; margin: 0 0 14px; color: var(--ink-2); }
+  strong { font-weight: 600; color: var(--ink); }
+  a { color: var(--accent); }
+  code {
+    font-family: var(--mono); font-size: .875em; background: var(--surface-2);
+    border: 1px solid var(--line); border-radius: 4px; padding: .08em .34em; white-space: nowrap;
+  }
+
+  /* ---- state strip ---- */
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
+    border-radius: 8px; overflow: hidden; margin: 32px 0 8px;
+  }
+  .stat { background: var(--surface); padding: 14px 16px; }
+  .stat b {
+    display: block; font-family: var(--disp); font-size: 28px; font-weight: 700;
+    line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+  }
+  .stat span {
+    display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--ink-3); margin-top: 6px;
+  }
+  .stat.warn b { color: var(--hole); }
+  .stats-note { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin: 0; }
+
+  /* ---- cards ---- */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .card {
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+    padding: 22px 24px; box-shadow: var(--shadow);
+    transition: border-color .14s ease, box-shadow .14s ease, transform .14s ease;
+  }
+  .card:hover {
+    border-color: var(--accent); box-shadow: var(--shadow-lift); transform: translateY(-2px);
+  }
+  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .card-top { display: flex; align-items: center; gap: 11px; margin-bottom: 10px; }
+  .card-ico {
+    font-size: 20px; line-height: 1; width: 38px; height: 38px; flex: none;
+    display: grid; place-items: center; border-radius: 8px;
+    background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  .card h3 {
+    font-family: var(--disp); font-size: 22px; font-weight: 700;
+    letter-spacing: -.01em; margin: 0; line-height: 1.15;
+  }
+  .card .sub { font-size: 14px; color: var(--ink-2); margin: 0 0 14px; }
+  .card ul { margin: 0 0 14px; padding-left: 17px; }
+  .card li { font-size: 13.5px; color: var(--ink-2); margin-bottom: 3px; }
+  .card-foot {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    border-top: 1px solid var(--line); padding-top: 11px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  }
+  .card-foot .go { color: var(--accent); font-weight: 500; }
+  .card:hover .card-foot .go { text-decoration: underline; }
+
+  /* ---- paths ---- */
+  .paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .path { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; background: var(--surface); padding: 14px 17px; }
+  .path h4 {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 7px;
+  }
+  .path p { font-size: 13.5px; margin: 0; max-width: none; }
+  .path .seq { font-family: var(--mono); font-size: 12px; color: var(--ink); margin-top: 8px; display: block; }
+
+  /* ---- tables ---- */
+  .tw { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 500; background: var(--surface-2); white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.m { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  td.w { white-space: normal; color: var(--ink-2); }
+
+  .chip {
+    display: inline-block; font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em;
+    padding: 1px 7px; border-radius: 3px; border: 1px solid var(--line-2);
+    color: var(--ink-2); background: var(--surface-2); white-space: nowrap;
+  }
+  .chip.hole { color: var(--hole); background: var(--hole-soft); border-color: color-mix(in srgb, var(--hole) 35%, transparent); }
+  .chip.debt { color: var(--debt); background: var(--debt-soft); border-color: color-mix(in srgb, var(--debt) 35%, transparent); }
+  .chip.ok { color: var(--ok); background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+
+  .call {
+    border: 1px solid var(--line); border-left: 3px solid var(--hole); background: var(--surface);
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 0 0 18px; max-width: 76ch;
+  }
+  .call-t {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--hole); margin: 0 0 6px;
+  }
+  .call p:last-child { margin-bottom: 0; }
+
+  footer.btm {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink-3);
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 36px 20px 70px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Gok-boilerplates / nestjs-backend</p>
+    <h1>Everything you need to work in this backend</h1>
+    <p class="lede">A NestJS + MongoDB starter with authentication, authorization, chat, notifications, media, two payment providers and an LLM assistant already wired in — plus tooling that stops code landing in the wrong place. Four pages, each answering a different question.</p>
+
+    <div class="stats">
+      <div class="stat"><b>12</b><span>Modules</span></div>
+      <div class="stat"><b>90</b><span>Routes</span></div>
+      <div class="stat"><b>19</b><span>Skills</span></div>
+      <div class="stat"><b>15</b><span>Lint rules</span></div>
+      <div class="stat warn"><b>10</b><span>Known debts</span></div>
+      <div class="stat warn"><b>2</b><span>Security holes</span></div>
+    </div>
+    <p class="stats-note">Counted from <code>src/</code>. The last two are on purpose — this repo writes its problems down.</p>
+  </header>
+
+  <!-- ============ CARDS ============ -->
+  <section class="sec">
+    <p class="kicker">The five pages</p>
+    <div class="cards">
+
+      <a class="card" href="./start.html">
+        <div class="card-top">
+          <div class="card-ico">🧰</div>
+          <h3>Start a project</h3>
+        </div>
+        <p class="sub">Get a repo — a new service, or this toolkit in one you already have.</p>
+        <ul>
+          <li>The module and email-provider pickers</li>
+          <li>Which modules are core, and why</li>
+          <li>Adding the toolkit to an existing codebase</li>
+          <li>Recording existing debt so nothing breaks</li>
+          <li>Errors you might actually see</li>
+        </ul>
+      </a>
+
+      <a class="card" href="./quickstart.html">
+        <div class="card-top">
+          <div class="card-ico">🚀</div>
+          <h3>Quickstart</h3>
+        </div>
+        <p class="sub">Get it running and ship your first endpoint.</p>
+        <ul>
+          <li>Install, <code>.env</code>, run, seed</li>
+          <li>Every environment variable, grouped</li>
+          <li>Anatomy of a module</li>
+          <li>A worked first endpoint</li>
+          <li>The six-stage commit gate</li>
+          <li>Troubleshooting table</li>
+        </ul>
+        <div class="card-foot"><span>New here? Start on this one</span><span class="go">Open →</span></div>
+      </a>
+
+      <a class="card" href="./architecture.html">
+        <div class="card-top">
+          <div class="card-ico">🗺️</div>
+          <h3>Architecture</h3>
+        </div>
+        <p class="sub">How it is put together, and why.</p>
+        <ul>
+          <li>System context and externals</li>
+          <li>Module map and per-module ownership</li>
+          <li>Authentication: tokens, sessions, rotation</li>
+          <li>Authorization: CASL, the two-stage check</li>
+          <li>Nine dependency rules</li>
+          <li>The full debt register</li>
+        </ul>
+        <div class="card-foot"><span>Read before changing structure</span><span class="go">Open →</span></div>
+      </a>
+
+      <a class="card" href="./api-reference.html">
+        <div class="card-top">
+          <div class="card-ico">🔌</div>
+          <h3>API Reference</h3>
+        </div>
+        <p class="sub">Every endpoint, and what guards it.</p>
+        <ul>
+          <li>All 90 routes across 16 controllers</li>
+          <li>Auth model per route</li>
+          <li>Request body and query shapes</li>
+          <li>The response envelope, and its caveat</li>
+          <li>Modules with no HTTP surface</li>
+          <li>An audit of what is open</li>
+        </ul>
+        <div class="card-foot"><span>For anyone integrating a client</span><span class="go">Open →</span></div>
+      </a>
+
+      <a class="card" href="./skills.html">
+        <div class="card-top">
+          <div class="card-ico">🛠️</div>
+          <h3>Agent Skills</h3>
+        </div>
+        <p class="sub">The 19 skills the repo ships, and when each fires.</p>
+        <ul>
+          <li>Four written for this backend</li>
+          <li>Fourteen from a vendored pack</li>
+          <li>Automatic vs manual-only</li>
+          <li>The four Claude Code hooks</li>
+          <li>How skill conflicts are settled</li>
+          <li>Gaps in the current team guide</li>
+        </ul>
+        <div class="card-foot"><span>Read once, then forget it</span><span class="go">Open →</span></div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ============ PATHS ============ -->
+  <section class="sec">
+    <p class="kicker">Where to start</p>
+    <h2>Pick the path that matches your week</h2>
+    <p>The pages are cross-linked, so any order works. These are just the routes that waste the least time.</p>
+    <div class="paths">
+      <div class="path">
+        <h4>New to the repo</h4>
+        <p>Get it running first, then learn why it is shaped the way it is.</p>
+        <span class="seq">Quickstart → Architecture</span>
+      </div>
+      <div class="path">
+        <h4>Building a feature</h4>
+        <p>Find the owning module, then copy the conventions from the worked example.</p>
+        <span class="seq">Architecture → Quickstart</span>
+      </div>
+      <div class="path">
+        <h4>Integrating a client</h4>
+        <p>Routes and shapes first, then the auth model behind them.</p>
+        <span class="seq">API Reference → Architecture</span>
+      </div>
+      <div class="path">
+        <h4>Reviewing or auditing</h4>
+        <p>Read the debt register, then check it against the live surface.</p>
+        <span class="seq">Architecture → API Reference</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SHAPE ============ -->
+  <section class="sec">
+    <p class="kicker">At a glance</p>
+    <h2>The shape of the thing</h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Concern</th><th>Choice</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="m">Framework</td><td class="m">NestJS 11 · Express 5</td><td class="w">Node 22, TypeScript</td></tr>
+          <tr><td class="m">Database</td><td class="m">MongoDB · Mongoose 9</td><td class="w">One process, one database. No queue, no cache.</td></tr>
+          <tr><td class="m">Auth</td><td class="m">Passport JWT</td><td class="w">15-minute access tokens, rotating 60-day refresh sessions</td></tr>
+          <tr><td class="m">Permissions</td><td class="m">CASL</td><td class="w">Policies live in the module that owns the data</td></tr>
+          <tr><td class="m">Realtime</td><td class="m">Socket.IO · SSE</td><td class="w"><span class="chip hole">both unauthenticated today</span></td></tr>
+          <tr><td class="m">Payments</td><td class="m">Stripe · PayPal</td><td class="w">Side by side, each fully confined to its own module</td></tr>
+          <tr><td class="m">Package manager</td><td class="m">pnpm 11.24.0</td><td class="w">Pinned and enforced in CI</td></tr>
+          <tr><td class="m">API docs</td><td class="m">Swagger</td><td class="w">Live at <code>/api-docs</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="call">
+      <p class="call-t">Two things to know before you ship anything</p>
+      <p><strong>The WebSocket handshake and the notifications SSE stream are both unauthenticated</strong> — they trust a client-supplied user id. And outside <code>/auth/*</code>, errors come back as <strong>HTTP 200</strong> with the real status inside the body. Neither is a convention to copy; both are on the debt register with an intended fix.</p>
+    </div>
+  </section>
+
+  <!-- ============ SOURCE ============ -->
+  <section class="sec">
+    <p class="kicker">Source of truth</p>
+    <h2>Where this comes from</h2>
+    <p>These pages are a readable layer over documentation that already lives in the repo and is checked by CI. When the two disagree, the repo wins.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Path</th><th>Holds</th></tr></thead>
+        <tbody>
+          <tr><td class="m">docs/architecture/</td><td class="w">Module map, ownership, dependency rules, the security model</td></tr>
+          <tr><td class="m">docs/adr/</td><td class="w">Four decisions, and why they were made</td></tr>
+          <tr><td class="m">docs/quality-gate.md</td><td class="w">The commit gate and the 15 convention rules</td></tr>
+          <tr><td class="m">docs/guides/permissions.md</td><td class="w">Day-to-day instructions for writing policies</td></tr>
+          <tr><td class="m">docs/agents/skills-guide.md</td><td class="w">The plain-English skills guide <span class="chip debt">3 gaps</span></td></tr>
+          <tr><td class="m">.claude/skills/</td><td class="w">The 19 skills themselves</td></tr>
+          <tr><td class="m">CLAUDE.md · AGENTS.md</td><td class="w">Enforcement-level rules for agents</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><code>pnpm run docs:check</code> verifies links resolve, Mermaid blocks are sane, ADRs are named and structured per policy, and no architecture document is missing from its index. It checks facts, never prose — <strong>passing it is not evidence the documentation is correct.</strong></p>
+  </section>
+
+  <footer class="btm">
+    Generated from <code>src/</code> · counts verified against the code, not the Swagger output
+  </footer>
+</div>
+
+</body>
+</html>

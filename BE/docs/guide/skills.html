@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>BE Boilerplate Agent Skills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #F4F6F9; --surface: #FFFFFF; --surface-2: #EDF1F6;
+    --ink: #0E1520; --ink-2: #4C5A6B; --ink-3: #7E8B9C;
+    --line: #DCE3EB; --line-2: #C6D0DB;
+    --accent: #2440BE; --accent-soft: #E9ECFC;
+    --ok: #0E7A52; --ok-soft: #E2F3EC;
+    --debt: #8F5B05; --debt-soft: #FAEEDA;
+    --hole: #AB2743; --hole-soft: #FBE7EB;
+    --shadow: 0 1px 2px rgba(14, 21, 32, .05);
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --disp: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0B0F15; --surface: #131A23; --surface-2: #1A222D;
+      --ink: #E4EBF3; --ink-2: #9FADBE; --ink-3: #6B7889;
+      --line: #212B37; --line-2: #2E3A48;
+      --accent: #8098FF; --accent-soft: #1A2242;
+      --ok: #40C08C; --ok-soft: #10281F;
+      --debt: #DBA33F; --debt-soft: #2A2113;
+      --hole: #F4708B; --hole-soft: #2C141A;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0B0F15; --surface: #131A23; --surface-2: #1A222D;
+    --ink: #E4EBF3; --ink-2: #9FADBE; --ink-3: #6B7889;
+    --line: #212B37; --line-2: #2E3A48;
+    --accent: #8098FF; --accent-soft: #1A2242;
+    --ok: #40C08C; --ok-soft: #10281F;
+    --debt: #DBA33F; --debt-soft: #2A2113;
+    --hole: #F4708B; --hole-soft: #2C141A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ground); color: var(--ink); font-family: var(--sans);
+    font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .shell { display: grid; grid-template-columns: 232px minmax(0, 1fr); max-width: 1340px; margin: 0 auto; }
+
+  .rail {
+    border-right: 1px solid var(--line); padding: 34px 22px 60px;
+    position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto;
+  }
+  .rail-brand { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--ink-3); margin-bottom: 26px; line-height: 1.5; }
+  .rail-brand b { color: var(--ink); font-weight: 600; }
+  .rail-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .13em; color: var(--ink-3); margin: 0 0 10px; }
+  .rail nav { display: flex; flex-direction: column; gap: 1px; }
+  .rail nav a {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+    padding: 5px 10px; border-left: 2px solid transparent; color: var(--ink-2);
+    text-decoration: none; font-size: 13.5px; border-radius: 0 4px 4px 0;
+  }
+  .rail nav a i { font-style: normal; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .rail nav a:hover { color: var(--ink); background: var(--surface-2); }
+  .rail nav a.on { color: var(--accent); border-left-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+  .rail nav a.on i { color: var(--accent); }
+  .rail nav a:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rail-foot { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+  .xlink {
+    display: block; font-size: 13px; color: var(--ink-2); text-decoration: none;
+    padding: 7px 10px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface);
+  }
+  .xlink:hover { border-color: var(--accent); color: var(--accent); }
+  .xlink span { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 2px; }
+
+  main { padding: 34px 44px 120px; min-width: 0; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+  h1 { font-family: var(--disp); font-weight: 700; font-size: clamp(34px, 4.6vw, 50px); line-height: 1.04; letter-spacing: -.015em; margin: 0 0 14px; text-wrap: balance; }
+  .lede { font-size: 17px; color: var(--ink-2); max-width: 68ch; margin: 0 0 28px; }
+  h2 { font-family: var(--disp); font-weight: 700; font-size: 26px; letter-spacing: -.01em; margin: 0 0 6px; text-wrap: balance; }
+  h3 { font-weight: 600; font-size: 16px; margin: 26px 0 8px; letter-spacing: -.005em; }
+
+  section { scroll-margin-top: 20px; padding-top: 42px; }
+  section > .kicker {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-3); border-top: 1px solid var(--line); padding-top: 14px; margin: 0 0 14px;
+    display: flex; justify-content: space-between; gap: 12px;
+  }
+  p { max-width: 72ch; margin: 0 0 14px; }
+  .muted { color: var(--ink-2); }
+  strong { font-weight: 600; }
+  a { color: var(--accent); }
+
+  code { font-family: var(--mono); font-size: .875em; background: var(--surface-2); border: 1px solid var(--line); border-radius: 4px; padding: .08em .34em; white-space: nowrap; }
+  pre {
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.62; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 7px; padding: 13px 15px;
+    overflow-x: auto; margin: 0 0 14px; box-shadow: var(--shadow);
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: inherit; white-space: pre; }
+  .cm { color: var(--ink-3); }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 0 0 8px; }
+  .stat { background: var(--surface); padding: 13px 15px; }
+  .stat b { display: block; font-family: var(--disp); font-size: 27px; font-weight: 700; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .stat span { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
+  .stat.warn b { color: var(--hole); }
+  .stats-note { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin: 0 0 4px; }
+
+  .tw { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { font-family: var(--mono); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; background: var(--surface-2); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.m, th.m { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  td.w { white-space: normal; }
+
+  .chip {
+    display: inline-block; font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em;
+    padding: 1px 7px; border-radius: 3px; border: 1px solid var(--line-2);
+    color: var(--ink-2); background: var(--surface-2); white-space: nowrap;
+  }
+  .chip + .chip { margin-left: 3px; }
+  .chip.ok { color: var(--ok); background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+  .chip.debt { color: var(--debt); background: var(--debt-soft); border-color: color-mix(in srgb, var(--debt) 35%, transparent); }
+  .chip.hole { color: var(--hole); background: var(--hole-soft); border-color: color-mix(in srgb, var(--hole) 35%, transparent); }
+  .chip.acc { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+
+  .call { border: 1px solid var(--line); border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 7px 7px 0; padding: 13px 17px; margin: 0 0 18px; max-width: 76ch; }
+  .call p:last-child { margin-bottom: 0; }
+  .call.warn { border-left-color: var(--debt); }
+  .call.danger { border-left-color: var(--hole); }
+  .call-t { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+  .call.warn .call-t { color: var(--debt); }
+  .call.danger .call-t { color: var(--hole); }
+
+  /* skill cards */
+  .skill { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 15px 17px; margin: 0 0 12px; }
+  .skill-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .skill-h h3 { margin: 0; font-family: var(--mono); font-size: 15px; font-weight: 600; }
+  .skill-h h3::before { content: "/"; color: var(--ink-3); }
+  .skill p { font-size: 14px; margin: 0 0 8px; max-width: 74ch; }
+  .skill p:last-child { margin-bottom: 0; }
+  .skill pre { margin-bottom: 0; font-size: 12px; padding: 9px 12px; }
+  .skill .when { font-size: 13px; color: var(--ink-2); }
+  .skill .when b { color: var(--ink); font-weight: 600; }
+
+  ul.tight { margin: 0 0 14px; padding-left: 20px; max-width: 72ch; }
+  ul.tight li { margin-bottom: 5px; }
+  hr.rule { border: 0; border-top: 1px solid var(--line); margin: 34px 0 0; }
+
+  @media (max-width: 940px) {
+    .shell { grid-template-columns: 1fr; }
+    .rail { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 22px 20px; }
+    .rail nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    .rail nav a { border-left: 0; border: 1px solid var(--line); border-radius: 5px; padding: 4px 9px; font-size: 12.5px; }
+    .rail nav a.on { border-color: var(--accent); }
+    main { padding: 24px 20px 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-brand">Gok-boilerplates<br><b>nestjs-backend</b></div>
+    <p class="rail-label">Agent Skills</p>
+    <nav id="nav">
+      <a href="#how">How skills work</a>
+      <a href="#ours">Built for this repo <i>4</i></a>
+      <a href="#pack">Engineering pack <i>14</i></a>
+      <a href="#standalone">Standalone <i>1</i></a>
+      <a href="#hooks">The hooks <i>4</i></a>
+      <a href="#conflicts">Conflict handling</a>
+      <a href="#quickref">Quick reference</a>
+      <a href="#gaps">Gaps in the guide</a>
+    </nav>
+    <div class="rail-foot">
+      <a class="xlink" href="./index.html"><span>Start here</span>Docs home</a>
+      <a class="xlink" href="./start.html"><span>Before this</span>Start a project</a>
+      <a class="xlink" href="./quickstart.html"><span>Companion</span>Quickstart</a>
+      <a class="xlink" href="./architecture.html"><span>Companion</span>Architecture</a>
+      <a class="xlink" href="./api-reference.html"><span>Companion</span>API Reference</a>
+    </div>
+  </aside>
+
+  <main>
+    <p class="eyebrow">Backend boilerplate · agent tooling</p>
+    <h1>The skills this repo ships, and when each one fires</h1>
+    <p class="lede">Nineteen Claude Code skills live in <code>.claude/skills/</code> and are committed to git — clone the repo and you have all of them, no plugin install. Four were written for this backend; fourteen are a vendored engineering pack; one is standalone. Four hooks fire them automatically.</p>
+
+    <div class="stats">
+      <div class="stat"><b>19</b><span>Skills</span></div>
+      <div class="stat"><b>4</b><span>Repo-specific</span></div>
+      <div class="stat"><b>13</b><span>Auto-firing</span></div>
+      <div class="stat"><b>6</b><span>Manual only</span></div>
+      <div class="stat"><b>4</b><span>Hooks</span></div>
+      <div class="stat warn"><b>3</b><span>Doc gaps</span></div>
+    </div>
+    <p class="stats-note">Counted from <code>.claude/skills/</code> and <code>.claude/settings.json</code>.</p>
+
+    <!-- ============ HOW ============ -->
+    <section id="how">
+      <p class="kicker"><span>Orientation</span></p>
+      <h2>How skills work</h2>
+      <p>A skill is a folder holding a <code>SKILL.md</code> — instructions Claude loads when the work matches. Two ways one runs:</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Trigger</th><th>How</th><th>Applies to</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Automatic</strong></td><td class="w">Claude reads the skill's <code>description</code> and loads it when your request matches. You say "debug this failing test" and <code>diagnosing-bugs</code> fires on its own.</td><td class="m">13 skills</td></tr>
+            <tr><td><strong>Manual only</strong></td><td class="w">The skill sets <code>disable-model-invocation: true</code>, so Claude will never reach for it by itself. You type <code>/name</code>.</td><td class="m">6 skills</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The six manual-only ones are <code>ask-matt</code>, <code>grill-with-docs</code>, <code>implement</code>, <code>improve-codebase-architecture</code>, <code>setup-matt-pocock-skills</code> and <code>wayfinder</code> — each starts a long, opinionated process you should choose deliberately rather than have chosen for you.</p>
+
+      <div class="call">
+        <p class="call-t">You do not need to memorise any of this</p>
+        <p>Type <code>/</code> in Claude Code to see the list, or just describe what you want in plain English. The right skill loads itself. This page is for when you want to know what is available and why it behaves the way it does.</p>
+      </div>
+    </section>
+
+    <!-- ============ OURS ============ -->
+    <section id="ours">
+      <p class="kicker"><span>Written for this repo</span><span>4 skills</span></p>
+      <h2>Built for this backend</h2>
+      <p>These encode decisions specific to this NestJS + Mongoose codebase. They are the ones that would not make sense in another repo.</p>
+
+      <div class="skill">
+        <div class="skill-h"><h3>best-practices</h3><span class="chip ok">auto</span><span class="chip acc">most important</span></div>
+        <p>Our coding conventions — how Nest modules, controllers, services, DTOs, guards and Mongoose schemas are structured here. This is the document the 15 custom ESLint rules encode.</p>
+        <p class="when"><b>Fires:</b> automatically, any time Claude writes, reviews or refactors backend code. You never call it directly.</p>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>architecture-documentation</h3><span class="chip ok">auto</span><span class="chip hole">mandatory</span></div>
+        <p>The single workflow for architecture docs and ADRs — where a document goes, whether a decision needs an ADR, whether a diagram earns its place. Adapted from an upstream command with its format menu <em>removed</em>: the upstream offers a choice between C4, Arc42, PlantUML, Structurizr and Draw.io, and offering that choice to an agent is exactly the drift this skill exists to prevent.</p>
+        <p class="when"><b>Fires:</b> automatically when a change alters module ownership or boundaries, the auth or authorization model, persistence, an external integration, or a cross-cutting convention. <strong>Mandatory per <code>CLAUDE.md</code> — docs update in the same PR, not a follow-up.</strong></p>
+        <p class="when">Most changes are not architectural, and the skill's first question lets you out quickly.</p>
+<pre><code>/architecture-documentation</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>fix-commit</h3><span class="chip ok">auto</span></div>
+        <p>Fixes whatever blocked a commit — lint, type errors, convention violations, secret detection, structure failures, or a rejected commit message. It fixes the root cause and never bypasses the gate. Also pays down baselined convention debt with <code>--debt</code>.</p>
+        <p class="when"><b>Use it:</b> right after a commit gets blocked.</p>
+<pre><code>/fix-commit
+/fix-commit --debt nestjs/no-raw-http-exception   <span class="cm"># pay down one rule</span></code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>fe-api-guide</h3><span class="chip ok">auto</span></div>
+        <p>Generates a frontend-integration package from this backend: one consolidated Markdown API guide, a README per module, and a self-contained interactive HTML demo app covering every module and flow — real uploads, real checkout redirects, not JSON dumps.</p>
+        <p class="when"><b>Use it:</b> when the frontend team needs to know how to call the endpoints. Its output already exists at <code>docs/fe-api-guide.md</code> and <code>docs/fe-demo-app.html</code>.</p>
+<pre><code>/fe-api-guide</code></pre>
+      </div>
+    </section>
+
+    <!-- ============ PACK ============ -->
+    <section id="pack">
+      <p class="kicker"><span>Vendored engineering pack</span><span>14 skills</span></p>
+      <h2>General engineering skills</h2>
+      <p>Vendored from <a href="https://github.com/mattpocock/skills">mattpocock/skills</a> and trimmed to what helps with backend work — <code>prototype</code> and <code>wizard</code> were dropped as UI/infra-focused. Versions are pinned in <code>skills-lock.json</code>.</p>
+
+      <h3>Building</h3>
+
+      <div class="skill">
+        <div class="skill-h"><h3>tdd</h3><span class="chip ok">auto</span></div>
+        <p>Red → green → refactor. The reference for what a good test is, where tests go, the anti-patterns, and the rules of the loop.</p>
+<pre><code>/tdd add a rate limiter to the login endpoint</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>implement</h3><span class="chip debt">manual only</span></div>
+        <p>Takes an agreed spec or set of tickets and builds it, without re-litigating the design. Uses <code>/tdd</code> at pre-agreed seams.</p>
+<pre><code>/implement ticket #42</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>diagnosing-bugs</h3><span class="chip ok">auto</span></div>
+        <p>A structured debugging loop instead of guess-and-check — form a hypothesis, test it, narrow the cause. Skip phases only when explicitly justified.</p>
+<pre><code>/diagnosing-bugs the /orders endpoint returns 500 intermittently under load</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>resolving-merge-conflicts</h3><span class="chip ok">auto</span></div>
+        <p>Works through an in-progress merge or rebase. Finds the primary source for each conflict — commit messages, PRs, issues — preserves both intents where possible, and <strong>always resolves; never <code>--abort</code></strong>.</p>
+<pre><code>/resolving-merge-conflicts</code></pre>
+      </div>
+
+      <h3>Thinking it through first</h3>
+
+      <div class="skill">
+        <div class="skill-h"><h3>grilling</h3><span class="chip ok">auto</span></div>
+        <p>Interviews you in <strong>rounds</strong>. Maps the design as a tree of decisions and asks every currently-answerable question in one batch — numbered, each with its recommended answer — then waits. It looks up facts about the codebase itself rather than asking you.</p>
+        <p class="when"><b>Use it:</b> the closest thing here to "brainstorm with me". Claude often reaches for it when you say "let's build X".</p>
+<pre><code>/grilling I want to add a reviews-and-ratings feature to user profiles</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>grill-with-docs</h3><span class="chip debt">manual only</span></div>
+        <p><code>grilling</code> + <code>domain-modeling</code> — the same interview, but it writes the outcome up as an ADR and glossary entries as it goes.</p>
+        <p class="when"><b>Use it:</b> before something big and irreversible. Cheaper to find the flaw now than after it is built.</p>
+<pre><code>/grill-with-docs I'm planning to move refresh tokens from cookies to headers</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>wayfinder</h3><span class="chip debt">manual only</span></div>
+        <p>For work too big for one agent session <em>and</em> wrapped in fog. Charts a shared <strong>map</strong> issue with child decision tickets and real blocking edges on GitHub, then resolves them one at a time until the route is clear.</p>
+        <p class="when"><b>Reach for it</b> not when work is merely big, but when making an issue implementation-ready would mean guessing a decision nobody has made. If ownership and acceptance criteria are already clear, use a normal issue. Full guide: <code>docs/guides/wayfinder.md</code>.</p>
+<pre><code>/wayfinder plan the migration off the legacy email service</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>research</h3><span class="chip ok">auto</span></div>
+        <p>Spins up a <strong>background agent</strong> so you keep working. It investigates against primary sources — official docs, RFCs, source code — and saves findings as a Markdown file in the repo, citing each claim.</p>
+        <p class="when"><b>Use it:</b> questions where a wrong guess is expensive.</p>
+<pre><code>/research the correct way to handle idempotency keys with Stripe webhooks</code></pre>
+      </div>
+
+      <h3>Design and vocabulary</h3>
+
+      <div class="skill">
+        <div class="skill-h"><h3>codebase-design</h3><span class="chip ok">auto</span></div>
+        <p>Shared vocabulary for <strong>deep modules</strong> — a lot of behaviour behind a small interface, placed at a clean seam. Helps decide where a boundary goes or how to make a service testable.</p>
+<pre><code>/codebase-design our NotificationsService interface feels leaky</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>improve-codebase-architecture</h3><span class="chip debt">manual only</span></div>
+        <p>Scans for <strong>deepening opportunities</strong>, presents them as a visual HTML report, then grills through whichever one you pick.</p>
+        <p class="when"><b>Use it:</b> a periodic architecture health check, or onboarding onto unfamiliar code.</p>
+<pre><code>/improve-codebase-architecture scan src/modules</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>domain-modeling</h3><span class="chip ok">auto</span></div>
+        <p>Actively builds and sharpens the project's domain model — challenging terms, inventing edge cases, writing the glossary and ADRs the moment they crystallise. Note this is the <em>active</em> discipline: merely reading <code>CONTEXT.md</code> for vocabulary is not this skill.</p>
+<pre><code>/domain-modeling what do we mean by "workspace" vs "organization"?</code></pre>
+      </div>
+
+      <h3>Review and routing</h3>
+
+      <div class="skill">
+        <div class="skill-h"><h3>code-review</h3><span class="chip ok">auto</span><span class="chip acc">also hook-driven</span></div>
+        <p>Reviews changes since a fixed point on <strong>two axes at once</strong>, in parallel sub-agents so neither pollutes the other's context: <strong>Standards</strong> (does it follow our documented conventions?) and <strong>Spec</strong> (does it do what the ticket asked?). Reported side by side, never merged or reranked — because a change can pass one axis and fail the other.</p>
+        <p class="when"><b>Fires on its own too</b> — see the Stop hook below.</p>
+<pre><code>/code-review since main</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>ask-matt</h3><span class="chip debt">manual only</span></div>
+        <p>A router over the other skills. Describe your situation and it tells you which one fits, and which <em>flow</em> — the path through several skills — you are on.</p>
+<pre><code>/ask-matt I have a huge messy feature to build, not sure where to start</code></pre>
+      </div>
+
+      <div class="skill">
+        <div class="skill-h"><h3>setup-matt-pocock-skills</h3><span class="chip debt">manual only</span></div>
+        <p>Generated the files in <code>docs/agents/</code> — issue tracker config, triage labels, domain doc layout — and the skill list in the team guide. Only needed again if the issue tracker changes.</p>
+<pre><code>/setup-matt-pocock-skills</code></pre>
+      </div>
+    </section>
+
+    <!-- ============ STANDALONE ============ -->
+    <section id="standalone">
+      <p class="kicker"><span>Standalone</span><span>1 skill</span></p>
+      <h2>Security audit</h2>
+      <div class="skill">
+        <div class="skill-h"><h3>security-audit</h3><span class="chip ok">auto</span><span class="chip hole">undocumented in the team guide</span></div>
+        <p>An eight-stage pipeline: fingerprint the stack, research current vulnerability classes and CVEs for what it finds, deep static and data-flow audit, propose a remediation plan, <strong>get explicit approval before any code changes</strong>, implement, write red-team-style regression tests proving each fix works, then report.</p>
+        <p class="when">Each stage writes a file, so the process is resumable and you can inspect or override any step — deliberately not a black box that returns a verdict.</p>
+        <p class="when"><b>Fires on:</b> "audit", "pen-test", "security review", "harden", "find vulnerabilities in" — and narrower asks that are really one stage of it, like "check my dependencies for known CVEs".</p>
+<pre><code>/security-audit</code></pre>
+      </div>
+      <div class="call warn">
+        <p class="call-t">This one is missing from the team guide</p>
+        <p><code>docs/agents/skills-guide.md</code> does not mention <code>security-audit</code> at all, so nobody reading the guide knows it exists. Given the repo's open debt register, it is arguably the most useful skill here.</p>
+      </div>
+    </section>
+
+    <!-- ============ HOOKS ============ -->
+    <section id="hooks">
+      <p class="kicker"><span>Automation</span><span>4 hooks</span></p>
+      <h2>The hooks</h2>
+      <p>Configured in <code>.claude/settings.json</code>. These run without you asking, and one of them can <strong>block Claude from ending its turn</strong>.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Event</th><th class="m">Script</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td class="m">UserPromptSubmit</td><td class="m">claude-skill-router.mjs</td><td class="w">Injects a reminder pointing at the right skill for what you just asked — the nudge that keeps conventions applied proactively rather than fixed at commit time.</td></tr>
+            <tr><td class="m">PostToolUse<br><span class="chip">Write | Edit</span></td><td class="m">claude-lint-fix-on-edit.mjs</td><td class="w">Lint-fixes every file Claude writes or edits, immediately.</td></tr>
+            <tr><td class="m">PostToolUse<br><span class="chip">Write | Edit</span></td><td class="m">claude-typecheck-on-edit.mjs</td><td class="w">Typechecks after each edit, so a type error surfaces in seconds rather than at commit.</td></tr>
+            <tr><td class="m">Stop</td><td class="m">claude-auto-review.mjs</td><td class="w"><strong>Blocks the end of the turn until a code review has run</strong>, when the change is big enough.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The auto-review hook, specifically</h3>
+      <p>It measures how much of <code>src/**</code> changed and forces <code>code-review</code> to run before Claude can finish. It triggers when:</p>
+      <ul class="tight">
+        <li>a <strong>new module folder</strong> appears, or</li>
+        <li><strong>3 or more</strong> <code>src/**.ts</code> files changed, or</li>
+        <li><strong>150 or more</strong> lines changed.</li>
+      </ul>
+      <p>Small fixes are left alone. It picks the fixed point itself — merge-base with <code>main</code> on a branch, <code>origin/main</code> or the working tree on <code>main</code> — and will not re-fire on a change set it has already reviewed.</p>
+<pre><code>CLAUDE_SKIP_AUTO_REVIEW=1   <span class="cm"># turn it off for a session</span></code></pre>
+
+      <div class="call">
+        <p class="call-t">Separate from the git hooks</p>
+        <p>These four are <strong>Claude Code</strong> hooks. The six-stage commit gate is a different mechanism — Husky git hooks in <code>.husky/</code> running <code>scripts/hooks/pre-commit.mjs</code>, <code>commit-msg.mjs</code> and <code>post-commit.mjs</code>. Those fire for everyone, agent or human. See the Quickstart page.</p>
+      </div>
+    </section>
+
+    <!-- ============ CONFLICTS ============ -->
+    <section id="conflicts">
+      <p class="kicker"><span>Automation</span></p>
+      <h2>Conflict handling</h2>
+      <p>If you have the plugin versions installed globally, two copies of the same skill compete and whichever fires is a coin flip — meaning you and your teammates get different behaviour from the same prompt. <code>.claude/settings.json</code> settles it by switching off the global copies so the repo's committed versions always win.</p>
+
+<pre><code>"skillOverrides": {
+  "mattpocock-skills:tdd": "off",
+  "mattpocock-skills:code-review": "off",
+  <span class="cm">// … 17 more, plus prototype and wizard which we do not vendor</span>
+  "superpowers:brainstorming": "off"
+}</code></pre>
+
+      <h3>Why <code>brainstorming</code> is switched off</h3>
+      <p>The Superpowers plugin ships a <code>brainstorming</code> skill covering the same ground as <code>grilling</code>. This repo keeps <code>grilling</code> because it feeds the rest of the chain and writes its output to a GitHub issue or an ADR, whereas <code>brainstorming</code> ends by handing off to a <code>writing-plans</code> skill this repo does not have, and writes to its own folder.</p>
+      <p class="muted">The honest trade-off, recorded in the team guide: <code>brainstorming</code> sized the ceremony to the job, treating a quick feasibility check differently from a new subsystem. <code>grilling</code> has one gear. In practice a small change has a small decision tree so it wraps up fast — but if it starts interviewing you about a one-line fix, just tell it to get on with it.</p>
+    </section>
+
+    <!-- ============ QUICKREF ============ -->
+    <section id="quickref">
+      <p class="kicker"><span>Reference</span></p>
+      <h2>Quick reference</h2>
+      <div class="tw">
+        <table>
+          <thead><tr><th>I want to…</th><th class="m">Run</th><th>Trigger</th></tr></thead>
+          <tbody>
+            <tr><td>Write a feature test-first</td><td class="m">/tdd</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Find why something's broken</td><td class="m">/diagnosing-bugs</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Review my branch before a PR</td><td class="m">/code-review</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Fix a blocked commit</td><td class="m">/fix-commit</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Redesign a messy module</td><td class="m">/codebase-design</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Find refactor opportunities</td><td class="m">/improve-codebase-architecture</td><td><span class="chip debt">manual</span></td></tr>
+            <tr><td>Define or clarify a domain term</td><td class="m">/domain-modeling</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Brainstorm a feature before writing it</td><td class="m">/grilling</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Same, but record it as an ADR</td><td class="m">/grill-with-docs</td><td><span class="chip debt">manual</span></td></tr>
+            <tr><td>Fix a merge conflict</td><td class="m">/resolving-merge-conflicts</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Research a technical question properly</td><td class="m">/research</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Build from an existing spec or ticket</td><td class="m">/implement</td><td><span class="chip debt">manual</span></td></tr>
+            <tr><td>Document an architecture change / write an ADR</td><td class="m">/architecture-documentation</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Generate the frontend API guide or demo</td><td class="m">/fe-api-guide</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Audit for security problems</td><td class="m">/security-audit</td><td><span class="chip ok">auto</span></td></tr>
+            <tr><td>Plan multi-session work through fog</td><td class="m">/wayfinder</td><td><span class="chip debt">manual</span></td></tr>
+            <tr><td>Figure out which skill I want</td><td class="m">/ask-matt</td><td><span class="chip debt">manual</span></td></tr>
+            <tr><td>Reconfigure the skill setup</td><td class="m">/setup-matt-pocock-skills</td><td><span class="chip debt">manual</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">Eighteen rows for nineteen skills — <code>best-practices</code> has no row because you never invoke it; it applies itself to every piece of backend code Claude touches.</p>
+    </section>
+
+    <!-- ============ GAPS ============ -->
+    <section id="gaps">
+      <p class="kicker"><span>Honest register</span></p>
+      <h2>Gaps in the team guide</h2>
+      <p>Checked by diffing <code>.claude/skills/</code> against the skills documented in <code>docs/agents/skills-guide.md</code>. Three real mismatches.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Issue</th><th>Detail</th><th>Impact</th></tr></thead>
+          <tbody>
+            <tr><td><strong>3 skills documented but absent</strong></td><td class="w">The guide has full sections with examples for <code>to-spec</code>, <code>to-tickets</code> and <code>triage</code> — including a five-label triage table. None of the three exists in <code>.claude/skills/</code>.</td><td><span class="chip hole">commands fail</span></td></tr>
+            <tr><td><strong>1 skill present but undocumented</strong></td><td class="w"><code>security-audit</code> is installed and auto-firing, but appears nowhere in the guide or its quick-reference table.</td><td><span class="chip debt">unknown to the team</span></td></tr>
+            <tr><td><strong>Wrong repo name</strong></td><td class="w">The guide says issues live on <code>gamm-boilerplates/backend</code>. <code>CLAUDE.md</code> and <code>docs/agents/issue-tracker.md</code> both say <code>Gok-boilerplates/nestjs-backend</code>.</td><td><span class="chip debt">stale</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The first is the one that bites: a developer reading the guide will type <code>/triage</code> or <code>/to-tickets</code> and get nothing. Either vendor those three skills back in, or cut their sections from the guide — the quick-reference table lists all three too.</p>
+
+      <hr class="rule">
+      <h3>Where the real files are</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th class="m">Path</th><th>What it holds</th></tr></thead>
+          <tbody>
+            <tr><td class="m">.claude/skills/</td><td>The 19 skills, one folder each with a <code>SKILL.md</code></td></tr>
+            <tr><td class="m">.claude/settings.json</td><td>Skill overrides and the four Claude Code hooks</td></tr>
+            <tr><td class="m">skills-lock.json</td><td>Pinned versions of vendored skills, with content hashes</td></tr>
+            <tr><td class="m">docs/agents/skills-guide.md</td><td>The plain-English team guide</td></tr>
+            <tr><td class="m">docs/agents/issue-tracker.md</td><td>How the issue-tracker skills talk to GitHub</td></tr>
+            <tr><td class="m">docs/agents/triage-labels.md</td><td>The five canonical triage label strings</td></tr>
+            <tr><td class="m">scripts/hooks/</td><td>Both hook families — Claude Code and git</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('#nav a[href^="#"]'));
+    var map = {};
+    links.forEach(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) map[el.id] = a;
+    });
+    var visible = {};
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bestVal = 0;
+      Object.keys(visible).forEach(function (id) {
+        if (visible[id] > bestVal) { bestVal = visible[id]; best = id; }
+      });
+      links.forEach(function (a) { a.classList.remove('on'); });
+      if (best && map[best]) map[best].classList.add('on');
+    }, { rootMargin: '-8% 0px -70% 0px', threshold: [0, 0.25, 0.6, 1] });
+    Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
+  })();
+</script>
+
+</body>
+</html>

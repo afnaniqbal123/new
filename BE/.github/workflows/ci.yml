@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    name: Lint, types, tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Enforce canonical package manager
+        run: |
+          test -f pnpm-lock.yaml
+          test ! -f package-lock.json
+          test ! -f yarn.lock
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Verify lockfile stays clean
+        run: git diff --exit-code -- pnpm-lock.yaml
+
+      # Canonical repository gate: lint/conventions, type safety, module
+      # boundaries, and documentation checks. See docs/quality-gate.md.
+      - name: Repository quality gate
+        run: pnpm run verify
+
+      # The architecture checker's own tests, against synthetic graphs — so a
+      # rule that stops detecting anything fails here rather than silently
+      # weakening the repository boundary.
+      - name: Architecture rule tests
+        run: pnpm run architecture:test
+
+      # The docs checker's own tests, against fixture trees.
+      - name: Documentation checker tests
+        run: pnpm run docs:test
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Build
+        run: pnpm run build
+
+      # The authentication and authorization contract, over real HTTP. Runs
+      # without a database on purpose: needing one would mean authentication
+      # had started reading from it again.
+      - name: Auth contract (e2e)
+        run: pnpm run test:e2e -- test/auth

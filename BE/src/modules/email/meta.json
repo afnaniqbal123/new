@@ -1,0 +1,10 @@
+{
+  "modules": [
+    "auth"
+  ],
+  "dependencies": {
+    "handlebars": "latest",
+    "@getbrevo/brevo": "latest"
+  },
+  "devDependencies": {}
+}
